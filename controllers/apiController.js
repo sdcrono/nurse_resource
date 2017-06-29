@@ -2,28 +2,46 @@ var Users = require('../models/userModel')
 
 module.exports = function(app) {
 
-    app.get('/api/users/:uname', function(req, res) {
+    // app.get('/api/users/:uname', function(req, res) {
+    //     Users.find({ username: req.params.uname },
+    //     function(err, users) {
+    //         if (err) throw err;
+    //         res.send(users);
+    //     });
+    // });
+
+    app.get('/api/users/:uname', (req, res) => 
         Users.find({ username: req.params.uname },
-        function(err, users) {
+        (err, users) => {
             if (err) throw err;
             res.send(users);
-        });
-    });
+        })
+    );
 
-    app.get('/api/user/:id', function(req, res) {
+    app.get('/api/user/:id', (req, res) => 
 
-        Users.findById({ _id: req.params.id }, function(err, user) {
+        Users.findById({ _id: req.params.id }, (err, user) => {
             if (err) throw err;
             res.send(user);
-        });
+        })
 
-    });
+    );
 
-    app.post('/api/user', function(req, res) {
+    app.get('/api/users', (req, res) => 
+        Users.find({}, (err, users) => {
+            var userMap = {};
+
+            users.forEach((user) => userMap[user._id] = user );
+
+            res.send(userMap);
+        })
+    );
+
+    app.post('/api/user', (req, res) => {
 
         if (req.body.id) {
             Users.findByIdAndUpdate(req.body.id, { username: req.body.username, password: req.body.password,
-                nurse: false, admin: false, updated_at: new Date}, function(err, user) {
+                nurse: false, admin: false, updated_at: new Date}, (err, user) => {
                 if (err) throw err;
                 res.send('success');
             });
@@ -38,7 +56,7 @@ module.exports = function(app) {
                 created_at: new Date,
                 updated_at: new Date
             });
-            newUser.save(function(err, user) {
+            newUser.save((err, user) => {
                 if (err) throw err;
                 res.send('Success');
             });
@@ -46,11 +64,13 @@ module.exports = function(app) {
 
     });
 
-    app.delete('/api/user', function(req, res) {
+    app.delete('/api/user', (req, res) => 
 
-        Users.findByIdAndRemove(req.params.id, function(err) {
+        Users.findByIdAndRemove(req.body.id, (err) => {
             if (err) throw err;
             res.send('SUCCESS');
-        });
-    });
+        })
+    );
 }
+
+// exports.create() = function()

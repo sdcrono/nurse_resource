@@ -6,7 +6,8 @@ var express = require('express'),
 
 var config = require('./config');
 var setupController = require('./controllers/setupController'),
-    apiController = require('./controllers/apiController');
+    apiController = require('./controllers/apiController'),
+    apiRoute = require('./routes/apiRoute');
 
 
 var app = express();
@@ -25,5 +26,6 @@ mongoose.connect(config.getDbConnectionString());
 
 setupController(app);
 apiController(app);
+// apiRoute(app);
 
 app.listen(port);
