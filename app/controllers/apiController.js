@@ -1,33 +1,13 @@
-var Users = require('../models/userModel')
+var Users = require('../models/userModel');
 
-module.exports = function(app) {
-
-    // app.get('/api/users/:uname', function(req, res) {
-    //     Users.find({ username: req.params.uname },
-    //     function(err, users) {
-    //         if (err) throw err;
-    //         res.send(users);
-    //     });
-    // });
-
-    app.get('/api/users/:uname', (req, res) => 
-        Users.find({ username: req.params.uname },
+exports.userById = (req, res) => 
+        Users.find({ username: req.params.id },
         (err, users) => {
             if (err) throw err;
             res.send(users);
         })
-    );
 
-    app.get('/api/user/:id', (req, res) => 
-
-        Users.findById({ _id: req.params.id }, (err, user) => {
-            if (err) throw err;
-            res.send(user);
-        })
-
-    );
-
-    app.get('/api/users', (req, res) => 
+exports.list = (req, res) => 
         Users.find({}, (err, users) => {
             var userMap = {};
 
@@ -35,9 +15,8 @@ module.exports = function(app) {
 
             res.send(userMap);
         })
-    );
 
-    app.post('/api/user', (req, res) => {
+exports.upsert = (req, res) => {
 
         if (req.body.id) {
             Users.findByIdAndUpdate(req.body.id, { username: req.body.username, password: req.body.password,
@@ -62,15 +41,11 @@ module.exports = function(app) {
             });
         }
 
-    });
+    }
 
-    app.delete('/api/user', (req, res) => 
+exports.delete = (req, res) => 
 
         Users.findByIdAndRemove(req.body.id, (err) => {
             if (err) throw err;
             res.send('SUCCESS');
         })
-    );
-}
-
-// exports.create() = function()

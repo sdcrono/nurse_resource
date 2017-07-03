@@ -4,8 +4,8 @@ var Schema = mongoose.Schema;
 
 var profileSchema = new Schema({
     name: {
-        type: String,
-        required: [true, 'Name required']
+        first: String,
+        last: { type: String, trim: true }
     },
 	email: {
         type: String,
@@ -22,13 +22,23 @@ var profileSchema = new Schema({
           message: '{VALUE} is not a valid phone number!'
         }
     },
-	age: Number,	
+	age: { type: Number, min: 0 },	
 	sex: String,
 	address: String,
 	owner: {
         type: Schema.Types.ObjectId,
         unique: true	
     }
+});
+
+profileSchema.virtual('fullname').get(function() {
+    return this.first + " " + this.last;
+});
+
+profileSchema.virtual('fullname').set(function (name) {  
+  var split = name.split(' ');
+  this.first = split[0];
+  this.last = split[1];
 });
 
 var Profiles = mongoose.model('Profiles', profileSchema);

@@ -18,11 +18,16 @@ var userSchema = new Schema({
     admin: Boolean,
     profile: [Schema.Types.Mixed],
     nurse_profile: [Schema.Types.Mixed],
+    location: {
+        latitude: Number,
+        longitude: Number
+    },
     created_at: Date,
     updated_at: {
         type: Date,
         default: Date.now
-    }
+    },
+    isDelete: Boolean
 });
 
 var Users = mongoose.model('Users', userSchema);
