@@ -1,19 +1,19 @@
 // process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 // var express = require('express'),
-var express = require('./config/express'),
+const express = require('./config/express'),
     // bodyParser = require('body-parser'),
     mongoose = require('mongoose');
 
-var config = require('./config');
+const config = require('./config');
 // var setupController = require('./controllers/setupController'),
 //     apiController = require('./controllers/apiController'),
 //     apiRoute = require('./routes/apiRoute');
 
 
-var app = express();
+const app = express();
 
-var port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 // app.use('/assets', express.static('./public'));
 
@@ -29,5 +29,6 @@ mongoose.connect(config.getDbConnectionString());
 // // apiController(app);
 // apiRoute(app);
 
-app.listen(port);
+app.listen(port, () => console.log('CORS-enabled web server listening on port 3000'));
+
 console.log(' server running at ' + config.getDbConnectionString() + ':' + port);

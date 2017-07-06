@@ -1,10 +1,15 @@
-var express = require('express'),
+const express = require('express'),
+    path = require('path'),
+    cors = require('cors'),
     bodyParser = require('body-parser');
 
 module.exports = () => {
-    var app = express();
+    const app = express();
 
-    app.use('/assets', express.static('../app/public'));
+    app.use(cors());
+
+    // app.use('/assets', express.static('../app/public'));
+    app.use(express.static(path.join(__dirname, '../public/src')));
 
     app.set('view engine', 'ejs');
 
@@ -15,10 +20,12 @@ module.exports = () => {
     require('../app/controllers/setupController')(app);
     // require('../app/controllers/apiController'),
     require('../app/routes/apiRoute')(app);
+    require('../app/routes/rolePermissionRoute')(app);
     require('../app/routes/registerRoute')(app);
 
     app.get('*', (req, res) => 
-        res.send("Appwork!")
+        // res.send("Appwork!")
+        res.sendFile(path.join(__dirname, '../public/src/index.html'))
     );
 
     // setupController(app);

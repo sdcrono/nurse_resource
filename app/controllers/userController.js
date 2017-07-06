@@ -1,4 +1,4 @@
-var Users = require('../models/userModel'),
+const Users = require('../models/userModel'),
     Profiles = require('../models/profileModel');
 
 exports.userById = (req, res) => 
@@ -14,7 +14,7 @@ exports.list = (req, res) =>
 
             users.forEach((user) => userMap[user._id] = user );
 
-            res.send(userMap);
+            res.send(users);
         })
 
 exports.upsert = (req, res) => {

@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
@@ -14,6 +14,7 @@ var userSchema = new Schema({
         type: String,
         required: [true, 'Password required']
     },
+    role: [String],
     nurse: Boolean,	
     admin: Boolean,
     profile: [Schema.Types.Mixed],

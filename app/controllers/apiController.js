@@ -1,4 +1,4 @@
-var Users = require('../models/userModel');
+const Users = require('../models/userModel');
 
 exports.userById = (req, res) => 
         Users.find({ username: req.params.id },
@@ -49,3 +49,5 @@ exports.delete = (req, res) =>
             if (err) throw err;
             res.send('SUCCESS');
         })
+
+exports.index = (req, res) => res.send("Api list")

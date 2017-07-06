@@ -1,6 +1,7 @@
 // var Users = require('../models/userModel')
 
-var Users = require('../controllers/apiController')
+const Users = require('../controllers/userController'),
+    Apis = require('../controllers/apiController');
 
 module.exports = app => {
 
@@ -14,5 +15,6 @@ module.exports = app => {
 
     app.route('/api/users').get(Users.list).post(Users.upsert).delete(Users.delete);
     app.route('/api/users/:id').get(Users.userById);
+    app.route('/api').get(Apis.index);
 
 }
