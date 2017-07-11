@@ -27,7 +27,7 @@ var profileSchema = new Schema({
 	address: String,
 	owner: {
         type: Schema.Types.ObjectId,
-        unique: true	
+        ref: 'user'	
     }
 });
 

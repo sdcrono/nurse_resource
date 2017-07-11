@@ -1,4 +1,4 @@
-const Users = require('../models/userModel'),
+const Users = require('../models/user.model'),
     Profiles = require('../models/profileModel'),
     Roles = require('../models/roleModel'),
     Permissions = require('../models/permissionModel');

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersService } from '../users.service';
-import { User } from '../models/user';
+import { UsersService } from '../_services/users.service';
+import { User } from '../_models/user';
 
 @Component({
   selector: 'app-users',
@@ -20,6 +20,10 @@ export class UsersComponent implements OnInit {
       // this.userService.getUsers().subscribe(users => this.users = users);
   }
 
+    private loadAllUsers() {
+      this.usersService.getAll().subscribe(users => { this.users = users; });
+  }
+
   ngOnInit() {
         // this.postsService.getAllPosts()
     //   .subscribe(
@@ -30,7 +34,8 @@ export class UsersComponent implements OnInit {
     //     err => this.errr = err,
     //     () => this.errr = 'completed'
     // );
-    this.getUsers();
+    // this.getUsers();
+    this.loadAllUsers();
   }
 
 }

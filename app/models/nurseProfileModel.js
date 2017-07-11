@@ -10,6 +10,6 @@ var nurseProfileSchema = new Schema({
     owner: Schema.Types.ObjectId
 });
 
-var NurseProfiles = mongoose.model('NurseProfiles', nurseSchema);
+var NurseProfiles = mongoose.model('NurseProfiles', nurseProfileSchema);
 
 module.exports = NurseProfiles;

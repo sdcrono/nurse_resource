@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions, Response  } from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 
-import { User } from './models/user';
+import { User } from '../_models/index';
 
 @Injectable()
 export class UsersService {
@@ -34,6 +34,26 @@ export class UsersService {
         return this.http.get('http://localhost:3000/api/users')
                     .toPromise()
                     .then(response => response.json() as User[])
+    }
+
+    getAll() {
+        return this.http.get('/users').map((response: Response) => response.json() as User[]);
+    }
+ 
+    getById(_id: string) {
+        return this.http.get('/users/' + _id).map((response: Response) => response.json());
+    }
+ 
+    create(user: User) {
+        return this.http.post('/users/register', user);
+    }
+ 
+    update(user: User) {
+        return this.http.put('/users/' + user._id, user);
+    }
+ 
+    delete(_id: string) {
+        return this.http.delete('/users/' + _id);
     }
 
 }
