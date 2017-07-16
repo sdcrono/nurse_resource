@@ -13,7 +13,7 @@ module.exports = app => {
     //     });
     // });
 
-    app.route('/api/users').get(Users.getAll).post(Users.upsert).delete(Users.delete);
+    app.route('/api/users').get(Users.getAll).post(Users.upsert).delete(Users.active);
     app.route('/api/users/:id').get(Users.getById);
     app.route('/api').get(Apis.index);
 

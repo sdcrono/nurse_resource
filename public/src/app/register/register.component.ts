@@ -10,7 +10,7 @@ import { AlertService, UsersService } from '../_services/index';
 
 export class RegisterComponent {
 
-  model: any = {}
+  model: any = {};
   loading = false;
 
   constructor(

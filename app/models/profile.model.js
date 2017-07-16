@@ -22,7 +22,7 @@ var profileSchema = new Schema({
           message: '{VALUE} is not a valid phone number!'
         }
     },
-	age: { type: Number, min: 0 },	
+	age: { type: Number, min: 22 },	
 	sex: String,
 	address: String,
 	owner: {

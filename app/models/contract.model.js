@@ -9,6 +9,6 @@ var contractSchema = new Schema({
     end_at: Date
 });
 
-var NurseProfiles = mongoose.model('NurseProfiles', nurseProfileSchema);
+var NurseProfiles = mongoose.model('Contracts', nurseProfileSchema);
 
 module.exports = NurseProfiles;

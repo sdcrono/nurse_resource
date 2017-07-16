@@ -45,9 +45,10 @@ module.exports = () => {
 
     require('../app/controllers/setupController')(app);
     // require('../app/controllers/apiController'),
-    require('../app/routes/apiRoute')(app);
+    require('../app/routes/api.route')(app);
+    require('../app/routes/nurse.route')(app);
     require('../app/routes/rolePermissionRoute')(app);
-    require('../app/routes/authenticationRoute')(app);
+    require('../app/routes/authentication.route')(app);
 
     app.get('*', (req, res) => 
         res.send("Appwork!")

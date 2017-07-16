@@ -18,5 +18,5 @@ module.exports = app => {
         }));
 
     app.get('/logout', Users.logout);
-    app.post('/api/users/authenticate', Users.authenticate);
+    app.post('/api/authenticate', Users.authenticate);
 }

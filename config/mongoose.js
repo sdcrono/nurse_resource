@@ -31,11 +31,11 @@ module.exports = function(){
 		}); 
 	});
 
-	require('../app/models/nurseProfileModel');
-	require('../app/models/permissionModel');
-    require('../app/models/profileModel');
-    require('../app/models/roleModel');
-    require('../app/models/serviceModel');
+	require('../app/models/nurseProfile.model');
+	require('../app/models/permission.model');
+    require('../app/models/profile.model');
+    require('../app/models/role.model');
+    require('../app/models/service.model');
     require('../app/models/user.model');
 	return db;
 };

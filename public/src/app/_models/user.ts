@@ -5,13 +5,14 @@ import { Role } from './role';
 export class User {
     _id: string;
     username: string;
-	password: string;
-    nurse: boolean;	
-    admin: boolean;
+    password: string;
+    role: String; 
+    email: string;
+    phone: number;
+    age: number;
+    gender: string;
+    address: string;
     created_at: string;
     updated_at: string;
-    nurse_profile: NurseProfile[];
-    profile: Profile[];
-    role: Role[]; 
     // isDelete: boolean;
 }

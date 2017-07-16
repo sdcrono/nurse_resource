@@ -8,7 +8,7 @@ var roleSchema = new Schema({
         unique: true
     },
 	description: String,
-    permissions: []
+    permissions: [String]
 
 });
 

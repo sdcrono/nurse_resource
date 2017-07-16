@@ -1,7 +1,7 @@
 // const Users = require('../models/userModel'),
-const Users = require('mongoose').model('Users'),
+// const Users = require('mongoose').model('Users'),
 
-    Profiles = require('../models/profileModel');
+//     Profiles = require('../models/profile.model');
 const userService = require('../services/user.service');
 
 var getErrorMessage = function(err){
@@ -124,20 +124,24 @@ exports.upsert = (req, res, next) => {
             //     if (err) throw err;
             //     res.send('success');
             // });
-            userService.updateUser(req.body.id, req.body.username, req.body.password, req.body.first, req.body.last, req.body.email, req.body.phone, req.body.age, req.body.gender, req.body.address)
-                .then(result => {
-                    res.send(result);
-                })
+            userService.updateUser(req.body)
                 .then(result => {
                     res.send(result);
                 })
                 .catch(err => {
                     res.status(400).send(err);
+                });
+            userService.updateProfile(req.body)
+                .then(result => {
+                    res.send(result);
                 })
+                .catch(err => {
+                    res.status(400).send(err);
+                });
         }
 
         else {
-            userService.createUser(req.body.username, req.body.password, req.body.first, req.body.last, req.body.email, req.body.phone, req.body.age, req.body.gender, req.body.address)
+            userService.createUser(req.body)
                 // .then(userService.upsertProfile(req.body.username, req.body.first, req.body.last, req.body.email, req.body.phone, req.body.age, req.body.gender, req.body.address)
                 //     .then(result => {
                 //         res.send(result);
@@ -209,12 +213,44 @@ exports.insert = (req, res) => {
 
     }
 
-exports.delete = (req, res, next) => 
+// exports.delete = (req, res, next) => 
 
-        Users.findByIdAndRemove(req.body.id, (err) => {
-            if (err) throw err;
-            res.send('SUCCESS');
+//         Users.findByIdAndRemove(req.body.id, (err) => {
+//             if (err) throw err;
+//             res.send('SUCCESS');
+//         })
+
+exports.delete = (req, res, next) => {
+    userService.deleteUser(req.body.id)
+        .then(result => {
+            res.send(result);
+        })                
+        .catch(err => {
+            res.status(400).send(err);
         })
+}
+        
+
+exports.deactive = (req, res, next) => 
+        userService.deactiveUser(req.body.id)        
+        .then(result => {
+            res.send(result);
+        })                
+        .catch(err => {
+            res.status(400).send(err);
+        })
+
+exports.active = (req, res, next) => 
+        userService.activeUser(req.body.id)        
+        .then(result => {
+            res.send(result);
+        })                
+        .catch(err => {
+            res.status(400).send(err);
+        })
+
+exports.search = (req, res) => {
+};
 
 exports.register = (req, res, next) => {
     if (!req.user) {
@@ -246,26 +282,41 @@ exports.logout = (req, res) => {
     res.redirect('/');
 };
 
-exports.authenticate = (username, password) => {
-    var deferred = Q.defer();
+// exports.authenticate = (username, password) => {
+//     var deferred = Q.defer();
  
-    db.users.findOne({ username: username }, function (err, user) {
-        if (err) deferred.reject(err.name + ': ' + err.message);
+//     db.users.findOne({ username: username }, function (err, user) {
+//         if (err) deferred.reject(err.name + ': ' + err.message);
  
-        if (user && bcrypt.compareSync(password, user.hash)) {
-            // authentication successful
-            deferred.resolve({
-                _id: user._id,
-                username: user.username,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                token: jwt.sign({ sub: user._id }, config.secret)
-            });
-        } else {
-            // authentication failed
-            deferred.resolve();
-        }
-    });
+//         if (user && bcrypt.compareSync(password, user.hash)) {
+//             // authentication successful
+//             deferred.resolve({
+//                 _id: user._id,
+//                 username: user.username,
+//                 firstName: user.firstName,
+//                 lastName: user.lastName,
+//                 token: jwt.sign({ sub: user._id }, config.secret)
+//             });
+//         } else {
+//             // authentication failed
+//             deferred.resolve();
+//         }
+//     });
  
-    return deferred.promise;
-}
+//     return deferred.promise;
+
+exports.authenticate = (req, res) => 
+    userService.authenticate(req.body.username, req.body.password)
+        .then(function (user) {
+            if (user) {
+                // authentication successful
+                res.send(user);
+            } else {
+                // authentication failed
+                res.status(400).send('Username or password is incorrect');
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+

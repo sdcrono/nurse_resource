@@ -8,8 +8,8 @@ const config = require('./config/config'),
 
 
 const db = mongoose(),
-    app = express(),
-    passports = passport();
+    app = express();
+    // passports = passport();
 
 // const port = process.env.PORT || 3000;
 

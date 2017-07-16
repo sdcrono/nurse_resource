@@ -19,7 +19,7 @@ var userSchema = new Schema({
     provider: String,
 	providerId: String,
 	providerData: {},
-    role: [Schema.Types.ObjectId],
+    role: String,
     location: {
         latitude: Number,
         longitude: Number
@@ -32,6 +32,10 @@ var userSchema = new Schema({
     profile: {
         type: Schema.Types.ObjectId,
         ref: 'profile'
+    },
+    nurseprofile: {
+        type: Schema.Types.ObjectId,
+        ref: 'meta'
     },
     isDelete: Boolean
 });

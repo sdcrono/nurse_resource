@@ -1,10 +1,13 @@
+//  AIzaSyAepYGvisNRywBmOOV3d2_T-9wPBZVy9gM 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
+
+import { AgmCoreModule } from "@agm/core";
 
 import { PostsComponent } from './posts/posts.component';
 import { PostsService } from './_services/posts.service';
@@ -22,6 +25,7 @@ import { HomeComponent } from './home/index';
 import { LoginComponent } from './login/index';
 import { RegisterComponent } from './register/index';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { NurseProvideComponent } from './nurse-provide/nurse-provide.component';
 
 // Define the routes
 const ROUTES = [
@@ -45,12 +49,18 @@ const ROUTES = [
     RegisterComponent,
     HomeComponent,
     AlertComponent,
-    NavMenuComponent  
+    NavMenuComponent,
+    NurseProvideComponent  
   ],
   imports: [
     BrowserModule,
     HttpModule,
     FormsModule,
+    ReactiveFormsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyAepYGvisNRywBmOOV3d2_T-9wPBZVy9gM',
+      libraries: ["places"] 
+    }),
     // RouterModule.forRoot(ROUTES)
     routing
   ],
