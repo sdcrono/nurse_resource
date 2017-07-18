@@ -20,12 +20,13 @@ import { UsersComponent } from './users/users.component';
 import { customHttpProvider } from './_helpers/index';
 import { AlertComponent } from './_directives/index';
 import { AuthGuard } from './_guards/index';
-import { AlertService, AuthenticationService, UsersService } from './_services/index';
+import { AlertService, AuthenticationService, UsersService, NursesService } from './_services/index';
 import { HomeComponent } from './home/index';
 import { LoginComponent } from './login/index';
 import { RegisterComponent } from './register/index';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { NurseProvideComponent } from './nurse-provide/nurse-provide.component';
+import { NavbarComponent, JumbotronComponent  } from './_components/index';
 
 // Define the routes
 const ROUTES = [
@@ -50,7 +51,9 @@ const ROUTES = [
     HomeComponent,
     AlertComponent,
     NavMenuComponent,
-    NurseProvideComponent  
+    NurseProvideComponent,
+    NavbarComponent,
+    JumbotronComponent  
   ],
   imports: [
     BrowserModule,
@@ -69,7 +72,8 @@ const ROUTES = [
     AuthGuard,
     AlertService,
     AuthenticationService,
-    UsersService
+    UsersService,
+    NursesService
   ],
   bootstrap: [AppComponent]
 })

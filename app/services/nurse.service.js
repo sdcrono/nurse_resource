@@ -15,8 +15,10 @@ service.getById = getById;
 service.getMetaById = getMetaById;
 service.createUser = createUser;
 service.createProfile = createProfile;
+service.createNurseProfile = createNurseProfile;
 service.updateUser = updateUser;
 service.updateProfile = updateProfile;
+service.updateNurseProfile = updateNurseProfile;
 service.deleteUser = _deleteUser;
 service.deleteProfile = _deleteProfile;
 service.deactiveUser = deactiveUser;
@@ -37,13 +39,14 @@ function getAll() {
 
                 users.forEach((user) => userMap[user._id] = user );
                 users = _.map(users, function (user) {
-                    return _.omit(users, 'password');
+                    return _.omit(user, 'password');
                 });
                 deferred.resolve(users);
                 // res.send(users);
             })
     return deferred.promise;
 }
+
 
 function userById() {
     let deferred = Q.defer();
@@ -116,8 +119,12 @@ function createUser(userParam) {
                                 let newUser = Users({
                                     username: userParam.username,
                                     password: pass,
-                                    nurse: false,
-                                    admin: false,
+                                    location: {
+                                        latitude: userParam.lat,
+                                        longitude: userParam.lng
+                                    },
+                                    // nurse: false,
+                                    // admin: false,
                                     role: "ROLE_Nurse",
                                     created_at: new Date,
                                     updated_at: new Date,
@@ -227,7 +234,11 @@ function updateUser(userParam) {
         }
 
         var info = {
-            username: userParam.username
+            username: userParam.username,
+            location: {
+                latitude: userParam.lat,
+                longitude: userParam.lng
+            }
         };
 
         if(userParam.password)
@@ -242,7 +253,7 @@ function updateUser(userParam) {
 
 }
 
-function updateProfile(userParam) {
+function updateNurseProfile(userParam) {
     let deferred = Q.defer();
     // let profile = Profiles.find({owner: id});
     NurseProfiles.findOne({owner: userParam.id}, (err, profile) => {

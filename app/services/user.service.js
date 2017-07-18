@@ -126,8 +126,12 @@ function createUser(userParam) {
                                 let newUser = Users({
                                     username: userParam.username,
                                     password: pass,
-                                    nurse: false,
-                                    admin: false,
+                                    location: {
+                                        latitude: userParam.lat,
+                                        longitude: userParam.lng
+                                    },
+                                    // nurse: false,
+                                    // admin: false,
                                     role: "ROLE_User",
                                     created_at: new Date,
                                     updated_at: new Date,
@@ -201,7 +205,11 @@ function updateUser(userParam) {
         }
 
         var info = {
-            username: userParam.username
+            username: userParam.username,
+            location: {
+                latitude: userParam.lat,
+                longitude: userParam.lng
+            }            
         };
 
         if(userParam.password)

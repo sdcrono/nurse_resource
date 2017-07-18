@@ -3,7 +3,45 @@
   <div class="form-group">
     <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
   </div>
-  <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+  <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom" (mapClick)="mapClicked($event)">
     <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+    <agm-marker 
+      *ngFor="let m of markers; let i = index"
+      (markerClick)="clickedMarker(m,i)"
+      [latitude]="m.lat"
+      [longitude]="m.lng"
+      [markerDraggable]="m.draggable"
+      (dragEnd)="markerDragEnd(m, $event)"
+    >
+    <agm-info-window>
+      <strong>{{m.name}}</strong>
+    </agm-info-window>
+  </agm-marker>
   </agm-map>
+
+  <div class="row">
+    <div class="col=md-12">
+      <div class="panel-heading">
+        <h3 class="panel-title">Nurse on Demand</h3>
+      </div>
+      <div class="panel-body">
+        <form (submit)="chooseMarker()">
+          <label>Name</label>
+          <input type="text" [(ngModel)]="markerName" name="markderName"/>
+          <label>Lat</label>
+          <input type="text" [(ngModel)]="markerLat" name="markderLat"/>
+          <label>Lng</label>
+          <input type="text" [(ngModel)]="markerLng" name="markderLng"/>
+          <label>Draggable</label>
+          <select type="text" [(ngModel)]="markerDraggable" name="markderDragglable">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+          <input type="submit" value= "Choose it!"/>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
+
+

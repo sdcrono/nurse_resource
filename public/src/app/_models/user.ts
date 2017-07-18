@@ -12,7 +12,7 @@ export class User {
     age: number;
     gender: string;
     address: string;
-    created_at: string;
-    updated_at: string;
+    // created_at: string;
+    // updated_at: string;
     // isDelete: boolean;
 }

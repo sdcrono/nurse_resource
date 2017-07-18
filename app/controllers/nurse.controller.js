@@ -22,7 +22,7 @@ var getErrorMessage = function(err){
 	
 	return message;
 };
-exports.getById = (req, res, next) => 
+exports.getById = (req, res) => 
         nurseService.getById(req.params.id)
         .then(users => {
             res.send(users);
@@ -53,14 +53,21 @@ exports.getAll = (req, res, next) =>
 exports.upsert = (req, res, next) => {
 
         if (req.body.id) {
-            nurseService.updateUser(req.body.id, req.body.username, req.body.password)
+            nurseService.updateUser(req.body)
                 .then(result => {
                     res.send(result);
                 })
                 .catch(err => {
                     res.status(400).send(err);
                 });
-            nurseService.updateProfile(req.body.id, req.body.first, req.body.last, req.body.email, req.body.phone, req.body.age, req.body.gender, req.body.address)
+            nurseService.updateProfile(req.body)
+                .then(result => {
+                    res.send(result);
+                })
+                .catch(err => {
+                    res.status(400).send(err);
+                });
+            nurseService.updateNurseProfile(req.body)
                 .then(result => {
                     res.send(result);
                 })
