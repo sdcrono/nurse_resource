@@ -206,3 +206,12 @@ exports.authenticate = (req, res) =>
         .catch(function (err) {
             res.status(400).send(err);
         });
+
+exports.search = (req, res, next) => 
+        nurseService.search()
+            .then(users => {
+                res.send(users);
+            })
+            .catch(err => {
+                res.status(400).send(err);
+            })

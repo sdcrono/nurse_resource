@@ -2,9 +2,12 @@ import { Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from "@angular/platform-browser";
+import { Router } from '@angular/router';
 import { AgmCoreModule, MapsAPILoader } from '@agm/core';
-import { NurseProfile, Location } from '../_models/index';
-import { NursesService, MarkersService } from '../_services/index';
+import { User, NurseProfile, Location, ContractModel } from '../_models/index';
+import { Nurse, Contract } from '../_interfaces/index';
+import { AlertService, NursesService, MarkersService, ContractsService } from '../_services/index';
+import {Observable} from 'rxjs/Observable';
 import {} from '@types/googlemaps';
 
 @Component({
@@ -16,7 +19,9 @@ import {} from '@types/googlemaps';
 })
 export class NurseProvideComponent implements OnInit {
 
-  nurses: NurseProfile[] = [];
+  //nurses: NurseProfile[] = [];
+  currentUser: User;
+  nurses: Nurse[] = [];
   public locations: Location;
 
   //Start Position
@@ -26,15 +31,21 @@ export class NurseProvideComponent implements OnInit {
   //Search form
   public searchControl: FormControl;
 
+  //Time
+  whatTime: number;
+  ahuhu: string;
+
   //Zoom level
   public zoom: number;
   public icon : string;
 
   //values
+  markerNo: number;
   markerName: string;
   markerLat: number;
   markerLng: number;
   markerDraggable: boolean;
+  markerDescription: string;
 
   //Markers
   markers: marker[] = [
@@ -66,18 +77,30 @@ export class NurseProvideComponent implements OnInit {
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private http: HttpModule,
+    private router: Router,
+    private alertService: AlertService,
     private nursesService: NursesService,
-    private markerService: MarkersService
+    private markerService: MarkersService,
+    private contractsService: ContractsService
   ) { }
 
   ngOnInit() {
+
+    //get current user
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     //set google maps defaults
     this.zoom = 12;
     this.latitude = 10.847171;
     this.longitude = 106.786956;
+
     //create search FormControl
     this.searchControl = new FormControl();
+
+    // this.whatTime = Observable.interval(1000).map(x => new Date()).share();
+    // this.whatTime = Date.now();
+    this.ahuhu = "Date.now()";
+    console.log("Now:" + this.whatTime);
 
     //set current position
     this.setCurrentPosition();
@@ -91,6 +114,7 @@ export class NurseProvideComponent implements OnInit {
 
   clickedMarker(marker: marker, index: number) {
     console.log("Clicked marker " + marker.name + ' at index ' + index + ' with lat ' + marker.lat + ' lng ' + marker.lng);
+    this.markerNo = marker.no;
     this.markerName = marker.name;
     this.markerLat= marker.lat;
     this.markerLng = marker.lng;
@@ -100,6 +124,7 @@ export class NurseProvideComponent implements OnInit {
   mapClicked($event: any) {
     console.log("Clicked map");
     let newMarker = {
+      no: -1,
       name: 'Untitle',
       lat: $event.coords.lat,
       lng: $event.coords.lng,
@@ -121,6 +146,30 @@ export class NurseProvideComponent implements OnInit {
     var newLat = $event.coords.lat;
     var newLng = $event.coords.lng;
 
+  }
+
+  chooseMarker() {
+    // event.preventDefault();
+    console.log("Choosing nurse is " + this.nurses[this.markerNo].username + ' at index ' + this.markerNo);
+    // let choosingNurse= {
+    //   userId: this.currentUser._id,
+    //   nurseId: this.nurses[this.markerNo].id,
+    //   created_at: "2017-12-11",
+    //   end_at: "2017-12-12"
+    // }
+    // console.log("ahuhu" + choosingNurse.toString());
+    let contract = new ContractModel(this.currentUser._id, this.nurses[this.markerNo].id, new Date(Date.now()), new Date("2017-12-12"));
+    this.contractsService.create(contract).subscribe(
+                data => {
+                    this.alertService.success('Make a contract successful', true);
+                    this.ahuhu ="123";
+                    // this.router.navigate(['/login']);
+                },
+                error => {
+                    this.alertService.error(error);
+                    this.ahuhu ="456";
+                    // this.loading = false;
+                });
   }
 
   private autoComplete() {
@@ -159,17 +208,39 @@ export class NurseProvideComponent implements OnInit {
   }
 
     private loadAllNurseOnTheMap() {
-        this.nursesService.getAll().subscribe(nurses => { 
-          this.nurses = nurses;
-          this.nurses.forEach(nurse => {
+      let dem = 0;
+        this.nursesService.search().subscribe(nurses => { 
+          // this.nurses = nurses;
+          // this.nurses.forEach(nurse => {
+          //   console.log("Nurse ", nurse);
+          //   console.log("location ", this.locations);
+          //   // let nurseMarker = {
+          //   //   name: nurse.username,
+          //   //   lat: +nurse.location.latitude.toString(),
+          //   //   lng: +nurse.location.longitude.toString(),
+          //   //   draggable: false
+          //   // }
+          //   var locationss = new Location();
+          //   locationss= Object.assign({}, nurse.location);
+          //   let nurseMarker = {
+          //     name: nurse.username,
+          //     lat: locationss.latitude,
+          //     lng: locationss.longitude,
+          //     draggable: false
+          //   }
+
+            this.nurses = nurses;
+            nurses.forEach(nurse => {
             console.log("Nurse ", nurse);
-            console.log("location ", this.locations);
+            console.log("location ", nurse.location.latitude.toString());
             let nurseMarker = {
+              no: dem,
               name: nurse.username,
-              lat: +nurse.location.latitude.toString(),
-              lng: +nurse.location.longitude.toString(),
+              lat: nurse.location.latitude,
+              lng: nurse.location.longitude,
               draggable: false
             }
+            dem++;
             console.log("Nurse Marker ", nurseMarker);
             this.markers.push(nurseMarker);
           });  
@@ -182,6 +253,7 @@ export class NurseProvideComponent implements OnInit {
 
 
   interface marker {
+    no: number;
     name?: string;
     lat: number;
     lng: number;

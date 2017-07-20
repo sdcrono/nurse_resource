@@ -8,6 +8,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 
 import { NurseProfile } from '../_models/index';
+import { Nurse } from '../_interfaces/index';
 
 @Injectable()
 export class NursesService {
@@ -16,6 +17,11 @@ export class NursesService {
 
     getAll() {
         return this.http.get('/nurses').map((response: Response) => response.json() as NurseProfile[]);
+    }
+
+    search() {
+        // return this.http.get('/activenurses').map((response: Response) => response.json() as NurseProfile[]);
+        return this.http.get('/activenurses').map((response: Response) => response.json() as Nurse[]);
     }
  
     // getById(_id: string) {
@@ -35,3 +41,34 @@ export class NursesService {
     // }
 
 }
+
+
+// export interface Nurse {
+//     _id: string;
+//     username: string;
+//     nurseProfile: NurseProfil;
+//     profile: Profil;
+//     location: Loc;
+//     // certification: string;
+//     // rate: number;
+//     // retribution: number;
+// }
+
+// export interface Loc {
+//     latitude: number;
+//     longitude: number;
+// }
+
+// export interface NurseProfil {
+//     career: string;
+//     working_place: string;
+//     address: string;
+//     age: number;
+//     sex: string;
+// }
+
+// export interface Profil {
+
+//     email: string;
+//     phone: number;
+// }

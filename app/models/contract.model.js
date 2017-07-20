@@ -4,11 +4,11 @@ var Schema = mongoose.Schema;
 
 var contractSchema = new Schema({
     userId: Schema.Types.ObjectId,
-    NurseId: Schema.Types.ObjectId,
+    nurseId: Schema.Types.ObjectId,
     created_at: Date,
     end_at: Date
 });
 
-var NurseProfiles = mongoose.model('Contracts', nurseProfileSchema);
+var Contracts = mongoose.model('Contracts', contractSchema);
 
-module.exports = NurseProfiles;
+module.exports = Contracts;

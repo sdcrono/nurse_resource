@@ -31,11 +31,11 @@ var userSchema = new Schema({
     },
     profile: {
         type: Schema.Types.ObjectId,
-        ref: 'profile'
+        ref: 'Profiles'
     },
     nurseprofile: {
         type: Schema.Types.ObjectId,
-        ref: 'meta'
+        ref: 'NurseProfiles'
     },
     isDelete: Boolean
 });

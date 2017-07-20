@@ -23,6 +23,7 @@ service.deleteUser = _deleteUser;
 service.deleteProfile = _deleteProfile;
 service.deactiveUser = deactiveUser;
 service.activeUser = activeUser;
+service.search = search;
  
 module.exports = service;
 
@@ -46,6 +47,7 @@ function getAll() {
             })
     return deferred.promise;
 }
+
 
 
 function userById() {
@@ -371,5 +373,33 @@ function activeUser(id) {
         });
 
     });
+    return deferred.promise;
+}
+
+
+function search() {
+    let deferred = Q.defer();
+ 
+    Users.find({isDelete: false, role: "ROLE_Nurse"}).select("-password -created_at -updated_at -isDelete -role -__v").populate([{
+                path: 'profile',
+                model: 'Profiles',
+                select: '-_id -owner -__v'
+            },{           
+                path: 'nurseprofile',
+                model: 'NurseProfiles',
+                select: '-_id -age -sex -address -certification -rate -retribution -owner -__v'
+            }]).exec((err, users) => {
+
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                
+                // var userMap = {};
+
+                // users.forEach((user) => userMap[user._id] = user );
+                // users = _.map(users, function (user) {
+                //     return _.omit(user, 'password');
+                // });
+                deferred.resolve(users);
+                // res.send(users);
+            })
     return deferred.promise;
 }

@@ -4,5 +4,6 @@ const Users = require('../controllers/user.controller'),
 module.exports = app => {
 
     app.route('/api/nurses').get(Nurses.getAll).post(Nurses.upsert).delete(Users.deactive);
+    app.route('/api/activenurses').get(Nurses.search);
     app.route('/api/nurses/:id').get(Nurses.getById,Nurses.getMetaById);
 }

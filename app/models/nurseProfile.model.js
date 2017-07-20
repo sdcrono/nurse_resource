@@ -15,6 +15,10 @@ var nurseProfileSchema = new Schema({
     rate: Number,
     retribution: Number,
     history: String,
+    type: {
+        type: String,
+        enum: ['Internal', 'External']
+    },
     owner: Schema.Types.ObjectId
 });
 

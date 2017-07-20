@@ -47,6 +47,7 @@ module.exports = () => {
     // require('../app/controllers/apiController'),
     require('../app/routes/api.route')(app);
     require('../app/routes/nurse.route')(app);
+    require('../app/routes/contract.route')(app);
     require('../app/routes/rolePermissionRoute')(app);
     require('../app/routes/authentication.route')(app);
 

@@ -1,5 +1,5 @@
 <div class="container">
-  <h1>Angular 2 + Google Maps Places Autocomplete</h1>
+  <h1>{{ahuhu}} </h1>
   <div class="form-group">
     <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
   </div>
@@ -27,16 +27,18 @@
       <div class="panel-body">
         <form (submit)="chooseMarker()">
           <label>Name</label>
-          <input type="text" [(ngModel)]="markerName" name="markderName"/>
+          <input type="text" [(ngModel)]="markerName" name="markderName"/><br/>
           <label>Lat</label>
-          <input type="text" [(ngModel)]="markerLat" name="markderLat"/>
+          <input type="text" [(ngModel)]="markerLat" name="markderLat"/><br/>
           <label>Lng</label>
-          <input type="text" [(ngModel)]="markerLng" name="markderLng"/>
+          <input type="text" [(ngModel)]="markerLng" name="markderLng"/><br/>
           <label>Draggable</label>
           <select type="text" [(ngModel)]="markerDraggable" name="markderDragglable">
             <option value="no">No</option>
             <option value="yes">Yes</option>
-          </select>
+          </select><br/>
+          <label>Description</label>
+          <input type="text" [(ngModel)]="markerDescription" name="markderDescrription"/><br/>
           <input type="submit" value= "Choose it!"/>
         </form>
       </div>
