@@ -1,9 +1,21 @@
 <div class="container">
-  <h1>{{ahuhu}} </h1>
+  <h1>{{ahuhu}} {{radius}}</h1>
+  <div class="input-group">
+          <span class="input-group-btn">
+              <button type="button" class="btn btn-danger btn-number"  (click)="collapseSearchingRadius()">
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+          </span>
+          <span class="input-group-btn">
+              <button type="button" class="btn btn-success btn-number" (click)="expandSearchingRadius()">
+                  <span class="glyphicon glyphicon-plus"></span>
+              </button>
+          </span>
+      </div>
   <div class="form-group">
     <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
   </div>
-  <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom" (mapClick)="mapClicked($event)">
+  <agm-map [latitude]="latitude" [longitude]="longitude" [fitBounds]="latlngBounds" [mapTypeId]="'hybrid'" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)">
     <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
     <agm-marker 
       *ngFor="let m of markers; let i = index"
@@ -17,7 +29,17 @@
       <strong>{{m.name}}</strong>
     </agm-info-window>
   </agm-marker>
+   <agm-circle [latitude]="latitude" [longitude]="longitude" 
+      [(radius)]="radius"
+      [circleDraggable]="false"
+      [editable]="true"
+      [visible]="true"
+      (radiusChange)="radiusChanged($event)"
+      #circle>
+  </agm-circle> 
+          <!-- [fillColor]="'red'" -->
   </agm-map>
+
 
   <div class="row">
     <div class="col=md-12">

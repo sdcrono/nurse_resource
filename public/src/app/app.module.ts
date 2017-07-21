@@ -62,7 +62,9 @@ const ROUTES = [
     ReactiveFormsModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAepYGvisNRywBmOOV3d2_T-9wPBZVy9gM',
-      libraries: ["places"] 
+      libraries: ["places","geometry"]
+      // language: 'vi',
+      // region: 'VI' 
     }),
     // RouterModule.forRoot(ROUTES)
     routing
