@@ -3,12 +3,13 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var contractDetailSchema = new Schema({
-    dates: [Number],
+    jobDescription: String,
+    dates: [String],
     // startHour: TimeRanges,
     // endHour: TimeRanges,
     owner: {
         type: Schema.Types.ObjectId,
-        ref: 'user'	
+        ref: 'Contracts'	
     }
 });
 

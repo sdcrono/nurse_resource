@@ -1,3 +1,4 @@
+export * from './contractDetail';
 export * from './nurseProfile';
 export * from './permission';
 export * from './location';

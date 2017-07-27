@@ -65,7 +65,7 @@ function createContract(contractParam) {
     let deferred = Q.defer();
     console.log("not fun:" + contractParam);
 
-    let newContract = Contracts({
+    let newContract = new Contracts({
         userId: contractParam.userId,
         NurseId: contractParam.nurseId,
         created_at: contractParam.created_at,
@@ -74,6 +74,21 @@ function createContract(contractParam) {
     newContract.save((err, contract) => {
         if (err) deferred.reject(err.name + ': ' + err.message);
         deferred.resolve('Success');
+        let newContractDetail = new Details({
+            jobDescription: contractParam.detail.jobDescription,
+            dates: contractParam.detail.dates,
+            owner: contract._id
+        });
+        newContractDetail.save((err, detail) => {
+            Contracts.findOneAndUpdate({
+                userId: contractParam.userId,
+                NurseId: contractParam.nurseId,
+                created_at: contractParam.created_at
+            }, {detail: detail._id}, (err, contract) => {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                    deferred.resolve('Success2');
+            });
+        });
         // createDetail(contractParam);
     });
                                 

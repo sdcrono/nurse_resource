@@ -4,8 +4,7 @@ var Schema = mongoose.Schema;
 
 var profileSchema = new Schema({
     name: {
-        first: String,
-        last: { type: String, trim: true }
+        type: String
     },
 	email: {
         type: String,

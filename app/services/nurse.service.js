@@ -10,7 +10,7 @@ const _ = require('lodash');
 var service = {};
  
 // service.authenticate = authenticate;
-service.getAll = getAll;
+service.getAll = getAllNurses;
 service.getById = getById;
 service.getMetaById = getMetaById;
 service.createUser = createUser;
@@ -23,7 +23,8 @@ service.deleteUser = _deleteUser;
 service.deleteProfile = _deleteProfile;
 service.deactiveUser = deactiveUser;
 service.activeUser = activeUser;
-service.search = search;
+service.deactiveNurse = deactiveNurse;
+service.search = searchByNurseProfile;
  
 module.exports = service;
 
@@ -63,17 +64,38 @@ function userById() {
 function getById(_id) {
     let deferred = Q.defer();
  
-    Users.findById({ _id: _id }, function (err, user) {
-        if (err) deferred.reject(err.name + ': ' + err.message);
+    // Users.findById({ _id: _id }, function (err, user) {
+    //     if (err) deferred.reject(err.name + ': ' + err.message);
  
-        if (user) {
-            // return user (without hashed password)
-            deferred.resolve(_.omit(user, 'password'));
-        } else {
-            // user not found
-            deferred.resolve();
-        }
-    });
+    //     if (user) {
+    //         // return user (without hashed password)
+    //         deferred.resolve(_.omit(user, 'password'));
+    //     } else {
+    //         // user not found
+    //         deferred.resolve();
+    //     }
+    // });
+    Users.findById({ _id: _id }).select("-password -created_at -updated_at -isDelete -role -__v").populate([{
+            path: 'profile',
+            model: 'Profiles',
+            select: '-_id -owner -__v'
+        },{           
+            path: 'nurseprofile',
+            model: 'NurseProfiles',
+            select: '-_id -age -sex -address -isDelete -owner -__v'
+        }]).exec((err, user) => {
+
+            if (err) deferred.reject(err.name + ': ' + err.message);
+            
+            // var userMap = {};
+
+            // users.forEach((user) => userMap[user._id] = user );
+            // users = _.map(users, function (user) {
+            //     return _.omit(user, 'password');
+            // });
+            deferred.resolve(user);
+            // res.send(users);
+        })
  
     return deferred.promise;
 }
@@ -136,12 +158,12 @@ function createUser(userParam) {
                                     if (err) deferred.reject(err.name + ': ' + err.message);
                                     // deferred.resolve('Success');
                                     createProfile(userParam).then(
-                                        deferred.resolve('Success5')
+                                        deferred.resolve(user)
                                     ).catch(err => {
                                         deferred.reject(err);
                                     });
                                     createNurseProfile(userParam).then(
-                                        deferred.resolve('Success6')
+                                        deferred.resolve(user)
                                     ).catch(err => {
                                         deferred.reject(err);
                                     });
@@ -164,10 +186,7 @@ function createProfile(userParam) {
             deferred.reject(err.name + ': ' + err.message);
         }
         let profile = new Profiles ({
-            name: {
-                first: userParam.firstname,
-                last: userParam.lastname
-            },
+            name: userParam.name,
             email: userParam.email,
             phone: userParam.phone,
             age: userParam.age,	
@@ -202,12 +221,16 @@ function createNurseProfile(userParam) {
         let profile = new NurseProfiles ({
             certification: userParam.certification,
             career: userParam.career,
-            working_place: userParam.working_place,
+            // working_place: userParam.working_place,
             address: userParam.address,
             age: userParam.age,	
             sex: userParam.gender,
-            rate: userParam.rate,
-            retribution: userParam.retribution,
+            hospital: userParam.hospital,
+            type: userParam.type,
+            rate: 0,
+            retribution: 0,
+            isDelete: false,
+            status: "free",
             owner: user._id 
         })
 
@@ -269,13 +292,16 @@ function updateNurseProfile(userParam) {
             address: userParam.address,
             age: userParam.age,	
             sex: userParam.gender,
+            hospital: userParam.hospital,
+            type: userParam.type,
             rate: userParam.rate,
-            retribution: userParam.retribution
+            retribution: userParam.retribution,
+            status: "free"
         }
 
         profile.update(set, (err, doc) => {
             if (err) deferred.reject(err.name + ': ' + err.message);
-            deferred.resolve('Success2');
+            deferred.resolve(userParam.id);
         });
     });
 
@@ -290,10 +316,7 @@ function updateProfile(userParam) {
             deferred.reject(err.name + ': ' + err.message);
         }   
         let set = {
-            name: {
-                first: userParam.firstname,
-                last: userParam.lastname
-            },
+            name: userParam.name,
             email: userParam.email,
             phone: userParam.phone,
             age: userParam.age,	
@@ -303,7 +326,7 @@ function updateProfile(userParam) {
 
         profile.update(set, (err, doc) => {
             if (err) deferred.reject(err.name + ': ' + err.message);
-            deferred.resolve('Success2');
+            deferred.resolve(userParam.id);
         });
     });
 
@@ -376,10 +399,64 @@ function activeUser(id) {
     return deferred.promise;
 }
 
+function deactiveNurse(id) {
 
-function search() {
     let deferred = Q.defer();
- 
+
+    NurseProfiles.findOne({owner: id}, (err, nurse) => {
+        if (err){
+            deferred.reject(err.name + ': ' + err.message);
+        }
+
+        let info = {
+            isDelete: true,
+        };
+
+        nurse.update(info, (err) => {
+            if (err) { deferred.reject(err.name + ': ' + err.message); }
+            deferred.resolve('SUCCESS');
+        });
+
+    });
+    return deferred.promise;
+}
+
+
+// function searchByUser(searchCriteria) {
+//     let deferred = Q.defer();
+//     let query = {};
+//     if (searchCriteria.body.career != "")
+//         query.career = searchCriteria.body.career;
+//     if (searchCriteria.body.type !="")
+//         query.type = searchCriteria.body.type;
+//     if (searchCriteria.body.hospital != "")
+//         query.hospital = searchCriteria.body.hospital;
+//     Users.find({isDelete: false, role: "ROLE_Nurse"}).select("-password -created_at -updated_at -isDelete -role -__v").populate([{
+//                 path: 'profile',
+//                 model: 'Profiles',
+//                 select: '-_id -owner -__v'
+//             },{           
+//                 path: 'nurseprofile',
+//                 model: 'NurseProfiles',
+//                 select: '-_id -age -sex -address -certification -rate -retribution -owner -__v'
+//             }]).exec((err, users) => {
+
+//                 if (err) deferred.reject(err.name + ': ' + err.message);
+                
+//                 // var userMap = {};
+
+//                 // users.forEach((user) => userMap[user._id] = user );
+//                 // users = _.map(users, function (user) {
+//                 //     return _.omit(user, 'password');
+//                 // });
+//                 deferred.resolve(users);
+//                 // res.send(users);
+//             })
+//     return deferred.promise;
+// }
+
+function getAllNurses() {
+    let deferred = Q.defer();
     Users.find({isDelete: false, role: "ROLE_Nurse"}).select("-password -created_at -updated_at -isDelete -role -__v").populate([{
                 path: 'profile',
                 model: 'Profiles',
@@ -387,8 +464,44 @@ function search() {
             },{           
                 path: 'nurseprofile',
                 model: 'NurseProfiles',
-                select: '-_id -age -sex -address -certification -rate -retribution -owner -__v'
+                select: '-_id -age -sex -address -certification -rate -retribution -isDelete -owner -__v'
             }]).exec((err, users) => {
+
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                
+                // var userMap = {};
+
+                // users.forEach((user) => userMap[user._id] = user );
+                // users = _.map(users, function (user) {
+                //     return _.omit(user, 'password');
+                // });
+                deferred.resolve(users);
+                // res.send(users);
+            })
+    return deferred.promise;
+}
+
+function searchByNurseProfile(searchCriteria) {
+    let deferred = Q.defer();
+    let query = {
+        isDelete: false
+    };
+    if (searchCriteria.career != "")
+        query.career = searchCriteria.career;
+    if (searchCriteria.type !="")
+        query.type = searchCriteria.type;
+    if (searchCriteria.hospital != "")
+        query.hospital = searchCriteria.hospital;
+    NurseProfiles.find(query).select("-_id -age -sex -address -certification -rate -retribution -isDelete -__v").populate({
+                path: 'owner',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            }).exec((err, users) => {
 
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 

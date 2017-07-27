@@ -16,10 +16,20 @@
                        <a [routerLink]="['/home']">  
                            <span class='glyphicon glyphicon-home'></span> Home  
                        </a>  
-                   </li>  
-                   <li [routerLinkActive]="['link-active']">  
-                       <a [routerLink]="['/new']">  
-                           <span class='glyphicon glyphicon-user'></span> New Employee  
+                   </li>
+                   <li [routerLinkActive]="['link-active']" *ngIf="currentUser.role=='ROLE_Admin'">  
+                       <a [routerLink]="['/nurses']">  
+                           <span class='glyphicon glyphicon-user'></span> Quản lý người dùng
+                       </a>  
+                   </li>
+                   <li [routerLinkActive]="['link-active']" *ngIf="currentUser.role=='ROLE_Admin'">  
+                       <a [routerLink]="['/users']">  
+                           <span class='glyphicon glyphicon-user'></span> Quản lý điều dưỡng
+                       </a>  
+                   </li>                                              
+                   <li [routerLinkActive]="['link-active']" *ngIf="currentUser.role=='ROLE_User'">  
+                       <a [routerLink]="['/search']">  
+                           <span class='glyphicon glyphicon-user'></span> Tìm kiếm người bệnh
                        </a>  
                    </li>  
                </ul>  

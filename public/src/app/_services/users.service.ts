@@ -8,6 +8,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 
 import { User } from '../_models/index';
+import { Users } from '../_interfaces/index';
 
 @Injectable()
 export class UsersService {
@@ -39,9 +40,12 @@ export class UsersService {
     getAll() {
         return this.http.get('/users').map((response: Response) => response.json() as User[]);
     }
+    getAllNurse() {
+        return this.http.get('/users').map((response: Response) => response.json() as Users[]);
+    }
  
     getById(_id: string) {
-        return this.http.get('/users/' + _id).map((response: Response) => response.json());
+        return this.http.get('/users/' + _id).map((response: Response) => response.json() as Users);
     }
  
     create(user: User) {
@@ -51,9 +55,16 @@ export class UsersService {
     update(user: User) {
         return this.http.put('/users/' + user._id, user);
     }
+
+    upsert(user: any) {
+        return this.http.post('/users', user);
+    }    
  
-    delete(_id: string) {
-        return this.http.delete('/users/' + _id);
+    // delete(_id: string) {
+    //     return this.http.delete('/users/' + _id);
+    // }
+    delete(_id: any) {
+        return this.http.post('/users/del', _id);
     }
 
 }

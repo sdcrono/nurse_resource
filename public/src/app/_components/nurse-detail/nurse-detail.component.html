@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <a [routerLink]="['/nurses/', nurse._id, 'edit']" class="btn btn-success">EDIT</a>
+    </div>
+  </div>
+  <h1>{{ nurse.username }}</h1>
+  <dl class="list">
+    <dt>Name</dt>
+    <dd *ngIf=" nurse.profile">{{ nurse.profile.name }}</dd>
+    <dt>Email</dt>
+    <dd *ngIf=" nurse.profile">{{ nurse.profile.email }}</dd>
+    <dt>Phone</dt>
+    <dd *ngIf=" nurse.profile">{{ nurse.profile.phone }}</dd>
+    <dt>Age</dt>
+    <dd *ngIf=" nurse.profile">{{ nurse.profile.age }}</dd>
+    <dt>Gender</dt>
+    <dd *ngIf=" nurse.profile">{{ nurse.profile.sex }}</dd>
+    <dt>Address</dt>
+    <dd *ngIf=" nurse.profile">{{ nurse.profile.address }}</dd>
+    <dt>Career</dt>
+    <dd *ngIf=" nurse.nurseprofile">{{ nurse.nurseprofile.career }}</dd>
+    <dt>Type</dt>
+    <dd *ngIf=" nurse.nurseprofile">{{ nurse.nurseprofile.type }}</dd>
+    <dt>Gender</dt>
+    <dd *ngIf=" nurse.nurseprofile">{{ nurse.nurseprofile.hospital }}</dd>
+  </dl>
+</div>

@@ -15,11 +15,20 @@ var nurseProfileSchema = new Schema({
     rate: Number,
     retribution: Number,
     history: String,
+    hospital: String,
     type: {
         type: String,
         enum: ['Internal', 'External']
     },
-    owner: Schema.Types.ObjectId
+    isDelete: Boolean,
+    status: {
+        type: String,
+        enum: ['Free', 'Working']
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'Users'
+    }
 });
 
 var NurseProfiles = mongoose.model('NurseProfiles', nurseProfileSchema);

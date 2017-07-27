@@ -9,7 +9,7 @@ const _ = require('lodash');
 var service = {};
  
 service.authenticate = authenticate;
-service.getAll = getAll;
+service.getAll = getAllUser;
 service.getById = getById;
 service.createUser = createUser;
 service.createProfile = createProfile;
@@ -73,6 +73,29 @@ function getAll() {
     return deferred.promise;
 }
 
+
+function getAllUser() {
+    let deferred = Q.defer();
+    Users.find({isDelete: false, role: "ROLE_User"}).select("-password -created_at -updated_at -isDelete -role -__v").populate({
+                path: 'profile',
+                model: 'Profiles',
+                select: '-_id -owner -__v'
+            }).exec((err, users) => {
+
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                
+                // var userMap = {};
+
+                // users.forEach((user) => userMap[user._id] = user );
+                // users = _.map(users, function (user) {
+                //     return _.omit(user, 'password');
+                // });
+                deferred.resolve(users);
+                // res.send(users);
+            })
+    return deferred.promise;
+}
+
 function userById() {
     let deferred = Q.defer();
     Users.find({ username: req.params.id },
@@ -83,21 +106,56 @@ function userById() {
 
 }
 
+// function getById(_id) {
+//     let deferred = Q.defer();
+ 
+//     Users.findById({ _id: _id }, function (err, user) {
+//         if (err) deferred.reject(err.name + ': ' + err.message);
+ 
+//         if (user) {
+//             // return user (without hashed password)
+//             deferred.resolve(_.omit(user, 'hash'));
+//         } else {
+//             // user not found
+//             deferred.resolve();
+//         }
+//     });
+ 
+//     return deferred.promise;
+// }
+
 function getById(_id) {
     let deferred = Q.defer();
  
-    Users.findById({ _id: _id }, function (err, user) {
-        if (err) deferred.reject(err.name + ': ' + err.message);
+    // Users.findById({ _id: _id }, function (err, user) {
+    //     if (err) deferred.reject(err.name + ': ' + err.message);
  
-        if (user) {
-            // return user (without hashed password)
-            deferred.resolve(_.omit(user, 'hash'));
-        } else {
-            // user not found
-            deferred.resolve();
-        }
-    });
- 
+    //     if (user) {
+    //         // return user (without hashed password)
+    //         deferred.resolve(_.omit(user, 'password'));
+    //     } else {
+    //         // user not found
+    //         deferred.resolve();
+    //     }
+    // });
+    Users.findById({ _id: _id }).select("-password -created_at -updated_at -isDelete -role -__v").populate({
+            path: 'profile',
+            model: 'Profiles',
+            select: '-_id -owner -__v'
+        }).exec((err, user) => {
+
+            if (err) deferred.reject(err.name + ': ' + err.message);
+            
+            // var userMap = {};
+
+            // users.forEach((user) => userMap[user._id] = user );
+            // users = _.map(users, function (user) {
+            //     return _.omit(user, 'password');
+            // });
+            deferred.resolve(user);
+            // res.send(users);
+        })
+
     return deferred.promise;
 }
 
@@ -160,15 +218,12 @@ function createProfile(userParam) {
             deferred.reject(err.name + ': ' + err.message);
         }
         let profile = new Profiles ({
-            name: {
-                first: userParam.firstname,
-                last: userParam.lastname
-            },
+            name: userParam.name,
             email: userParam.email,
             phone: userParam.phone,
             age: userParam.age,	
             sex: userParam.gender,
-            address: userParam.address,
+            address: userParam.address, 
             owner: user._id 
         })
 

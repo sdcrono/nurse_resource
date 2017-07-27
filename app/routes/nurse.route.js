@@ -3,7 +3,9 @@ const Users = require('../controllers/user.controller'),
 
 module.exports = app => {
 
-    app.route('/api/nurses').get(Nurses.getAll).post(Nurses.upsert).delete(Users.deactive);
-    app.route('/api/activenurses').get(Nurses.search);
-    app.route('/api/nurses/:id').get(Nurses.getById,Nurses.getMetaById);
+    app.route('/api/nurses').get(Nurses.getAll).post(Nurses.upsert).delete(Nurses.delete);
+    app.route('/api/nurses/del').post(Nurses.deactive);
+    app.route('/api/activenurses').get(Nurses.search).post(Nurses.search);
+    app.route('/api/nurses/:id').get(Nurses.read).post(Nurses.upsert);
+    app.param('id', Nurses.getById);
 }

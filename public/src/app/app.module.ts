@@ -6,8 +6,10 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 import { AgmCoreModule } from "@agm/core";
+import { NgDateRangePickerModule } from 'ng-daterangepicker';
 
 import { PostsComponent } from './posts/posts.component';
 import { PostsService } from './_services/posts.service';
@@ -26,7 +28,9 @@ import { LoginComponent } from './login/index';
 import { RegisterComponent } from './register/index';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { NurseProvideComponent } from './nurse-provide/nurse-provide.component';
-import { NavbarComponent, JumbotronComponent  } from './_components/index';
+import { NavbarComponent, JumbotronComponent, NurseComponent, NurseDetailComponent, NurseCreateComponent, NurseEditComponent, UserComponent, UserDetailComponent, UserCreateComponent, UserEditComponent  } from './_components/index';
+
+
 
 // Define the routes
 const ROUTES = [
@@ -53,7 +57,15 @@ const ROUTES = [
     NavMenuComponent,
     NurseProvideComponent,
     NavbarComponent,
-    JumbotronComponent  
+    JumbotronComponent,
+    NurseComponent,
+    NurseDetailComponent,
+    NurseCreateComponent,
+    NurseEditComponent,
+    UserComponent,
+    UserCreateComponent,
+    UserEditComponent,
+    UserDetailComponent  
   ],
   imports: [
     BrowserModule,
@@ -66,10 +78,12 @@ const ROUTES = [
       // language: 'vi',
       // region: 'VI' 
     }),
+    NgDateRangePickerModule,
     // RouterModule.forRoot(ROUTES)
     routing
   ],
   providers: [
+    // {provide: LocationStrategy, useClass: HashLocationStrategy},
     customHttpProvider,
     AuthGuard,
     AlertService,

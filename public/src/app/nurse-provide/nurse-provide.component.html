@@ -1,56 +1,123 @@
 <div class="container">
-  <h1>{{ahuhu}} {{radius}}</h1>
-  <div class="input-group">
-          <span class="input-group-btn">
-              <button type="button" class="btn btn-danger btn-number"  (click)="collapseSearchingRadius()">
-                <span class="glyphicon glyphicon-minus"></span>
-              </button>
-          </span>
-          <span class="input-group-btn">
-              <button type="button" class="btn btn-success btn-number" (click)="expandSearchingRadius()">
-                  <span class="glyphicon glyphicon-plus"></span>
-              </button>
-          </span>
-      </div>
-  <div class="form-group">
-    <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
-  </div>
-  <agm-map [latitude]="latitude" [longitude]="longitude" [fitBounds]="latlngBounds" [mapTypeId]="'hybrid'" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)">
-    <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
-    <agm-marker 
-      *ngFor="let m of markers; let i = index"
-      (markerClick)="clickedMarker(m,i)"
-      [latitude]="m.lat"
-      [longitude]="m.lng"
-      [markerDraggable]="m.draggable"
-      (dragEnd)="markerDragEnd(m, $event)"
-    >
-    <agm-info-window>
-      <strong>{{m.name}}</strong>
-    </agm-info-window>
-  </agm-marker>
-   <agm-circle [latitude]="latitude" [longitude]="longitude" 
-      [(radius)]="radius"
-      [circleDraggable]="false"
-      [editable]="true"
-      [visible]="true"
-      (radiusChange)="radiusChanged($event)"
-      #circle>
-  </agm-circle> 
-          <!-- [fillColor]="'red'" -->
-  </agm-map>
-
 
   <div class="row">
-    <div class="col=md-12">
+      <h1>{{ahuhu}} {{radius}}</h1>
+    <div class="col-md-1">
+      <div class="input-group">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-danger btn-number"  (click)="collapseSearchingRadius()">
+            <span class="glyphicon glyphicon-minus"></span>
+          </button>
+        </span>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-success btn-number" (click)="expandSearchingRadius()">
+              <span class="glyphicon glyphicon-plus"></span>
+          </button>
+        </span>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
+      </div>
+    </div>    
+    <div class="col-md-8">
+      <div class="input-group">
+        <select type="text" [(ngModel)]="searchCriteriaCareer" name="searchCriteriaCareer" (ngModelChange)="onChangeCareer($event)">
+          <!-- <option [value]="LPN">LPN</option>
+          <option [value]="RN">RN</option> -->
+          <!-- <option *ngFor="let item of selectCareerOption" [ngValue]="item" [disabled]="item.value==0"> -->
+          <option *ngFor="let item of selectCareerOption" [ngValue]="item">  
+            {{item.label}}
+          </option>
+        </select>
+        <select type="text" [(ngModel)]="searchCriteriaType" name="searchCriteriaType" (ngModelChange)="onChangeType($event)">
+          <!-- <option [value]="Internal">Internal</option>
+          <option [value]="External">External</option> -->
+          <option *ngFor="let item of selectTypeOption" [ngValue]="item">
+            {{item.label}}
+          </option>
+        </select>
+        <select type="text" [(ngModel)]="searchCriteriaHospital" name="searchCriteriaHospital" (ngModelChange)="onChangeHospital($event)">
+          <!-- <option [value]="BỆNH VIỆN AN BÌNH">BỆNH VIỆN AN BÌNH</option>
+          <option [value]="BỆNH VIỆN QUÂN DÂN MIỀN ĐÔNG">BỆNH VIỆN QUÂN DÂN MIỀN ĐÔNG</option>
+          <option [value]="BỆNH VIỆN BƯU ĐIỆN 2">BỆNH VIỆN BƯU ĐIỆN 2</option> -->
+          <option *ngFor="let item of selectHospitalOption" [ngValue]="item">
+            {{item.label}}
+          </option>
+        </select>    
+      </div>
+    </div>
+  </div>
+
+
+
+
+  
+</div>
+
+
+<div class="row">
+  <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <agm-map [latitude]="latitude" [longitude]="longitude" [fitBounds]="latlngBounds" [mapTypeId]="'hybrid'" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)">
+        <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+        <agm-marker 
+          *ngFor="let m of markers; let i = index"
+          (markerClick)="clickedMarker(m,i)"
+          [latitude]="m.lat"
+          [longitude]="m.lng"
+          [markerDraggable]="m.draggable"
+          (dragEnd)="markerDragEnd(m, $event)"
+        >
+        <agm-info-window>
+          <strong>{{m.name}}</strong>
+        </agm-info-window>
+      </agm-marker>
+      <agm-circle [latitude]="latitude" [longitude]="longitude" 
+          [(radius)]="radius"
+          [circleDraggable]="false"
+          [editable]="true"
+          [visible]="true"
+          (radiusChange)="radiusChanged($event)"
+          #circle>
+      </agm-circle> 
+              <!-- [fillColor]="'red'" -->
+      </agm-map>
+    </div>
+    <!-- <div class="col-md-3"></div> -->
+    <div class="col-md-5">
       <div class="panel-heading">
         <h3 class="panel-title">Nurse on Demand</h3>
       </div>
       <div class="panel-body">
         <form (submit)="chooseMarker()">
-          <label>Name</label>
-          <input type="text" [(ngModel)]="markerName" name="markderName"/><br/>
-          <label>Lat</label>
+          <label class="label label-info">>Tên</label>
+          <!-- <input type="text" [(ngModel)]="markerName" name="markderName"/><br/> -->
+           {{markerName}}<br/>
+          <label class="label label-info">>Email</label>
+           {{markerEmail}}<br/> 
+          <label class="label label-info">>SĐT</label>
+           {{markerPhone}}<br/> 
+          <label class="label label-info">>Giới tính</label>
+           {{markerSex}}<br/>
+          <label class="label label-info">>Tuổi</label>
+           {{markerAge}}<br/>
+          <label class="label label-info">>Địa chỉ</label>
+           {{markerAddress}}<br/> 
+          <label class="label label-info">>Làm việc tại</label>
+           {{markerHospital}}<br/>
+          <div class="card" *ngIf="markerName">
+            <div class="card-block">
+              <h4 class="card-title">{{markerName}}</h4>
+              <h6 class="card-subtitle mb-2 text-muted">{{markerPhone}} - {{markerEmail}}</h6>
+              <p class="card-text"><label class="label label-info">>Giới tính</label>{{markerSex}}</p>
+              <p class="card-text"><label class="label label-info">>Địa chỉ</label>{{markerAddress}}</p>
+              <!-- <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a> -->
+            </div>
+          </div>                                                       
+          <!-- <label>Lat</label>
           <input type="text" [(ngModel)]="markerLat" name="markderLat"/><br/>
           <label>Lng</label>
           <input type="text" [(ngModel)]="markerLng" name="markderLng"/><br/>
@@ -58,14 +125,92 @@
           <select type="text" [(ngModel)]="markerDraggable" name="markderDragglable">
             <option value="no">No</option>
             <option value="yes">Yes</option>
-          </select><br/>
-          <label>Description</label>
-          <input type="text" [(ngModel)]="markerDescription" name="markderDescrription"/><br/>
-          <input type="submit" value= "Choose it!"/>
+          </select><br/> -->
+          <label>Tên bệnh nhân </label><br/>
+          <input type="text" [(ngModel)]="patient" name="patientDescription"><br/>
+          <label>Tuổi </label><br/>
+          <input type="number" [(ngModel)]="patientAge" name="patientDescription"><<br/>                    
+          <label>Mô tả công việc {{value}} </label><br/>
+          <textarea type="text" [(ngModel)]="patientDescription" name="patientDescription"></textarea><br/>
+          Thứ 2
+         <select type="text" [(ngModel)]="mon" name="mon" (ngModelChange)="onChangeHour($event,'mon')">
+          <option *ngFor="let item of hourOption" [ngValue]="item">  
+            {{item.label}}
+          </option>
+        </select><br/>
+         Thứ 3
+         <select type="text" [(ngModel)]="tue" name="tue" (ngModelChange)="onChangeHour($event,'tue')">
+          <option *ngFor="let item of hourOption" [ngValue]="item">  
+            {{item.label}}
+          </option>
+        </select><br/>  
+         Thứ 4
+         <select type="text" [(ngModel)]="wed" name="wed" (ngModelChange)="onChangeHour($event,'wed')">
+          <option *ngFor="let item of hourOption" [ngValue]="item">  
+            {{item.label}}
+          </option>
+        </select><br/>  
+         Thứ 5
+         <select type="text" [(ngModel)]="thu" name="thu" (ngModelChange)="onChangeHour($event,'thu')">
+          <option *ngFor="let item of hourOption" [ngValue]="item">  
+            {{item.label}}
+          </option>
+        </select><br/>  
+         Thứ 6
+         <select type="text" [(ngModel)]="fri" name="fri" (ngModelChange)="onChangeHour($event,'fri')">
+          <option *ngFor="let item of hourOption" [ngValue]="item">  
+            {{item.label}}
+          </option>
+        </select><br/>            
+         Thứ 7
+         <select type="text" [(ngModel)]="sat" name="sat" (ngModelChange)="onChangeHour($event,'sat')">
+          <option *ngFor="let item of hourOption" [ngValue]="item">  
+            {{item.label}}
+          </option>
+        </select><br/>  
+         Chủ nhật
+         <select type="text" [(ngModel)]="sun" name="sun" (ngModelChange)="onChangeHour($event,'sun')">
+          <option *ngFor="let item of hourOption" [ngValue]="item">  
+            {{item.label}}
+          </option>
+        </select>                  
+          <br/>
+           <input type="submit" value= "Choose it!"/> 
+          <button type="button" class="btn btn-success btn-number" (click)="makeContract()">
+              <span class="glyphicon glyphicon-ok"></span>
+          </button>
         </form>
+
+        {{startDate | date: 'dd/MM/yyyy'}}
+        <div class="column is-4 is-offset-4">
+          <div class="centered">
+            <div class="control is-horizontal">
+              <div class="control-label">
+                <label class="label">Theme</label>
+              </div>
+              <span class="select">
+                <select [(ngModel)]="options.theme">
+                  <option>default</option>
+                  <option>green</option>
+                  <option>teal</option>
+                  <option>cyan</option>
+                  <option>grape</option>
+                  <option>red</option>
+                  <option>gray</option>
+                </select>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="column is-4 is-offset-4">
+          <div class="is-fullwidth has-text-centered">
+            <ng-daterangepicker [(ngModel)]="value" [options]="options"></ng-daterangepicker>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </div>
-</div>
 
 

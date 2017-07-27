@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response  } from '@angular/http';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 
-import { NurseProfile } from '../_models/index';
-import { Nurse } from '../_interfaces/index';
+// import { NurseProfile } from '../_models/index';
+import { Nurse, NurseProfile } from '../_interfaces/index';
 
 @Injectable()
 export class NursesService {
@@ -16,29 +16,47 @@ export class NursesService {
   constructor(private http: Http) { }
 
     getAll() {
-        return this.http.get('/nurses').map((response: Response) => response.json() as NurseProfile[]);
+        // return this.http.get('/nurses').map((response: Response) => response.json() as NurseProfile[]);
+        return this.http.get('/nurses').map((response: Response) => response.json() as Nurse[]);
     }
 
-    search() {
+    // search() {
+    //     // return this.http.get('/activenurses').map((response: Response) => response.json() as NurseProfile[]);
+    //     return this.http.get('/activenurses').map((response: Response) => response.json() as Nurse[]);
+    // }
+
+    search(career?: string, type?: string, hospital?: string) : Observable<any> {
+        let searchCriteria = {
+            career: career,
+            type: type,
+            hospital: hospital
+        }
         // return this.http.get('/activenurses').map((response: Response) => response.json() as NurseProfile[]);
-        return this.http.get('/activenurses').map((response: Response) => response.json() as Nurse[]);
+        return this.http.post('/activenurses', searchCriteria).map((response: Response) => response.json() as NurseProfile[]);
+        // return Observable.interval(500).flatMap(() => {
+        //     return this.http.post('/activenurses', searchCriteria).map((response: Response) => response.json() as NurseProfile[]);
+        // });
     }
  
-    // getById(_id: string) {
-    //     return this.http.get('/users/' + _id).map((response: Response) => response.json());
-    // }
+    getById(_id: string) {
+        return this.http.get('/nurses/' + _id).map((response: Response) => response.json() as Nurse);
+    }
  
-    // create(user: User) {
-    //     return this.http.post('/users', user);
-    // }
+    create(nurse: any) {
+        return this.http.post('/nurses', nurse);
+    }
  
-    // update(user: User) {
-    //     return this.http.put('/users/' + user._id, user);
-    // }
+    update(nurse: Nurse) {
+        return this.http.put('/nurses/' + nurse.id, nurse);
+    }
  
-    // delete(_id: string) {
-    //     return this.http.delete('/users/' + _id);
-    // }
+    upsert(nurse: any) {
+        return this.http.post('/nurses', nurse);
+    }
+
+    delete(id: any) {
+        return this.http.post('/nurses/del', id);
+    }
 
 }
 

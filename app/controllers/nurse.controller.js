@@ -22,10 +22,14 @@ var getErrorMessage = function(err){
 	
 	return message;
 };
-exports.getById = (req, res) => 
-        nurseService.getById(req.params.id)
-        .then(users => {
-            res.send(users);
+
+exports.read =(req, res) => res.send(req.user)
+
+exports.getById = (req, res, next, id) => 
+        nurseService.getById(id)
+        .then(user => {
+            // res.send(users);
+            req.user = user;
             next();
         })
         .catch(err => {
@@ -131,7 +135,7 @@ exports.insert = (req, res) => {
     }
 
 exports.delete = (req, res, next) => {
-    userService.deleteUser(req.body.id)
+    nurseService.deleteUser(req.body.id)
         .then(result => {
             res.send(result);
         })                
@@ -141,17 +145,26 @@ exports.delete = (req, res, next) => {
 }
         
 
-exports.deactive = (req, res, next) => 
-        userService.deactiveUser(req.body.id)        
+exports.deactive = (req, res, next) => {
+        nurseService.deactiveUser(req.body.id)        
         .then(result => {
             res.send(result);
         })                
         .catch(err => {
             res.status(400).send(err);
-        })
+        });
+        nurseService.deactiveNurse(req.body.id)        
+        .then(result => {
+            res.send(result);
+        })                
+        .catch(err => {
+            res.status(400).send(err);
+        });
+}
+
 
 exports.active = (req, res, next) => 
-        userService.activeUser(req.body.id)        
+        nurseService.activeUser(req.body.id)        
         .then(result => {
             res.send(result);
         })                
@@ -159,8 +172,8 @@ exports.active = (req, res, next) =>
             res.status(400).send(err);
         })
 
-exports.search = (req, res) => {
-};
+// exports.search = (req, res) => {
+// };
 
 exports.register = (req, res, next) => {
     if (!req.user) {
@@ -208,7 +221,7 @@ exports.authenticate = (req, res) =>
         });
 
 exports.search = (req, res, next) => 
-        nurseService.search()
+        nurseService.search(req.body)
             .then(users => {
                 res.send(users);
             })

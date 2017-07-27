@@ -6,7 +6,11 @@ var contractSchema = new Schema({
     userId: Schema.Types.ObjectId,
     nurseId: Schema.Types.ObjectId,
     created_at: Date,
-    end_at: Date
+    end_at: Date,
+    detail: {
+        type: Schema.Types.ObjectId,
+        ref: 'ContractDetails'	
+    }
 });
 
 var Contracts = mongoose.model('Contracts', contractSchema);

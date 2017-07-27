@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <a [routerLink]="['/users/', user._id, 'edit']" class="btn btn-success">EDIT</a>
+    </div>
+  </div>
+  <h1>{{ user.username }}</h1>
+  <dl class="list">
+    <dt>Name</dt>
+    <dd *ngIf=" user.profile">{{ user.profile.name }}</dd>
+    <dt>Email</dt>
+    <dd *ngIf=" user.profile">{{ user.profile.email }}</dd>
+    <dt>Phone</dt>
+    <dd *ngIf=" user.profile">{{ user.profile.phone }}</dd>
+    <dt>Age</dt>
+    <dd *ngIf=" user.profile">{{ user.profile.age }}</dd>
+    <dt>Gender</dt>
+    <dd *ngIf=" user.profile">{{ user.profile.sex }}</dd>
+    <dt>Address</dt>
+    <dd *ngIf=" user.profile">{{ user.profile.address }}</dd>
+  </dl>
+</div>
