@@ -7,7 +7,7 @@ import { AgmCoreModule, MapsAPILoader } from '@agm/core';
 import { NgDateRangePickerOptions } from 'ng-daterangepicker';
 import { AgmCircle } from '@agm/core/directives/circle';
 import { User, Location, ContractModel, ContractDetailModel } from '../_models/index';
-import { Nurse, NurseProfile, Contract } from '../_interfaces/index';
+import { Nurse, NurseProfile, Contract, Users } from '../_interfaces/index';
 import { AlertService, NursesService, MarkersService, ContractsService } from '../_services/index';
 import {Observable} from 'rxjs/Observable';
 import "rxjs/add/operator/takeWhile";
@@ -33,6 +33,7 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
   //Start Position for marker and circle
   public latitude: number;
   public longitude: number;
+  public address: string;
   public radius: number; //meter
   // yourLatLng;
   
@@ -63,7 +64,7 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
   markerLat: number;
   markerLng: number;
   markerDraggable: boolean;
-  patient: string;
+  patientName: string;
   patientAge: string;
   patientDescription: string;
 
@@ -193,20 +194,20 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
         value: ""
       }, {
         id: 2,
-        label: "sáng: 7h30-11h",
-        value: "sáng: 7h30-11h"
+        label: "sáng: 7h30-10h30",
+        value: "sáng: 7h30-10h30"
       }, {
         id: 3,
-        label: "shiều: 1h30-5h",
-        value: "shiều: 1h30-5h"
+        label: "chiều: 1h30-4h30",
+        value: "chiều: 1h30-4h30"
       }, {
         id: 4,
-        label: "tối: 6h-9h30",
-        value: "tối: 6h-9h30"
+        label: "tối: 6h-9h",
+        value: "tối: 6h-9h"
       }, {
         id: 5,
-        label: "cả ngày: 7h30-5h (2 ca)",
-        value: "cả ngày: 7h30-5h (2 ca)"
+        label: "cả ngày: 7h30-4h30 (2 ca)",
+        value: "cả ngày: 7h30-4h30 (2 ca)"
       }
     ];
     this.mon = this.hourOption[0];
@@ -222,11 +223,10 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
 
     //get current user
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
     //set google maps defaults
     this.zoom = 12;
-    this.latitude = 10.847171;
-    this.longitude = 106.786956;
+    this.latitude = this.currentUser.lat;
+    this.longitude = this.currentUser.lng;
     this.radius = 5000;
     // this.yourLatLng = new google.maps.LatLng(this.latitude, this.longitude);
 
@@ -313,12 +313,14 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
   }
 
   expandSearchingRadius() {
-    this.radius += 5000;
+    if(this.radius<10000)
+      this.radius += 5000;
     this.loadAllNurseOnTheMap();
   }
 
   collapseSearchingRadius() {
-    this.radius -= 5000;
+    if(this.radius>5000)
+      this.radius -= 5000;
     this.loadAllNurseOnTheMap();
   }
 
@@ -408,9 +410,10 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
     else {
       startDate.setDate(startDate.getDate()+1);
       endDate.setDate(endDate.getDate()+1);
-      console.log(">" + startDate + "," + endDate +  + "," + date);
+      let loc = new Location(this.latitude, this.longitude);
+      console.log(">" + startDate + "," + endDate + "," + date + "," + this.nurseProfile.owner._id);
       let contractDetail = new ContractDetailModel(this.patientDescription,this.date);
-      let contract = new ContractModel(this.currentUser._id, this.nurseProfile.owner.id, startDate, endDate, contractDetail);
+      let contract = new ContractModel(this.currentUser._id, this.nurseProfile.owner._id, startDate, endDate, this.patientName, this.patientAge, this.address, loc, contractDetail);
       this.contractsService.create(contract).takeWhile(() => this.alive).subscribe(
         data => {
             this.alertService.success('Make a contract successful', true);
@@ -440,7 +443,7 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
 
     this.mapsAPILoader.load().then(() => {
       let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-        types: ["address"]
+        // types: ["address"]
       });
       autocomplete.addListener("place_changed", () => {
         this.ngZone.run(() => {
@@ -452,10 +455,12 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
             return;
           }
 
-          //set latitude, longitude and zoom
+          //set address, latitude, longitude and zoom
+          this.address = place.formatted_address;
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
           this.zoom = 12;
+          this.loadAllNurseOnTheMap();
         });
       });
     });
@@ -580,7 +585,7 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
           if (this.getDistanceFromLatLonInKm(this.latitude,this.longitude,nurse.owner.location.latitude,nurse.owner.location.longitude) <= this.radius) {
             let nurseMarker = {
               no: dem,
-              name: nurse.owner.username,
+              name: nurse.owner.profile.name,
               email: nurse.owner.profile.email,
               phone: nurse.owner.profile.phone,   
               sex: nurse.owner.profile.sex,

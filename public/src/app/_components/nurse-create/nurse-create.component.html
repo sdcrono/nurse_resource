@@ -15,7 +15,7 @@
           <label for="name">Mật khẩu</label>
           <div class="alert" *ngIf="reactiveForm.controls['password'].hasError('required') && reactiveForm.controls['password'].touched">{{ requireAlert }}</div>
           <div class="alert" *ngIf="reactiveForm.controls['password'].hasError('minlength') && reactiveForm.controls['password'].touched">{{ minPassAlert }}</div>
-          <input type="text" class="form-control input-lg" placeholder="nhập mật khẩu" [formControl]="reactiveForm.controls['password']">
+          <input type="password" class="form-control input-lg" placeholder="nhập mật khẩu" [formControl]="reactiveForm.controls['password']">
         </div>
         <!-- name -->
         <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['name'].valid && reactiveForm.controls['name'].touched}">

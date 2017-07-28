@@ -25,12 +25,22 @@
                 <a [routerLink]="['/nurses']">  
                     <span class='glyphicon glyphicon-user'></span> Quản lý điều dưỡng
                 </a>  
-            </li>                                              
+            </li>
+            <li [routerLinkActive]="['link-active']" *ngIf="currentUser.role=='ROLE_Admin'">  
+                <a [routerLink]="['/contracts']">  
+                    <span class='glyphicon glyphicon-briefcase'></span> Quản lý hợp đồng
+                </a>  
+            </li>                                                           
             <li [routerLinkActive]="['link-active']" *ngIf="currentUser.role=='ROLE_User'">  
                 <a [routerLink]="['/search']">  
-                    <span class='glyphicon glyphicon-user'></span> Tìm kiếm người bệnh
+                    <span class='glyphicon glyphicon-search'></span> Tìm kiếm người bệnh
                 </a>  
             </li>
+            <li [routerLinkActive]="['link-active']">  
+                <a [routerLink]="['/users/', currentUser._id, 'profile']">  
+                    <span class='glyphicon glyphicon-user'></span> Thông tin cá nhân
+                </a>  
+            </li>            
             <!-- <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>   -->
           </ul>

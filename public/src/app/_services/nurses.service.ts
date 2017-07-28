@@ -47,7 +47,7 @@ export class NursesService {
     }
  
     update(nurse: Nurse) {
-        return this.http.put('/nurses/' + nurse.id, nurse);
+        return this.http.put('/nurses/' + nurse._id, nurse);
     }
  
     upsert(nurse: any) {

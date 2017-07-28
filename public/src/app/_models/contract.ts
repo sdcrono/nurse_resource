@@ -1,12 +1,16 @@
 import { Contract } from '../_interfaces/index'
-import { ContractDetailModel } from '../_models/index'
+import { ContractDetailModel, Location } from '../_models/index'
 export class ContractModel implements Contract{
     
     constructor(
         public userId: string,
         public nurseId: string, 
-        public created_at: Date, 
-        public end_at: Date,
+        public createdAt: Date, 
+        public endAt: Date,
+        public patientName: string,
+        public patientAge: string,
+        public address: string,
+        public location: Location,        
         public detail: ContractDetailModel
     ) { }
     

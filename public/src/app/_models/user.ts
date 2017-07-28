@@ -1,4 +1,5 @@
 import { NurseProfile } from './nurseProfile';
+import { Location } from './location';
 import { Profile } from './profile';
 import { Role } from './role';
 
@@ -12,6 +13,8 @@ export class User {
     age: number;
     gender: string;
     address: string;
+    lat: number;
+    lng: number;
     // created_at: string;
     // updated_at: string;
     // isDelete: boolean;

@@ -58,7 +58,11 @@ export class UsersService {
 
     upsert(user: any) {
         return this.http.post('/users', user);
-    }    
+    }
+
+    register(user: any) {
+        return this.http.post('/register', user);
+    }       
  
     // delete(_id: string) {
     //     return this.http.delete('/users/' + _id);

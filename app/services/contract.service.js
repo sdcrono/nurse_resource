@@ -9,8 +9,12 @@ const _ = require('lodash');
 var service = {};
  
 service.getAll = getAll;
-// service.getById = getById;
+service.getAllCheck = getAllCheck;
+service.getAllCustom = getAllCustom;
+service.getById = getById;
 service.createContract = createContract;
+service.approve = approve;
+service.reject = reject;
 // service.createProfile = createProfile;
 // service.updateUser = updateUser;
 // service.updateProfile = updateProfile;
@@ -23,23 +27,310 @@ service.createContract = createContract;
 module.exports = service;
 
 
-
 function getAll() {
     let deferred = Q.defer();
  
-    Contracts.find({}, (err, users) => {
+    Contracts.find().select("-__v").populate([{
+                path: 'userId',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            },{           
+                path: 'nurseId',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: [{
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                },{
+                    path: 'nurseprofile',
+                    model: 'NurseProfiles',
+                    select: '-_id -age -sex -address -certification -rate -retribution -isDelete -owner -__v'
+                }]
+            },{
+                path: 'detail',
+                model: 'ContractDetails',
+                select: '-_id -owner -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            }]).exec((err, contracts) => {
 
                 if (err) deferred.reject(err.name + ': ' + err.message);
+                
+                // var userMap = {};
 
-                var userMap = {};
-
-                users.forEach((user) => userMap[user._id] = user );
-                users = _.map(users, function (user) {
-                    return _.omit(user, 'password');
-                });
-                deferred.resolve(users);
+                // users.forEach((user) => userMap[user._id] = user );
+                // users = _.map(users, function (user) {
+                //     return _.omit(user, 'password');
+                // });
+                deferred.resolve(contracts);
                 // res.send(users);
             })
+    return deferred.promise;
+}
+
+function getAllCheck() {
+    let deferred = Q.defer();
+ 
+    Contracts.find({status: "check"}).select("-__v").populate([{
+                path: 'userId',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            },{           
+                path: 'nurseId',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: [{
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                },{
+                    path: 'nurseprofile',
+                    model: 'NurseProfiles',
+                    select: '-_id -age -sex -address -certification -rate -retribution -isDelete -owner -__v'
+                }]
+            },{
+                path: 'detail',
+                model: 'ContractDetails',
+                select: '-_id -owner -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            }]).exec((err, contracts) => {
+
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                
+                // var userMap = {};
+
+                // users.forEach((user) => userMap[user._id] = user );
+                // users = _.map(users, function (user) {
+                //     return _.omit(user, 'password');
+                // });
+                deferred.resolve(contracts);
+                // res.send(users);
+            })
+    return deferred.promise;
+}
+
+function getAllCustom(searchCriteria) {
+    let deferred = Q.defer();
+    let query = {};
+    if (searchCriteria.status != "" && searchCriteria.status != "all") {
+        query.status = searchCriteria.status;
+        if (searchCriteria.role == "ROLE_User")
+            query.userId = searchCriteria.id;
+        if (searchCriteria.role == "ROLE_Nurse")
+            query.nurseId = searchCriteria.id;
+        Contracts.find(query).select("-__v").populate([{
+            path: 'userId',
+            model: 'Users',
+            select: '-password -created_at -updated_at -isDelete -role -__v',
+            populate: {
+                path: 'profile',
+                model: 'Profiles',
+                select: '-_id -owner -__v'
+            }
+        },{           
+            path: 'nurseId',
+            model: 'Users',
+            select: '-password -created_at -updated_at -isDelete -role -__v',
+            populate: [{
+                path: 'profile',
+                model: 'Profiles',
+                select: '-_id -owner -__v'
+            },{
+                path: 'nurseprofile',
+                model: 'NurseProfiles',
+                select: '-_id -age -sex -address -certification -rate -retribution -isDelete -owner -__v'
+            }]
+        },{
+            path: 'detail',
+            model: 'ContractDetails',
+            select: '-_id -owner -__v',
+            populate: {
+                path: 'profile',
+                model: 'Profiles',
+                select: '-_id -owner -__v'
+            }
+        }]).exec((err, contracts) => {
+
+            if (err) deferred.reject(err.name + ': ' + err.message);
+            
+            // var userMap = {};
+
+            // users.forEach((user) => userMap[user._id] = user );
+            // users = _.map(users, function (user) {
+            //     return _.omit(user, 'password');
+            // });
+            deferred.resolve(contracts);
+            // res.send(users);
+        })        
+    }
+    else {
+        if (searchCriteria.role == "ROLE_Admin")
+            Contracts.find().select("-__v").populate([{
+                path: 'userId',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            },{           
+                path: 'nurseId',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: [{
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                },{
+                    path: 'nurseprofile',
+                    model: 'NurseProfiles',
+                    select: '-_id -age -sex -address -certification -rate -retribution -isDelete -owner -__v'
+                }]
+            },{
+                path: 'detail',
+                model: 'ContractDetails',
+                select: '-_id -owner -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            }]).exec((err, contracts) => {
+
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                
+                // var userMap = {};
+
+                // users.forEach((user) => userMap[user._id] = user );
+                // users = _.map(users, function (user) {
+                //     return _.omit(user, 'password');
+                // });
+                deferred.resolve(contracts);
+                // res.send(users);
+            })
+        else {
+            if (searchCriteria.role == "ROLE_User")
+                query.userId = searchCriteria.id;
+            if (searchCriteria.role == "ROLE_Nurse")
+                query.nurseId = searchCriteria.id; 
+            Contracts.find(query).select("-__v").populate([{
+                path: 'userId',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            },{           
+                path: 'nurseId',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: [{
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                },{
+                    path: 'nurseprofile',
+                    model: 'NurseProfiles',
+                    select: '-_id -age -sex -address -certification -rate -retribution -isDelete -owner -__v'
+                }]
+            },{
+                path: 'detail',
+                model: 'ContractDetails',
+                select: '-_id -owner -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            }]).exec((err, contracts) => {
+
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                
+                // var userMap = {};
+
+                // users.forEach((user) => userMap[user._id] = user );
+                // users = _.map(users, function (user) {
+                //     return _.omit(user, 'password');
+                // });
+                deferred.resolve(contracts);
+                // res.send(users);
+            })                 
+        }     
+
+    }
+       
+    return deferred.promise;
+}
+
+function getById(_id) {
+    let deferred = Q.defer();
+ 
+    Contracts.findById({ _id: _id }).select("-__v").populate([{
+                path: 'userId',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            },{           
+                path: 'nurseId',
+                model: 'Users',
+                select: '-password -created_at -updated_at -isDelete -role -__v',
+                populate: [{
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                },{
+                    path: 'nurseprofile',
+                    model: 'NurseProfiles',
+                    select: '-_id -age -sex -address -certification -rate -retribution -isDelete -owner -__v'
+                }]
+            },{
+                path: 'detail',
+                model: 'ContractDetails',
+                select: '-_id -owner -__v',
+                populate: {
+                    path: 'profile',
+                    model: 'Profiles',
+                    select: '-_id -owner -__v'
+                }
+            }]).exec((err, contracts) => {
+
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                
+                // var userMap = {};
+
+                // users.forEach((user) => userMap[user._id] = user );
+                // users = _.map(users, function (user) {
+                //     return _.omit(user, 'password');
+                // });
+                deferred.resolve(contracts);
+                // res.send(users);
+            })
+ 
     return deferred.promise;
 }
 
@@ -67,13 +358,22 @@ function createContract(contractParam) {
 
     let newContract = new Contracts({
         userId: contractParam.userId,
-        NurseId: contractParam.nurseId,
-        created_at: contractParam.created_at,
-        end_at: contractParam.end_at
-    });
+        nurseId: contractParam.nurseId,
+        created_at: contractParam.createdAt,
+        end_at: contractParam.endAt,
+        patientName: contractParam.patientName,
+        patientAge: contractParam.patientAge,
+        address: contractParam.address,
+        location: {
+            latitude: contractParam.location.latitude,
+            longitude: contractParam.location.longitude
+        },
+        status: "check"
+    });        
     newContract.save((err, contract) => {
         if (err) deferred.reject(err.name + ': ' + err.message);
         deferred.resolve('Success');
+        var contractId = contract._id;
         let newContractDetail = new Details({
             jobDescription: contractParam.detail.jobDescription,
             dates: contractParam.detail.dates,
@@ -81,9 +381,10 @@ function createContract(contractParam) {
         });
         newContractDetail.save((err, detail) => {
             Contracts.findOneAndUpdate({
-                userId: contractParam.userId,
-                NurseId: contractParam.nurseId,
-                created_at: contractParam.created_at
+                // userId: contractParam.userId,
+                // NurseId: contractParam.nurseId,
+                // created_at: contractParam.created_at
+                _id: contractId
             }, {detail: detail._id}, (err, contract) => {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                     deferred.resolve('Success2');
@@ -96,6 +397,50 @@ function createContract(contractParam) {
     return deferred.promise;
 
 
+}
+
+function approve(id) {
+
+    let deferred = Q.defer();
+
+    Contracts.findOne({_id: id}, (err, contract) => {
+        if (err){
+            deferred.reject(err.name + ': ' + err.message);
+        }
+
+        let info = {
+            status: "approve"
+        };
+
+        contract.update(info, (err) => {
+            if (err) { deferred.reject(err.name + ': ' + err.message); }
+            deferred.resolve('SUCCESS');
+        });
+
+    });
+    return deferred.promise;
+}
+
+function reject(id) {
+
+    let deferred = Q.defer();
+
+    Contracts.findOne({_id: id}, (err, contract) => {
+        if (err){
+            deferred.reject(err.name + ': ' + err.message);
+        }
+
+        let info = {
+            status: "reject"
+        };
+
+        contract.update(info, (err) => {
+            if (err) { deferred.reject(err.name + ': ' + err.message); }
+            deferred.resolve('SUCCESS');
+        });
+
+    });
+    return deferred.promise;
 }
 
 // function createProfile(userParam) {

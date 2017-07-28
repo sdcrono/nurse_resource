@@ -11,6 +11,8 @@ var service = {};
 service.authenticate = authenticate;
 service.getAll = getAllUser;
 service.getById = getById;
+service.registerUser = registerUser;
+service.registerProfile = registerProfile;
 service.createUser = createUser;
 service.createProfile = createProfile;
 service.updateUser = updateUser;
@@ -41,6 +43,8 @@ function authenticate(username, password) {
                     // firstName: profile.name.first,
                     // lastName: profile.name.last,
                     role: user.role,
+                    lat: user.location.latitude,
+                    lng: user.location.longitude,
                     token: jwt.sign({ sub: user._id }, "config.secret")
                 });
             });
@@ -156,6 +160,82 @@ function getById(_id) {
             // res.send(users);
         })
 
+    return deferred.promise;
+}
+
+function registerUser(userParam) {
+    let deferred = Q.defer();
+
+    Users.findOne(
+        { username: userParam.username },
+        function (err, user) {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+ 
+            if (user) {
+                // username already exists
+                deferred.reject('Username "' + userParam.username + '" is already taken');
+            } else {
+                    Profiles.findOne(
+                        { email: userParam.email },
+                        function (err, profile) {
+                            if (err) deferred.reject(err.name + ': ' + err.message);
+                
+                            if (profile) {
+                                // username already exists
+                                deferred.reject('Email "' + userParam.email + '" is already taken');
+                            } else {
+                                let pass = bcrypt.hashSync(userParam.password, 10);
+                                let newUser = Users({
+                                    username: userParam.username,
+                                    password: pass,
+                                    // nurse: false,
+                                    // admin: false,
+                                    role: "ROLE_User",
+                                    created_at: new Date,
+                                    updated_at: new Date,
+                                    isDelete: false
+                                });
+                                newUser.save((err, user) => {
+                                    if (err) deferred.reject(err.name + ': ' + err.message);
+                                    // deferred.resolve('Success');
+                                    registerProfile(userParam);
+                                });
+                                
+                            }
+                        });
+            }
+        });
+        return deferred.promise;
+
+
+}
+
+function registerProfile(userParam) {
+    let deferred = Q.defer();
+
+    Users.findOne({username: userParam.username}, (err, user) => {
+        if(err){
+            deferred.reject(err.name + ': ' + err.message);
+        }
+        let profile = new Profiles ({
+            name: userParam.name,
+            email: userParam.email,
+            owner: user._id 
+        })
+
+        // Profiles.findOneAndUpdate({owner: user._id}, profile, {upsert:true}, (err, doc) => {
+        //     if (err) deferred.reject(err.name + ': ' + err.message);
+        //     deferred.resolve('Success2');
+        // });
+        profile.save((err, profile) => {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+                deferred.resolve('Success2');
+                Users.findOneAndUpdate({username: userParam.username}, {profile: profile._id}, (err, user) => {
+                    if (err) deferred.reject(err.name + ': ' + err.message);
+                     deferred.resolve('Success4');
+                });
+        });
+    });
     return deferred.promise;
 }
 

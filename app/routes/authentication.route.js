@@ -5,7 +5,7 @@ const Users = require('../controllers/user.controller'),
 module.exports = app => {
     // app.route('/register').post(Users.insert);
     // app.route('/').get(Logins.index);
-    app.route('/register')
+    app.route('/api/register')
         // .get(users.renderRegister)
         .post(Users.register);
 

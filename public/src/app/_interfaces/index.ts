@@ -2,6 +2,8 @@ export * from './daterangepickeroption';
 export * from './nurseprofile';
 export * from './location';
 export * from './contract';
+export * from './contractPer';
+export * from './contractDetail';
 export * from './profile';
 export * from './nurse';
 export * from './name';

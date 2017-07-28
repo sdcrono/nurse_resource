@@ -44,6 +44,37 @@ exports.getAll = (req, res, next) =>
                 res.status(400).send(err);
             })
 
+exports.getAllCheck = (req, res, next) => 
+        contractService.getAllCheck()
+            .then(contracts => {
+                res.send(contracts);
+            })
+            .catch(err => {
+                res.status(400).send(err);
+            })
+
+exports.getAllSearch= (req, res, next) => 
+        contractService.getAllCustom(req.body)
+            .then(contracts => {
+                res.send(contracts);
+            })
+            .catch(err => {
+                res.status(400).send(err);
+            })            
+
+exports.read =(req, res) => res.send(req.contract)
+
+exports.getById = (req, res, next, id) => 
+        contractService.getById(id)
+        .then(contract => {
+            // res.send(users);
+            req.contract = contract;
+            next();
+        })
+        .catch(err => {
+            res.status(400).send(err);
+        })
+
 exports.upsert = (req, res, next) => {
 
         if (req.body.id) {
@@ -75,6 +106,24 @@ exports.upsert = (req, res, next) => {
         }
 
     }
+
+exports.approve = (req, res, next) => 
+        contractService.approve(req.body.id)        
+        .then(result => {
+            res.send(result);
+        })                
+        .catch(err => {
+            res.status(400).send(err);
+        })
+
+exports.reject = (req, res, next) => 
+        contractService.reject(req.body.id)        
+        .then(result => {
+            res.send(result);
+        })                
+        .catch(err => {
+            res.status(400).send(err);
+        })
 
 // exports.delete = (req, res, next) => {
 //     userService.deleteUser(req.body.id)

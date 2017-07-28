@@ -31,7 +31,7 @@
             <input type="email" class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" required />
             <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
         </div>
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
+        <!-- <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
             <label for="phone">Phone</label>
             <input type="number" class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" required />
             <div *ngIf="f.submitted && !phone.valid" class="help-block">Phone is required</div>
@@ -46,24 +46,16 @@
             <input type="number" class="form-control" name="gender" [(ngModel)]="model.gender" #gender="ngModel" required />
             <div *ngIf="f.submitted && !gender.valid" class="help-block">Gender is required</div>
         </div>
-        <!-- <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !address.valid }">
+         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !address.valid }">
             <label for="address">Address</label>
              <input type="text" class="form-control" name="address" [(ngModel)]="model.address" #address="ngModel" required /> 
             <div *ngIf="f.submitted && !address.valid" class="help-block">Address is required</div>
-        </div> -->
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !address.valid }">
-            <label for="address">Address</label>
-            <!-- <input type="text" class="form-control" name="address" [(ngModel)]="model.address" #address="ngModel" required /> -->
-            <input name="address" required placeholder="search for location"autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
-            <div *ngIf="f.submitted && !address.valid" class="help-block">Address is required</div>
-        </div>                                 
+        </div>                                      -->
         <div class="form-group">
             <button [disabled]="loading" class="btn btn-primary">Register</button>
             <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
             <a [routerLink]="['/login']" class="btn btn-link">Cancel</a>
         </div>
-        <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="true" [zoom]="zoom">
-          <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
-        </agm-map>
+
     </form>
 </div>

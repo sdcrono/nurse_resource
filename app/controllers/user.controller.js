@@ -220,6 +220,17 @@ exports.insert = (req, res) => {
 //             res.send('SUCCESS');
 //         })
 
+exports.register = (req, res, next) => {
+
+    userService.registerUser(req.body)
+        .then(result => {
+            res.send(result);
+        })                
+        .catch(err => {
+            res.status(400).send(err);
+        })                 
+}
+
 exports.delete = (req, res, next) => {
     userService.deleteUser(req.body.id)
         .then(result => {
@@ -252,30 +263,30 @@ exports.active = (req, res, next) =>
 exports.search = (req, res) => {
 };
 
-exports.register = (req, res, next) => {
-    if (!req.user) {
-        var user = new User(req.body);
-        var message = null;
-        user.provider = 'local';
-        user.save( err => {
-            if (err) {
-                var message = getErrorMessage(err);
-                req.flash('error', message);
-                return res.redirect('/register');
-            }
+// exports.register = (req, res, next) => {
+//     if (!req.user) {
+//         var user = new User(req.body);
+//         var message = null;
+//         user.provider = 'local';
+//         user.save( err => {
+//             if (err) {
+//                 var message = getErrorMessage(err);
+//                 req.flash('error', message);
+//                 return res.redirect('/register');
+//             }
 
-            req.login(user, function(err) {
-                if (err)
-                    return next(err);
+//             req.login(user, function(err) {
+//                 if (err)
+//                     return next(err);
 
-                return res.redirect('/');
-            });
-        });
-    }
-    else {
-        return res.redirect('/');
-    }
-};
+//                 return res.redirect('/');
+//             });
+//         });
+//     }
+//     else {
+//         return res.redirect('/');
+//     }
+// };
 
 exports.logout = (req, res) => {
     req.logout();

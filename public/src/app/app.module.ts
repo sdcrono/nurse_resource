@@ -28,7 +28,8 @@ import { LoginComponent } from './login/index';
 import { RegisterComponent } from './register/index';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { NurseProvideComponent } from './nurse-provide/nurse-provide.component';
-import { NavbarComponent, JumbotronComponent, NurseComponent, NurseDetailComponent, NurseCreateComponent, NurseEditComponent, UserComponent, UserDetailComponent, UserCreateComponent, UserEditComponent  } from './_components/index';
+import { NavbarComponent, JumbotronComponent, NurseComponent, NurseDetailComponent, NurseCreateComponent, NurseEditComponent, UserComponent, 
+  UserDetailComponent, UserCreateComponent, UserEditComponent, ContractComponent, ContractDetailComponent, ProfileComponent } from './_components/index';
 
 
 
@@ -65,7 +66,10 @@ const ROUTES = [
     UserComponent,
     UserCreateComponent,
     UserEditComponent,
-    UserDetailComponent  
+    UserDetailComponent,
+    ContractComponent,
+    ContractDetailComponent,
+    ProfileComponent  
   ],
   imports: [
     BrowserModule,

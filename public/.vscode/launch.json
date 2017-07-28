@@ -3,14 +3,15 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [{
+    "configurations": [
+        {
         "name": "Launch Chrome against localhost, with sourcemaps",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost:4200/",
         "runtimeArgs": [
            "--user-data-dir",
-           "--remote-debugging-port=9222"
+           "--remote-debugging-port=9223"
         ],
         "sourceMaps": true,
         "diagnosticLogging": true,
@@ -22,7 +23,7 @@
         "type": "chrome",
         "request": "attach",
         "url": "http://localhost:4200/",
-        "port": 9222,
+        "port": 9223,
         "sourceMaps": true,
         "diagnosticLogging": true,
         "webRoot": "${workspaceRoot}"

@@ -1,6 +1,11 @@
+import { Location } from './index'
 export interface Contract {
     userId: string,
     nurseId: string,
-    created_at: Date,
-    end_at: Date
+    createdAt: Date,
+    endAt: Date,
+    patientName: string,
+    patientAge: string,
+    address: string,
+    location: Location
 }
