@@ -58,7 +58,21 @@ export class NurseCreateComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder
   ) { 
-    this.reactiveForm = formBuilder.group({
+    // this.reactiveForm = formBuilder.group({
+    //   'username': [null, Validators.required],
+    //   'password': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
+    //   'name': [null, Validators.required],
+    //   'email': [null, Validators.required],
+    //   'phone': [null, Validators.compose([Validators.required, Validators.minLength(11), Validators.maxLength(11)])],
+    //   'age': [null, Validators.compose([Validators.required, maxAge(48), minAge(22)])],
+    //   'gender': [null, Validators.required],
+    //   'address': [null, Validators.required],
+    //   'certification': [null, Validators.required],
+    //   'career': [null, Validators.required],
+    //   'hospital': [null, Validators.required],
+    //   'type': [null, Validators.required],
+    // })
+     this.reactiveForm = formBuilder.group({
       'username': [null, Validators.required],
       'password': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
       'name': [null, Validators.required],
@@ -69,9 +83,9 @@ export class NurseCreateComponent implements OnInit {
       'address': [null, Validators.required],
       'certification': [null, Validators.required],
       'career': [null, Validators.required],
-      'hospital': [null, Validators.required],
+      'hospital': [null],
       'type': [null, Validators.required],
-    })
+    })   
   }
 
   ngOnInit() {

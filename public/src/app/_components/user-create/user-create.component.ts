@@ -3,7 +3,7 @@ import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { AgmCoreModule, MapsAPILoader } from '@agm/core';
 import { maxAge, minAge } from '../../_directives/index';
-import { UsersService } from '../../_services/index';
+import { AlertService, UsersService } from '../../_services/index';
 // import { Nurse } from '../../_models/index';
 import "rxjs/add/operator/takeWhile";
 import {} from '@types/googlemaps';
@@ -37,12 +37,23 @@ export class UserCreateComponent implements OnInit {
 
 
   constructor(
+    private alertService: AlertService,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private usersService: UsersService,
     private router: Router,
     private formBuilder: FormBuilder
   ) { 
+    // this.reactiveForm = formBuilder.group({
+    //   'username': [null, Validators.required],
+    //   'password': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
+    //   'name': [null, Validators.required],
+    //   'email': [null, Validators.required],
+    //   'phone': [null, Validators.compose([Validators.required, Validators.minLength(11), Validators.maxLength(11)])],
+    //   'age': [null, Validators.compose([Validators.required, maxAge(48), minAge(22)])],
+    //   'gender': [null, Validators.required],
+    //   'address': [null, Validators.required]
+    // })   
     this.reactiveForm = formBuilder.group({
       'username': [null, Validators.required],
       'password': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
@@ -51,8 +62,8 @@ export class UserCreateComponent implements OnInit {
       'phone': [null, Validators.compose([Validators.required, Validators.minLength(11), Validators.maxLength(11)])],
       'age': [null, Validators.compose([Validators.required, maxAge(48), minAge(22)])],
       'gender': [null, Validators.required],
-      'address': [null, Validators.required]
-    })    
+      'address': [null]
+    })  
   }
 
   ngOnInit() {
@@ -81,11 +92,12 @@ export class UserCreateComponent implements OnInit {
     this.usersService.upsert(this.user).subscribe(result => {
       let id = result.text();
       console.log(id);
+      this.alertService.success('Thêm thành công', true);
       this.router.navigate(['/users/', id]);
     }, err => {
+      this.alertService.error(err);
       console.log(err);
     });
-    console.log("User " + this.user);
 
   }
 

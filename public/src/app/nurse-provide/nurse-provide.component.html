@@ -21,7 +21,7 @@
         <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
       </div>
     </div>    
-    <div class="col-md-8">
+    <div class="col-md-12">
       <div class="input-group">
         <select type="text" [(ngModel)]="searchCriteriaCareer" name="searchCriteriaCareer" (ngModelChange)="onChangeCareer($event)">
           <!-- <option [value]="LPN">LPN</option>
@@ -45,7 +45,15 @@
           <option *ngFor="let item of selectHospitalOption" [ngValue]="item">
             {{item.label}}
           </option>
-        </select>    
+        </select>
+        <select type="text" [(ngModel)]="searchMode" name="searchMode" (ngModelChange)="onChangeMode($event)">
+          <!-- <option [value]="BỆNH VIỆN AN BÌNH">BỆNH VIỆN AN BÌNH</option>
+          <option [value]="BỆNH VIỆN QUÂN DÂN MIỀN ĐÔNG">BỆNH VIỆN QUÂN DÂN MIỀN ĐÔNG</option>
+          <option [value]="BỆNH VIỆN BƯU ĐIỆN 2">BỆNH VIỆN BƯU ĐIỆN 2</option> -->
+          <option *ngFor="let item of selectMode" [ngValue]="item">
+            {{item.label}}
+          </option>
+        </select>               
       </div>
     </div>
   </div>
@@ -55,7 +63,7 @@
 <div class="row">
   <div class="col-md-2"></div>
     <div class="col-md-5">
-      <agm-map [latitude]="latitude" [longitude]="longitude" [fitBounds]="latlngBounds" [mapTypeId]="'hybrid'" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)">
+      <agm-map [latitude]="latitude" [longitude]="longitude" [fitBounds]="latlngBounds" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)">
         <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
         <agm-marker 
           *ngFor="let m of markers; let i = index"
@@ -78,6 +86,12 @@
           #circle>
       </agm-circle> 
               <!-- [fillColor]="'red'" -->
+       <agm-polygon #myPolygon
+        [paths]="paths"
+        [editable]="false" 
+        [draggable]="false" 
+        (polyClick)="click($event)" 
+        (polyDblClick)="delete($event)"></agm-polygon>              
       </agm-map>
     </div>
     <!-- <div class="col-md-3"></div> -->
@@ -112,15 +126,15 @@
               <a href="#" class="card-link">Another link</a> -->
             </div>
           </div>                                                       
-          <!-- <label>Lat</label>
+           <label>Lat</label>
           <input type="text" [(ngModel)]="markerLat" name="markderLat"/><br/>
           <label>Lng</label>
           <input type="text" [(ngModel)]="markerLng" name="markderLng"/><br/>
-          <label>Draggable</label>
+          <!-- <label>Draggable</label>
           <select type="text" [(ngModel)]="markerDraggable" name="markderDragglable">
             <option value="no">No</option>
             <option value="yes">Yes</option>
-          </select><br/> -->
+          </select><br/>  -->
           <label>Tên bệnh nhân </label><br/>
           <input type="text" [(ngModel)]="patientName" name="patientDescription"/><br/>
           <label>Tuổi </label><br/>

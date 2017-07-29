@@ -22,7 +22,7 @@ import { UsersComponent } from './users/users.component';
 import { customHttpProvider } from './_helpers/index';
 import { AlertComponent } from './_directives/index';
 import { AuthGuard } from './_guards/index';
-import { AlertService, AuthenticationService, UsersService, NursesService, ContractsService } from './_services/index';
+import { AlertService, AuthenticationService, UsersService, NursesService, ContractsService, GlobalEventsManager, NavbarService } from './_services/index';
 import { HomeComponent } from './home/index';
 import { LoginComponent } from './login/index';
 import { RegisterComponent } from './register/index';
@@ -92,6 +92,8 @@ const ROUTES = [
     AuthGuard,
     AlertService,
     AuthenticationService,
+    GlobalEventsManager,
+    NavbarService,
     UsersService,
     NursesService,
     ContractsService

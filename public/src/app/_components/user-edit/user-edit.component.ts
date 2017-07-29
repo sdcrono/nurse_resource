@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, NgZone, ViewChild  } from '@angular/core
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AgmCoreModule, MapsAPILoader } from '@agm/core';
-import { UsersService } from '../../_services/index';
+import { AlertService, UsersService } from '../../_services/index';
 import { maxAge, minAge } from '../../_directives/index';
 
 @Component({
@@ -33,6 +33,7 @@ export class UserEditComponent implements OnInit {
   public searchElementRef: ElementRef;
 
   constructor(
+    private alertService: AlertService,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private router: Router,
@@ -40,6 +41,16 @@ export class UserEditComponent implements OnInit {
     private usersService: UsersService,
     private formBuilder: FormBuilder
   ) { 
+    // this.reactiveForm = formBuilder.group({
+    //   'username': [null, Validators.required],
+    //   'password': '',
+    //   'name': [null, Validators.required],
+    //   'email': [null, Validators.required],
+    //   'phone': [null, Validators.compose([Validators.required, Validators.minLength(11), Validators.maxLength(11)])],
+    //   'age': [null, Validators.compose([Validators.required, maxAge(48), minAge(22)])],
+    //   'gender': [null, Validators.required],
+    //   'address': [null, Validators.required],
+    // })
     this.reactiveForm = formBuilder.group({
       'username': [null, Validators.required],
       'password': '',
@@ -48,8 +59,8 @@ export class UserEditComponent implements OnInit {
       'phone': [null, Validators.compose([Validators.required, Validators.minLength(11), Validators.maxLength(11)])],
       'age': [null, Validators.compose([Validators.required, maxAge(48), minAge(22)])],
       'gender': [null, Validators.required],
-      'address': [null, Validators.required],
-    })    
+      'address': [null],
+    })       
   }
 
   ngOnInit() {
@@ -87,11 +98,12 @@ export class UserEditComponent implements OnInit {
     this.usersService.upsert(this.user).subscribe(result => {
       let id = result.text();
       console.log(id);
+      this.alertService.success('Chỉnh sửa thành công', true);
       this.router.navigate(['/users/', id]);
     }, err => {
+      this.alertService.error(err);
       console.log(err);
     });
-    console.log("User " + this.user);
 
   }
 

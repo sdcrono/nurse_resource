@@ -25,20 +25,21 @@ export class RegisterComponent {
   }
 
   register() {
-    // this.loading = true;
+    this.loading = true;
     console.log(this.model);
-    // this.usersService.register(this.model)
-    //     .subscribe(
-    //       data => {
-    //         console.log(data)
-    //         this.alertService.success('Resgistration successful', true);
-    //         this.router.navigate(['/login'])
-    //       },
-    //       error => {
-    //         this.alertService.error(error);
-    //         this.loading = false;
-    //       }
-    //     )
+    this.usersService.upsert(this.model)
+        .subscribe(
+          data => {
+            console.log(data)
+            this.alertService.success('Resgistration successful', true);
+            this.router.navigate(['/login'])
+          },
+          error => {
+            console.log(error);
+            this.alertService.error(error);
+            this.loading = false;
+          }
+        )
     // this.usersService.upsert(this.model).subscribe(result => {
     //   this.loading = false;
     //   let id = result.text();

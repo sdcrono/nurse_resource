@@ -1,4 +1,6 @@
-<div class="col-md-6 col-md-offset-3">
+<div class="col-md-6"> </div>
+<!-- <div class="col-md-6 col-md-offset-3"> -->
+<div class="col-md-3">
     <h2>Register</h2>
     <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
         <!-- <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
@@ -12,24 +14,28 @@
             <div *ngIf="f.submitted && !lastName.valid" class="help-block">Last Name is required</div>
         </div> -->
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !name.valid }">
-            <label for="name">Name</label>
+            <label for="name">Họ Tên</label>
             <input type="text" class="form-control" name="name" [(ngModel)]="model.name" #name="ngModel" required />
-            <div *ngIf="f.submitted && !name.valid" class="help-block">Name is required</div>
+            <!-- <div *ngIf="f.submitted && !name.valid" class="help-block">Name is required</div> -->
+            <div *ngIf="f.submitted && !name.valid" class="help-block">Cần ghi họ tên</div>
         </div>
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
-            <label for="username">Username</label>
+            <label for="username">Tên tài khoản</label>
             <input type="text" class="form-control" name="username" [(ngModel)]="model.username" #username="ngModel" required />
-            <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
+            <!-- <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div> -->
+            <div *ngIf="f.submitted && !username.valid" class="help-block">Cần ghi tên tài khoản</div>
         </div>
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required />
-            <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+            <label for="password">Mật khẩu</label>
+            <input type="password" pattern=".{6,}" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required title="6 characters minimum"/>
+            <!-- <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div> -->
+            <div *ngIf="f.submitted && !password.valid" class="help-block">Yêu cầu gõ mật khẩu ít nhất 6 ký tự</div>
         </div>
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
             <label for="email">Email</label>
-            <input type="email" class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" required />
-            <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
+            <input type="email" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" required />
+            <!-- <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div> -->
+            <div *ngIf="f.submitted && !email.valid" class="help-block">Cần ghi đúng định dạng email</div>
         </div>
         <!-- <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
             <label for="phone">Phone</label>

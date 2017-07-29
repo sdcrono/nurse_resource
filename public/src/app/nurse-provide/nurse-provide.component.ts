@@ -1,11 +1,12 @@
-import { Component, Directive, ElementRef, NgZone, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Directive, ElementRef, NgZone, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from "@angular/platform-browser";
 import { Router } from '@angular/router';
-import { AgmCoreModule, MapsAPILoader } from '@agm/core';
+import { AgmCoreModule, MapsAPILoader, AgmPolygon, LatLngLiteral, LatLngBounds } from '@agm/core';
 import { NgDateRangePickerOptions } from 'ng-daterangepicker';
 import { AgmCircle } from '@agm/core/directives/circle';
+// import { AgmPolygon } from '@agm/core/directives/polygon';
 import { User, Location, ContractModel, ContractDetailModel } from '../_models/index';
 import { Nurse, NurseProfile, Contract, Users } from '../_interfaces/index';
 import { AlertService, NursesService, MarkersService, ContractsService } from '../_services/index';
@@ -20,7 +21,7 @@ import {} from '@types/googlemaps';
   styleUrls: ['./nurse-provide.component.css'],
   providers: [MarkersService]
 })
-export class NurseProvideComponent implements OnInit,OnDestroy {
+export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
 
   //nurses: NurseProfile[] = [];
   currentUser: User;
@@ -75,9 +76,11 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
   private selectCareerOption: any;
   private selectTypeOption: any;
   private selectHospitalOption: any;
+  private selectMode: any;
   private searchCriteriaCareer: any;
   private searchCriteriaType: any;
   private searchCriteriaHospital: any;
+  private searchMode: any;
   private hourOption: any;
   private mon: any;
   private tue: any;
@@ -110,6 +113,47 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
     // },
   ];
 
+  pathsSelect: string;
+  paths: Array<LatLngLiteral> = [
+      { lat: 10.770000,  lng: 106.670000 },
+      { lat: 10.770000,  lng: 106.710000 },
+      { lat: 10.800000,  lng: 106.710000 },
+      { lat: 10.800000,  lng: 106.670000 }
+    ];
+  pathsCenter: Array<LatLngLiteral> = [
+      { lat: 10.770000,  lng: 106.670000 },
+      { lat: 10.770000,  lng: 106.710000 },
+      { lat: 10.800000,  lng: 106.710000 },
+      { lat: 10.800000,  lng: 106.670000 }
+    ];
+
+  pathsTop: Array<LatLngLiteral> = [
+      { lat: 10.800000,  lng: 106.670000 },
+      { lat: 10.800000,  lng: 106.710000 },
+      { lat: 10.830000,  lng: 106.710000 },
+      { lat: 10.830000,  lng: 106.670000 }
+    ];
+    
+  pathsBottom: Array<LatLngLiteral> = [
+      { lat: 10.740000,  lng: 106.670000 },
+      { lat: 10.740000,  lng: 106.710000 },
+      { lat: 10.770000,  lng: 106.710000 },
+      { lat: 10.770000,  lng: 106.670000 }
+    ];
+
+  pathsLeft: Array<LatLngLiteral> = [
+      { lat: 10.770000,  lng: 106.630000 },
+      { lat: 10.770000,  lng: 106.670000 },
+      { lat: 10.800000,  lng: 106.670000 },
+      { lat: 10.800000,  lng: 106.630000 }
+    ];    
+
+  pathsRight: Array<LatLngLiteral> = [
+      { lat: 10.770000,  lng: 106.710000 },
+      { lat: 10.770000,  lng: 106.750000 },
+      { lat: 10.800000,  lng: 106.750000 },
+      { lat: 10.800000,  lng: 106.710000 }
+    ];   
   //the attribute nhận nhiệm vụ subcribe/unsubcribe
   private alive: boolean = true;
 
@@ -118,6 +162,9 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
 
   @ViewChild(AgmCircle)
   public myCircle: AgmCircle;
+
+  @ViewChild(AgmPolygon)
+  public myPolygon: google.maps.Polygon;  
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
@@ -187,6 +234,20 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
     
     this.searchCriteriaHospital = this.selectHospitalOption[0];
 
+    this.selectMode = [
+      {
+        id: 1,
+        label: "-Tìm kiếm xung quanh-",
+        value: "nearby"
+      }, {
+        id: 2,
+        label: "-Tìm kiếm theo khu vực-",
+        value: "sector"
+      }
+    ];
+
+    this.searchMode = this.selectMode[0];
+
     this.hourOption = [
       {
         id: 1,
@@ -224,9 +285,10 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
     //get current user
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     //set google maps defaults
-    this.zoom = 12;
-    this.latitude = this.currentUser.lat;
-    this.longitude = this.currentUser.lng;
+    console.log("C "+ this.currentUser.lat);
+    this.zoom = 13;
+    this.latitude = this.currentUser.lat === undefined ? 10.778285 : this.currentUser.lat;
+    this.longitude = this.currentUser.lng === undefined ? 106.697806 : this.currentUser.lng;
     this.radius = 5000;
     // this.yourLatLng = new google.maps.LatLng(this.latitude, this.longitude);
 
@@ -253,13 +315,16 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
     this.setCurrentPosition();
 
     //load searched nurses
-    this.loadAllNurseOnTheMap();
+    // this.loadAllNurseOnTheMap();
 
     // //fillbound nurse locations to the map
     // this.fillboundAllNurseOnTheMap();
 
     //load Places Autocomplete
     this.autoComplete();
+
+        //load searched nurses
+    this.loadAllNurseOnTheMap();
 
   }
 
@@ -278,6 +343,15 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
     this.markerDraggable = marker.draggable;
     console.log("Clicked user " + this.nurseProfiles[this.markerNo].owner.username + ' at index ' + this.markerNo + ' with lat ' + marker.lat + ' lng ' + marker.lng);
     this.nurseProfile = this.nurseProfiles[this.markerNo];
+  }
+
+  click($event: any){
+    console.log(`click event is called {$event}`);
+    // console.log('click event is called {$event}' +  $event.coords.lat + '-' + $event.coords.lng);
+  }
+  
+  delete($event: any){
+    console.log(`delete is called {$event}`);
   }
 
   mapClicked($event: any) {
@@ -335,6 +409,10 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
   onChangeHospital($event: any) {
     this.loadAllNurseOnTheMap();
   }
+
+  onChangeMode($event: any) {
+    this.loadAllNurseOnTheMap();
+  }  
 
   onChangeHour($event: any, date: string) {
     switch(date) {
@@ -445,6 +523,8 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
       let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
         // types: ["address"]
       });
+      this.pathsSelect = this.lockRegionForCurrentUser();
+      let nurseLatLng = new google.maps.LatLng(10, 30);
       autocomplete.addListener("place_changed", () => {
         this.ngZone.run(() => {
           //get the place result
@@ -460,6 +540,7 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
           this.zoom = 12;
+          this.pathsSelect = this.lockRegionForCurrentUser();
           this.loadAllNurseOnTheMap();
         });
       });
@@ -566,9 +647,167 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
   //     });
   // }
 
+  ngAfterViewInit() {
+    console.log('ngAfterViewInit');
+  }
+
+  private lockRegionForCurrentUser() {
+    var polygonC = new google.maps.Polygon({
+        paths: this.pathsCenter,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35
+      });
+    var polygonT = new google.maps.Polygon({
+        paths: this.pathsTop,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35
+      }); 
+    var polygonB = new google.maps.Polygon({
+        paths: this.pathsBottom,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35
+      }); 
+    var polygonL = new google.maps.Polygon({
+        paths: this.pathsLeft,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35
+      });
+    var polygonR = new google.maps.Polygon({
+        paths: this.pathsRight,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35
+      });                            
+    let nurseLatLng = new google.maps.LatLng(this.latitude, this.longitude);
+    let ft = false;
+    ft = google.maps.geometry.poly.containsLocation(nurseLatLng, polygonC);
+    console.log("PolygonC:" + ft);
+    if (ft) {
+      this.paths = this.pathsCenter;
+      return "C";   
+    }
+      
+    ft = google.maps.geometry.poly.containsLocation(nurseLatLng, polygonT);
+    console.log("PolygonT:" + ft);
+    if (ft) {
+      this.paths = this.pathsTop;
+      return "T";   
+    }    
+    ft = google.maps.geometry.poly.containsLocation(nurseLatLng, polygonB);
+    console.log("PolygonB:" + ft);   
+    if (ft) {
+      this.paths = this.pathsBottom;
+      return "B";   
+    } 
+    ft = google.maps.geometry.poly.containsLocation(nurseLatLng, polygonL);
+    console.log("PolygonL:" + ft);   
+    if (ft) {
+      this.paths = this.pathsLeft;
+      return "L";   
+    }
+    ft = google.maps.geometry.poly.containsLocation(nurseLatLng, polygonR);
+    console.log("PolygonR:" + ft);   
+    if (ft) {
+      this.paths = this.pathsRight;
+      return "R";   
+    }
+
+    return "X";
+  }
+
+  private lockRegionForNurse(s: string, nurse: any) {
+    let nurseLatLng = new google.maps.LatLng(nurse.owner.location.latitude, nurse.owner.location.longitude);
+    let ft = false;
+    switch(s) {
+      case 'C':
+        var polygonC = new google.maps.Polygon({
+            paths: this.pathsCenter,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35
+          });
+          ft = google.maps.geometry.poly.containsLocation(nurseLatLng, polygonC);
+          console.log("PolygonC:" + ft);
+          break;            
+      case 'T':
+        var polygonT = new google.maps.Polygon({
+          paths: this.pathsTop,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35
+        });
+          ft = google.maps.geometry.poly.containsLocation(nurseLatLng, polygonT);
+          console.log("PolygonT:" + ft);
+          break;    
+      case 'B':
+        var polygonB = new google.maps.Polygon({
+            paths: this.pathsBottom,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35
+          }); 
+        ft = google.maps.geometry.poly.containsLocation(nurseLatLng, polygonB);
+        console.log("PolygonB:" + ft);   
+        break;
+
+      case 'L':
+        var polygonL = new google.maps.Polygon({
+            paths: this.pathsLeft,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35
+          });      
+        ft = google.maps.geometry.poly.containsLocation(nurseLatLng, polygonL);
+        console.log("PolygonL:" + ft);   
+        break;
+          
+      case 'R':
+        var polygonR = new google.maps.Polygon({
+            paths: this.pathsRight,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35
+          });
+        ft = google.maps.geometry.poly.containsLocation(nurseLatLng, polygonR);
+        console.log("PolygonR:" + ft); 
+        break;    
+
+      case 'X':
+        ft = false;
+        console.log("PolygonX:" + ft); 
+        break;           
+    }
+    return ft;
+  }
+
   private loadAllNurseOnTheMap() {
       this.markers.length = 0;
       // this.markers = [];
+
       this.nursesService.search(this.searchCriteriaCareer.value, this.searchCriteriaType.value, this.searchCriteriaHospital.value)
         .takeWhile(() => this.alive)
         .subscribe(nurses => { 
@@ -579,35 +818,62 @@ export class NurseProvideComponent implements OnInit,OnDestroy {
           nurses.forEach(nurse => {
           console.log("Nurse ", nurse);
           console.log("location ", nurse.owner.location.latitude.toString());
-          // let nurseLatLng = new google.maps.LatLng(nurse.location.latitude, nurse.location.longitude);
-          // let distance = google.maps.geometry.spherical.computeDistanceBetween(this.yourLatLng, nurseLatLng);
-          // google.maps.geometry.poly.containsLocation(nurse.location, this.myCircle);
-          if (this.getDistanceFromLatLonInKm(this.latitude,this.longitude,nurse.owner.location.latitude,nurse.owner.location.longitude) <= this.radius) {
-            let nurseMarker = {
-              no: dem,
-              name: nurse.owner.profile.name,
-              email: nurse.owner.profile.email,
-              phone: nurse.owner.profile.phone,   
-              sex: nurse.owner.profile.sex,
-              age: nurse.owner.profile.age,
-              address: nurse.owner.profile.address,
-              hospital: nurse.hospital,          
-              lat: nurse.owner.location.latitude,
-              lng: nurse.owner.location.longitude,
-              // distance: distance,
-              draggable: false
-            }
-            dem++;
-            console.log("Nurse Marker ", nurseMarker);
-            this.markers.push(nurseMarker);
-            this.nurseProfiles.push(nurse);
-          }
 
+          switch(this.searchMode.value) {
+            case "nearby":
+              // for old mode
+              if (this.getDistanceFromLatLonInKm(this.latitude,this.longitude,nurse.owner.location.latitude,nurse.owner.location.longitude) <= this.radius) {
+                let nurseMarker = {
+                  no: dem,
+                  name: nurse.owner.profile.name,
+                  email: nurse.owner.profile.email,
+                  phone: nurse.owner.profile.phone,   
+                  sex: nurse.owner.profile.sex,
+                  age: nurse.owner.profile.age,
+                  address: nurse.owner.profile.address,
+                  hospital: nurse.hospital,          
+                  lat: nurse.owner.location.latitude,
+                  lng: nurse.owner.location.longitude,
+                  // distance: distance,
+                  draggable: false
+                }
+                dem++;
+                console.log("Nurse Marker ", nurseMarker);
+                this.markers.push(nurseMarker);
+                this.nurseProfiles.push(nurse);
+              };
+              break;
+            case "sector":            
+              // for new mode
+              if (this.lockRegionForNurse(this.pathsSelect, nurse)) {
+                let nurseMarker = {
+                  no: dem,
+                  name: nurse.owner.profile.name,
+                  email: nurse.owner.profile.email,
+                  phone: nurse.owner.profile.phone,   
+                  sex: nurse.owner.profile.sex,
+                  age: nurse.owner.profile.age,
+                  address: nurse.owner.profile.address,
+                  hospital: nurse.hospital,          
+                  lat: nurse.owner.location.latitude,
+                  lng: nurse.owner.location.longitude,
+                  // distance: distance,
+                  draggable: false
+                }
+                dem++;
+                console.log("Nurse Marker ", nurseMarker);
+                this.markers.push(nurseMarker);
+                this.nurseProfiles.push(nurse);
+              };
+              break;
+          }
         });  
         dem = 0;
       });
   }
 
+
+  
   ngOnDestroy() {
     this.alive = false;
   }

@@ -249,7 +249,8 @@ function createUser(userParam) {
  
             if (user) {
                 // username already exists
-                deferred.reject('Username "' + userParam.username + '" is already taken');
+                // deferred.reject('Username "' + userParam.username + '" is already taken');
+                deferred.reject('Tên tài khoản "' + userParam.username + '" đã có rồi');
             } else {
                     Profiles.findOne(
                         { email: userParam.email },
@@ -258,7 +259,8 @@ function createUser(userParam) {
                 
                             if (profile) {
                                 // username already exists
-                                deferred.reject('Email "' + userParam.email + '" is already taken');
+                                // deferred.reject('Email "' + userParam.email + '" is already taken');
+                                deferred.reject('Email "' + userParam.email + '" đã có rồi');
                             } else {
                                 let pass = bcrypt.hashSync(userParam.password, 10);
                                 let newUser = Users({
@@ -278,7 +280,13 @@ function createUser(userParam) {
                                 newUser.save((err, user) => {
                                     if (err) deferred.reject(err.name + ': ' + err.message);
                                     // deferred.resolve('Success');
-                                    createProfile(userParam);
+                                    else
+                                        createProfile(userParam).then(result => {
+                                            deferred.resolve(user._id);
+                                        })
+                                        .catch(err => {
+                                            deferred.reject(err);
+                                        });
                                 });
                                 
                             }
@@ -313,10 +321,10 @@ function createProfile(userParam) {
         // });
         profile.save((err, profile) => {
             if (err) deferred.reject(err.name + ': ' + err.message);
-                deferred.resolve('Success2');
+                // deferred.resolve(userParam.id);
                 Users.findOneAndUpdate({username: userParam.username}, {profile: profile._id}, (err, user) => {
                     if (err) deferred.reject(err.name + ': ' + err.message);
-                     deferred.resolve('Success4');
+                     deferred.resolve(userParam.id);
                 });
         });
     });
@@ -395,10 +403,7 @@ function updateProfile(userParam) {
             deferred.reject(err.name + ': ' + err.message);
         }   
         let set = {
-            name: {
-                first: userParam.firstname,
-                last: userParam.lastname
-            },
+            name: userParam.name,
             email: userParam.email,
             phone: userParam.phone,
             age: userParam.age,	
@@ -408,7 +413,7 @@ function updateProfile(userParam) {
 
         profile.update(set, (err, doc) => {
             if (err) deferred.reject(err.name + ': ' + err.message);
-            deferred.resolve('Success2');
+            deferred.resolve(userParam.id);
         });
     });
     // Profiles.findByIdAndUpdate(id, set, (err, doc) => {

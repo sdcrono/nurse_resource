@@ -158,12 +158,12 @@ function createUser(userParam) {
                                     if (err) deferred.reject(err.name + ': ' + err.message);
                                     // deferred.resolve('Success');
                                     createProfile(userParam).then(
-                                        deferred.resolve(user)
+                                        deferred.resolve(user._id)
                                     ).catch(err => {
                                         deferred.reject(err);
                                     });
                                     createNurseProfile(userParam).then(
-                                        deferred.resolve(user)
+                                        deferred.resolve(user._id)
                                     ).catch(err => {
                                         deferred.reject(err);
                                     });
@@ -201,10 +201,10 @@ function createProfile(userParam) {
         // });
         profile.save((err, profile) => {
             if (err) deferred.reject(err.name + ': ' + err.message);
-                deferred.resolve('Success2');
+                // deferred.resolve(userParam.id);
                 Users.findOneAndUpdate({username: userParam.username}, {profile: profile._id}, (err, user) => {
                     if (err) deferred.reject(err.name + ': ' + err.message);
-                     deferred.resolve('Success4');
+                     deferred.resolve(userParam.id);
                 });
         });
     });
@@ -230,7 +230,7 @@ function createNurseProfile(userParam) {
             rate: 0,
             retribution: 0,
             isDelete: false,
-            status: "free",
+            status: "Free",
             owner: user._id 
         })
 
@@ -240,10 +240,10 @@ function createNurseProfile(userParam) {
         // });
         profile.save((err, profile) => {
             if (err) deferred.reject(err.name + ': ' + err.message);
-                deferred.resolve('Success2');
+                // deferred.resolve(userParam.id);
                 Users.findOneAndUpdate({username: userParam.username}, {nurseprofile: profile._id}, (err, user) => {
                     if (err) deferred.reject(err.name + ': ' + err.message);
-                     deferred.resolve('Success4');
+                     deferred.resolve(userParam.id);
                 });
         });
     });
