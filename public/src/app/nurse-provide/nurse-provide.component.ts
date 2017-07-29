@@ -5,6 +5,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { Router } from '@angular/router';
 import { AgmCoreModule, MapsAPILoader, AgmPolygon, LatLngLiteral, LatLngBounds } from '@agm/core';
 import { NgDateRangePickerOptions } from 'ng-daterangepicker';
+// import { DateRangePickerModule } from 'ng-pick-daterange';
 import { AgmCircle } from '@agm/core/directives/circle';
 // import { AgmPolygon } from '@agm/core/directives/polygon';
 import { User, Location, ContractModel, ContractDetailModel } from '../_models/index';

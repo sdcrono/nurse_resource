@@ -10,6 +10,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 import { AgmCoreModule } from "@agm/core";
 import { NgDateRangePickerModule } from 'ng-daterangepicker';
+import { DateTimePickerModule } from 'ng-pick-datetime';
 
 import { PostsComponent } from './posts/posts.component';
 import { PostsService } from './_services/posts.service';
@@ -83,6 +84,7 @@ const ROUTES = [
       // region: 'VI' 
     }),
     NgDateRangePickerModule,
+    DateTimePickerModule,
     // RouterModule.forRoot(ROUTES)
     routing
   ],
