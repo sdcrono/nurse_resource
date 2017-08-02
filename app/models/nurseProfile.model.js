@@ -25,6 +25,11 @@ var nurseProfileSchema = new Schema({
         type: String,
         enum: ['Free', 'Working']
     },
+    busy_dates: [{
+        date: String,
+        start_time: Date,
+        end_time: Date
+    }],
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'Users'

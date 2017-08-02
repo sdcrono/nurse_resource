@@ -1,6 +1,7 @@
 export * from './contractDetail';
 export * from './nurseProfile';
 export * from './permission';
+export * from './busyDate';
 export * from './location';
 export * from './contract';
 export * from './profile';

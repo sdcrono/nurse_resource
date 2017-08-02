@@ -4,7 +4,11 @@ var Schema = mongoose.Schema;
 
 var contractDetailSchema = new Schema({
     jobDescription: String,
-    dates: [String],
+    dates: [{
+        date: String,
+        start_time: Date,
+        end_time: Date
+    }],
     // startHour: TimeRanges,
     // endHour: TimeRanges,
     owner: {

@@ -61,7 +61,140 @@
 
 
 <div class="row">
-  <div class="col-md-2"></div>
+  <div class="col-md-2">
+          <div class="centered">
+            <div class="control is-horizontal">
+              <div class="control-label">
+                 <label class="label">Theme</label> 
+                <!-- <label class="label">Chọn  lịch làm việc và thời hạn công việc</label> -->
+              </div>
+              <span class="select">
+                <!-- <select [(ngModel)]="options.theme">
+                  <option>default</option>
+                  <option>green</option>
+                  <option>teal</option>
+                  <option>cyan</option>
+                  <option>grape</option>
+                  <option>red</option>
+                  <option>gray</option>
+                </select> -->
+                <table>
+                  <tr>
+                    <td>
+                      <button type="button" class="btn btn-success btn-number" (click)="resetTime('T2')">
+                        T2
+                      </button>
+                    </td>
+                    <td><input class="form-control" [value]="monSt | date:'shortTime'" [(ngModel)]="monSt" name="monSt" dateTimePicker [pickerType]="'time'" readonly (onChange)="setMonSt($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="limitSt" [maxMoment]="monEn"></td> 
+                    <td><input class="form-control" [value]="monEn | date:'shortTime'" [(ngModel)]="monEn" name="monEn" dateTimePicker [pickerType]="'time'" readonly (onChange)="setMonEn($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="monSt" [maxMoment]="limitEn"></td>    
+                  </tr>
+                  <tr>
+                    <td>
+                      <button type="button" class="btn btn-success btn-number" (click)="resetTime('T3')">
+                        T3
+                      </button>
+                    </td>
+                    <td><input class="form-control" [value]="tueSt | date:'shortTime'" [(ngModel)]="tueSt" name="tueSt" dateTimePicker [pickerType]="'time'" readonly (onChange)="setTueSt($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="limitSt" [maxMoment]="tueEn"></td> 
+                    <td><input class="form-control" [value]="tueEn | date:'shortTime'" [(ngModel)]="tueEn" name="tueEn" dateTimePicker [pickerType]="'time'" readonly (onChange)="setTueEn($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="tueSt" [maxMoment]="limitEn"></td>    
+                  </tr>
+                  <tr>
+                    <td>
+                      <button type="button" class="btn btn-success btn-number" (click)="resetTime('T4')">
+                        T4
+                      </button>
+                    </td>
+                    <td><input class="form-control" [value]="wedSt | date:'shortTime'" [(ngModel)]="wedSt" name="wedSt" dateTimePicker [pickerType]="'time'" readonly (onChange)="setWedSt($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="limitSt" [maxMoment]="wedEn"></td> 
+                    <td><input class="form-control" [value]="wedEn | date:'shortTime'" [(ngModel)]="wedEn" name="wedEn" dateTimePicker [pickerType]="'time'" readonly (onChange)="setWedEn($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="wedSt" [maxMoment]="limitEn"></td>    
+                  </tr>
+                  <tr>
+                    <td>
+                      <button type="button" class="btn btn-success btn-number" (click)="resetTime('T5')">
+                        T5
+                      </button>
+                    </td>
+                    <td><input class="form-control" [value]="thuSt | date:'shortTime'" [(ngModel)]="thuSt" name="thuSt" dateTimePicker [pickerType]="'time'" readonly (onChange)="setThuSt($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="limitSt" [maxMoment]="thuEn"></td> 
+                    <td><input class="form-control" [value]="thuEn | date:'shortTime'" [(ngModel)]="thuEn" name="thuEn" dateTimePicker [pickerType]="'time'" readonly (onChange)="setThuEn($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="thuSt" [maxMoment]="limitEn"></td>    
+                  </tr>
+                  <tr>
+                    <td>
+                      <button type="button" class="btn btn-success btn-number" (click)="resetTime('T6')">
+                        T6
+                      </button>
+                    </td>
+                    <td><input class="form-control" [value]="friSt | date:'shortTime'" [(ngModel)]="friSt" name="friSt" dateTimePicker [pickerType]="'time'" readonly (onChange)="setFriSt($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="limitSt" [maxMoment]="friEn"></td> 
+                    <td><input class="form-control" [value]="friEn | date:'shortTime'" [(ngModel)]="friEn" name="friEn" dateTimePicker [pickerType]="'time'" readonly (onChange)="setFriEn($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="friSt" [maxMoment]="limitEn"></td>     
+                  </tr>
+                  <tr>
+                    <td>
+                      <button type="button" class="btn btn-success btn-number" (click)="resetTime('T7')">
+                        T7
+                      </button>
+                    </td>
+                    <td><input class="form-control" [value]="satSt | date:'shortTime'" [(ngModel)]="satSt" name="satSt" dateTimePicker [pickerType]="'time'" readonly (onChange)="setSatSt($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="limitSt" [maxMoment]="satEn"></td> 
+                    <td><input class="form-control" [value]="satEn | date:'shortTime'" [(ngModel)]="satEn" name="satEn" dateTimePicker [pickerType]="'time'" readonly (onChange)="setSatEn($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="satSt" [maxMoment]="limitEn"></td>    
+                  </tr>
+                  <tr>
+                    <td>
+                      <button type="button" class="btn btn-success btn-number" (click)="resetTime('CN')">
+                        CN
+                      </button>
+                    </td>
+                    <td><input class="form-control" [value]="sunSt | date:'shortTime'" [(ngModel)]="sunSt" name="sunSt" dateTimePicker [pickerType]="'time'" readonly (onChange)="setSunSt($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="limitSt" [maxMoment]="sunEn"></td> 
+                    <td><input class="form-control" [value]="sunEn | date:'shortTime'" [(ngModel)]="sunEn" name="sunEn" dateTimePicker [pickerType]="'time'" readonly (onChange)="setSunEn($event)" [hourTime]=" '24' " [locale]=" 'vi' " [minMoment]="sunSt" [maxMoment]="limitEn"></td> 
+                  </tr>                                                                                                            
+                </table>
+                  
+                <!-- <select type="text" [(ngModel)]="mon" name="mon" (ngModelChange)="onChangeHour($event,'mon')">
+                  <option *ngFor="let item of hourOption" [ngValue]="item">  
+                    {{item.label}}
+                  </option>
+                </select><br/> -->
+
+                <!-- <button type="button" class="btn btn-success btn-number" (click)="check()">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button> -->
+
+                <!-- Thứ 3
+                <select type="text" [(ngModel)]="tue" name="tue" (ngModelChange)="onChangeHour($event,'tue')">
+                  <option *ngFor="let item of hourOption" [ngValue]="item">  
+                    {{item.label}}
+                  </option>
+                </select><br/>  
+                Thứ 4
+                <select type="text" [(ngModel)]="wed" name="wed" (ngModelChange)="onChangeHour($event,'wed')">
+                  <option *ngFor="let item of hourOption" [ngValue]="item">  
+                    {{item.label}}
+                  </option>
+                </select><br/>  
+                Thứ 5
+                <select type="text" [(ngModel)]="thu" name="thu" (ngModelChange)="onChangeHour($event,'thu')">
+                  <option *ngFor="let item of hourOption" [ngValue]="item">  
+                    {{item.label}}
+                  </option>
+                </select><br/>  
+                Thứ 6
+                <select type="text" [(ngModel)]="fri" name="fri" (ngModelChange)="onChangeHour($event,'fri')">
+                  <option *ngFor="let item of hourOption" [ngValue]="item">  
+                    {{item.label}}
+                  </option>
+                </select><br/>            
+                Thứ 7
+                <select type="text" [(ngModel)]="sat" name="sat" (ngModelChange)="onChangeHour($event,'sat')">
+                  <option *ngFor="let item of hourOption" [ngValue]="item">  
+                    {{item.label}}
+                  </option>
+                </select><br/>  
+                Chủ nhật
+                <select type="text" [(ngModel)]="sun" name="sun" (ngModelChange)="onChangeHour($event,'sun')">
+                  <option *ngFor="let item of hourOption" [ngValue]="item">  
+                    {{item.label}}
+                  </option>
+                </select>                  
+                  <br/>                 -->
+              </span>
+            </div>
+          </div>    
+  </div>
     <div class="col-md-5">
       <agm-map [latitude]="latitude" [longitude]="longitude" [fitBounds]="latlngBounds" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)">
         <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
@@ -139,78 +272,21 @@
           <input type="text" [(ngModel)]="patientName" name="patientDescription"/><br/>
           <label>Tuổi </label><br/>
           <input type="number" [(ngModel)]="patientAge" name="patientDescription" pattern="[1-9]*"/><br/>                    
-          <label>Mô tả công việc {{value}} </label><br/>
+          <label>Mô tả công việc {{momentVariable}} </label><br/>
           <textarea class="form-control" type="text" [(ngModel)]="patientDescription" name="patientDescription"></textarea><br/>
       <div class="row">
         <!-- <div class="column is-4 is-offset-4"> -->
         <div class="col-md-5">
-          <div class="centered">
-            <div class="control is-horizontal">
-              <div class="control-label">
-                 <label class="label">Theme</label> 
-                <!-- <label class="label">Chọn  lịch làm việc và thời hạn công việc</label> -->
-              </div>
-              <span class="select">
-                <!-- <select [(ngModel)]="options.theme">
-                  <option>default</option>
-                  <option>green</option>
-                  <option>teal</option>
-                  <option>cyan</option>
-                  <option>grape</option>
-                  <option>red</option>
-                  <option>gray</option>
-                </select> -->
-                  Thứ 2
-                <select type="text" [(ngModel)]="mon" name="mon" (ngModelChange)="onChangeHour($event,'mon')">
-                  <option *ngFor="let item of hourOption" [ngValue]="item">  
-                    {{item.label}}
-                  </option>
-                </select><br/>
-                Thứ 3
-                <select type="text" [(ngModel)]="tue" name="tue" (ngModelChange)="onChangeHour($event,'tue')">
-                  <option *ngFor="let item of hourOption" [ngValue]="item">  
-                    {{item.label}}
-                  </option>
-                </select><br/>  
-                Thứ 4
-                <select type="text" [(ngModel)]="wed" name="wed" (ngModelChange)="onChangeHour($event,'wed')">
-                  <option *ngFor="let item of hourOption" [ngValue]="item">  
-                    {{item.label}}
-                  </option>
-                </select><br/>  
-                Thứ 5
-                <select type="text" [(ngModel)]="thu" name="thu" (ngModelChange)="onChangeHour($event,'thu')">
-                  <option *ngFor="let item of hourOption" [ngValue]="item">  
-                    {{item.label}}
-                  </option>
-                </select><br/>  
-                Thứ 6
-                <select type="text" [(ngModel)]="fri" name="fri" (ngModelChange)="onChangeHour($event,'fri')">
-                  <option *ngFor="let item of hourOption" [ngValue]="item">  
-                    {{item.label}}
-                  </option>
-                </select><br/>            
-                Thứ 7
-                <select type="text" [(ngModel)]="sat" name="sat" (ngModelChange)="onChangeHour($event,'sat')">
-                  <option *ngFor="let item of hourOption" [ngValue]="item">  
-                    {{item.label}}
-                  </option>
-                </select><br/>  
-                Chủ nhật
-                <select type="text" [(ngModel)]="sun" name="sun" (ngModelChange)="onChangeHour($event,'sun')">
-                  <option *ngFor="let item of hourOption" [ngValue]="item">  
-                    {{item.label}}
-                  </option>
-                </select>                  
-                  <br/>                
-              </span>
-            </div>
-          </div>
+
         </div>
         <!-- <div class="column is-4 is-offset-4"> -->
         <div class="col-md-5">
           <div class="is-fullwidth has-text-centered">
             <ng-daterangepicker [(ngModel)]="value" name="value" [options]="options"></ng-daterangepicker>
+              <input [value]="momentVariable | date" [(ngModel)]="momentVariable" name="momentVariable" dateTimePicker [pickerType]="'time'" readonly (onChange)="setMoment($event)">  
+            <!-- <dp-time-select #dayPicker theme="dp-material" [(ngModel)]="selectedDate" [config]="config"></dp-time-select>
+              <button type="button" class="btn btn-success btn-number"(click)="open()"></button>
+              <button type="button" class="btn btn-success btn-number" (click)="close()"></button> -->
           </div>
         </div>
       </div>

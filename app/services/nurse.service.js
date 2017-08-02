@@ -128,7 +128,8 @@ function createUser(userParam) {
  
             if (user) {
                 // username already exists
-                deferred.reject('Username "' + userParam.username + '" is already taken');
+                // deferred.reject('Username "' + userParam.username + '" is already taken');
+                deferred.reject('Tên tài khoản "' + userParam.username + '" đã có rồi');
             } else {
                     Profiles.findOne(
                         { email: userParam.email },
@@ -137,7 +138,8 @@ function createUser(userParam) {
                 
                             if (profile) {
                                 // username already exists
-                                deferred.reject('Email "' + userParam.email + '" is already taken');
+                                // deferred.reject('Email "' + userParam.email + '" is already taken');
+                                deferred.reject('Email "' + userParam.email + '" đã có rồi');
                             } else {
                                 let pass = bcrypt.hashSync(userParam.password, 10);
                                 let newUser = Users({
@@ -231,6 +233,7 @@ function createNurseProfile(userParam) {
             retribution: 0,
             isDelete: false,
             status: "Free",
+            busy_dates: userParam.busyDates,
             owner: user._id 
         })
 

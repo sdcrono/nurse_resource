@@ -3,7 +3,8 @@ import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { AgmCoreModule, MapsAPILoader } from '@agm/core';
 import { maxAge, minAge } from '../../_directives/index';
-import { NursesService } from '../../_services/index';
+import { AlertService, NursesService } from '../../_services/index';
+import { BusyDate } from '../../_interfaces/index';
 // import { Nurse } from '../../_models/index';
 import "rxjs/add/operator/takeWhile";
 import {} from '@types/googlemaps';
@@ -50,8 +51,13 @@ export class NurseCreateComponent implements OnInit {
   @ViewChild("search")
   public searchElementRef: ElementRef;
 
+  date: string;
+  start: Date;
+  end: Date;
+  busyDates: BusyDate[] = [];
 
   constructor(
+    private alertService: AlertService,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private nursesService: NursesService,
@@ -117,13 +123,18 @@ export class NurseCreateComponent implements OnInit {
       certification: value.certification,
       career: value.career,
       hospital: value.hospital,
-      type: value.type
+      type: value.type,
+      busyDates: this.busyDates
     };
     this.nursesService.upsert(this.nurse).takeWhile(() => this.alive).subscribe(result => {
       let id = result.text();
+      id.replace(/\"/g, "");
+      eval(id);
       console.log(id);
-      this.router.navigate(['/nurses/', id]);
+      this.alertService.success('Thêm thành công', true);
+      // this.router.navigate(['/nurses/', id]);
     }, err => {
+      this.alertService.error(err);
       console.log(err);
     });
     console.log("Nurse " + this.nurse);
@@ -156,6 +167,29 @@ export class NurseCreateComponent implements OnInit {
     });
   }
 
-  
+addBusyDate() {
+  let busyDate = {
+    date: this.date,
+    start_time: this.start,
+    end_time: this.end
+  };
+  this.busyDates.push(busyDate);
+  console.log(this.busyDates);
+}
+
+deleteBusyDate(busyDate) {
+  console.log(busyDate);
+  let index = this.busyDates.indexOf(busyDate);
+  console.log(index);
+  if (index > -1) {
+      this.busyDates.splice(index, 1);
+  }
+}
 
 }
+
+//   interface busyDate {
+//     date: string,
+//     start_time: Date,
+//     end_time: Date
+// }

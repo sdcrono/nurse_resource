@@ -1,6 +1,6 @@
 //  AIzaSyAepYGvisNRywBmOOV3d2_T-9wPBZVy9gM 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
@@ -11,6 +11,11 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AgmCoreModule } from "@agm/core";
 import { NgDateRangePickerModule } from 'ng-daterangepicker';
 import { DateTimePickerModule } from 'ng-pick-datetime';
+import { DpDatePickerModule } from 'ng2-date-picker';
+
+import * as moment from 'moment'; 
+
+
 
 import { PostsComponent } from './posts/posts.component';
 import { PostsService } from './_services/posts.service';
@@ -85,11 +90,13 @@ const ROUTES = [
     }),
     NgDateRangePickerModule,
     DateTimePickerModule,
+    DpDatePickerModule,
     // RouterModule.forRoot(ROUTES)
     routing
   ],
   providers: [
     // {provide: LocationStrategy, useClass: HashLocationStrategy},
+    // { provide: LOCALE_ID, useValue: "vi" },
     customHttpProvider,
     AuthGuard,
     AlertService,

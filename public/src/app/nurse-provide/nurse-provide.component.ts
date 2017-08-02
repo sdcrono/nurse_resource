@@ -6,9 +6,10 @@ import { Router } from '@angular/router';
 import { AgmCoreModule, MapsAPILoader, AgmPolygon, LatLngLiteral, LatLngBounds } from '@agm/core';
 import { NgDateRangePickerOptions } from 'ng-daterangepicker';
 // import { DateRangePickerModule } from 'ng-pick-daterange';
+import * as moment from 'moment';
 import { AgmCircle } from '@agm/core/directives/circle';
 // import { AgmPolygon } from '@agm/core/directives/polygon';
-import { User, Location, ContractModel, ContractDetailModel } from '../_models/index';
+import { User, Location, ContractModel, ContractDetailModel, BusyDate } from '../_models/index';
 import { Nurse, NurseProfile, Contract, Users } from '../_interfaces/index';
 import { AlertService, NursesService, MarkersService, ContractsService } from '../_services/index';
 import {Observable} from 'rxjs/Observable';
@@ -72,6 +73,30 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
 
   //dateRangePickerValue
   value: string;
+
+  //date variable
+  momentVariable: any;
+  limitSt: Date;
+  limitEn: Date;
+  // testSt: Date;
+  // testEn: Date;
+  monSt: Date;
+  monEn: Date;
+  tueSt: Date;
+  tueEn: Date;
+  wedSt: Date;
+  wedEn: Date;
+  thuSt: Date;
+  thuEn: Date;
+  friSt: Date;
+  friEn: Date;    
+  satSt: Date;
+  satEn: Date;  
+  sunSt: Date;
+  sunEn: Date;
+  subDate: Date;
+  numberBusyDateAllow: number = 0;
+  workingDates: BusyDate[] = [];
 
   //search options and values
   private selectCareerOption: any;
@@ -301,6 +326,22 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ahuhu = "Date.now()";
     console.log("Now:" + this.whatTime);
 
+    //set Time for search
+    const minHour = 7;
+    const maxHour = 21;
+    const minMinute = 30;
+    const maxMinute = 30;
+    const minSecond = 0;
+    const maxSecond = 0;
+    this.limitSt= new Date();            
+    this.limitSt.setHours(minHour);
+    this.limitSt.setMinutes(minMinute);
+    this.limitSt.setSeconds(minSecond);
+    this.limitEn= new Date();
+    this.limitEn.setHours(maxHour);
+    this.limitEn.setMinutes(maxMinute);
+    this.limitEn.setSeconds(maxSecond);
+
     //default option for daterangepicker
     this.options = {
       theme: 'default',
@@ -442,6 +483,130 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
       console.log(this.date);
   }
 
+  setMoment(moment: any): any {
+    this.momentVariable = moment;
+    console.log("time:"+this.momentVariable);
+  }
+
+  setMonSt($event) {
+    // console.log($event);
+    this.loadAllNurseOnTheMap();
+  }
+
+  setMonEn($event) {
+    // if (this.monEn.getTime() < this.monSt.getTime())
+    //   console.log("Cái gì ko đúng");
+    this.loadAllNurseOnTheMap();
+  }
+  
+  setTueSt($event) {
+    // console.log($event);
+    this.loadAllNurseOnTheMap();
+  }
+
+  setTueEn($event) {
+    this.loadAllNurseOnTheMap();
+  }    
+
+  setWedSt($event) {
+    // console.log($event);
+    this.loadAllNurseOnTheMap();
+  }
+
+  setWedEn($event) {
+    this.loadAllNurseOnTheMap();
+  }
+  
+  setThuSt($event) {
+    // console.log($event);
+    this.loadAllNurseOnTheMap();
+  }
+
+  setThuEn($event) {
+    this.loadAllNurseOnTheMap();
+  }
+  
+  setFriSt($event) {
+    // console.log($event);
+    this.loadAllNurseOnTheMap();
+  }
+
+  setFriEn($event) {
+    this.loadAllNurseOnTheMap();
+  }    
+
+  setSatSt($event) {
+    // console.log($event);
+    this.loadAllNurseOnTheMap();
+  }
+
+  setSatEn($event) {
+    this.loadAllNurseOnTheMap();
+  }
+  
+  setSunSt($event) {
+    // console.log($event);
+    this.loadAllNurseOnTheMap();
+  }
+
+  setSunEn($event) {
+    this.loadAllNurseOnTheMap();
+  }
+
+  resetTime(thu: string) {
+    switch (thu) {
+      case "T2":
+        this.monSt = undefined;
+        this.monEn = undefined;
+        break;       
+      case "T3":
+        this.tueSt = undefined;
+        this.tueEn = undefined;
+        break;   
+      case "T4":
+        this.wedSt = undefined;
+        this.wedEn = undefined;
+        break;   
+      case "T5":
+        this.thuSt = undefined;
+        this.thuEn = undefined;
+        break;   
+      case "T6":
+        this.friSt = undefined;
+        this.friEn = undefined;
+        break;   
+      case "T7":
+        this.satSt = undefined;
+        this.satEn = undefined;
+        break;   
+      case "CN":
+        this.sunSt = undefined;
+        this.sunEn = undefined;
+        break;   
+    }
+
+    this.loadAllNurseOnTheMap();
+  }
+  
+  check() {
+    console.log("a"+this.subDate);
+    this.subDate = new Date();
+    console.log("b"+this.subDate);
+    // this.subDate.setDate(Date.now());
+    // console.log("c"+this.subDate);
+    this.monSt.setSeconds(0);
+    this.monEn.setSeconds(0);
+    this.tueSt.setSeconds(0);
+    this.tueEn.setSeconds(0);    
+    if (Math.max(this.monSt.getTime(), this.tueSt.getTime()) <= Math.min(this.monEn.getTime(), this.tueEn.getTime()))
+      console.log("true");
+    else
+      console.log("false");
+    // this.subDate.setDate(this.monEn.getTime() - this.monSt.getTime());
+    // console.log("D"+this.subDate);
+    console.log();
+  }  
+
   chooseMarker() {
     // event.preventDefault();
     console.log("Choosing nurse is " + this.nurses[this.markerNo].username + ' at index ' + this.markerNo);
@@ -491,7 +656,8 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
       endDate.setDate(endDate.getDate()+1);
       let loc = new Location(this.latitude, this.longitude);
       console.log(">" + startDate + "," + endDate + "," + date + "," + this.nurseProfile.owner._id);
-      let contractDetail = new ContractDetailModel(this.patientDescription,this.date);
+      this.addBusyDates();
+      let contractDetail = new ContractDetailModel(this.patientDescription,this.workingDates);
       let contract = new ContractModel(this.currentUser._id, this.nurseProfile.owner._id, startDate, endDate, this.patientName, this.patientAge, this.address, loc, contractDetail);
       this.contractsService.create(contract).takeWhile(() => this.alive).subscribe(
         data => {
@@ -506,6 +672,44 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+  }
+
+  addBusyDates() {
+    if (this.monSt !== undefined && this.monEn !==undefined) {
+      let workingDate = new BusyDate("T2", this.monSt, this.monEn);
+      this.workingDates.push(workingDate);
+    }
+
+    if (this.tueSt !== undefined && this.tueEn !==undefined) {
+      let workingDate = new BusyDate("T3", this.tueSt, this.tueEn);
+      this.workingDates.push(workingDate);     
+    }
+
+    if (this.wedSt !== undefined && this.wedEn !==undefined) {
+      let workingDate = new BusyDate("T4", this.wedSt, this.wedEn);
+      this.workingDates.push(workingDate);     
+    }
+
+    if (this.thuSt !== undefined && this.thuEn !==undefined) {
+      let workingDate = new BusyDate("T5", this.thuSt, this.thuEn);
+      this.workingDates.push(workingDate);      
+    }
+
+    if (this.friSt !== undefined && this.friEn !==undefined) {
+      let workingDate = new BusyDate("T6", this.friSt, this.friEn);
+      this.workingDates.push(workingDate);       
+    }
+
+    if (this.satSt !== undefined && this.satEn !==undefined) {
+      let workingDate = new BusyDate("T7", this.satSt, this.satEn);
+      this.workingDates.push(workingDate);      
+    }
+
+    if (this.sunSt !== undefined && this.sunEn !==undefined) {
+      let workingDate = new BusyDate("CN", this.sunSt, this.sunEn);
+      this.workingDates.push(workingDate);     
+    }
+ 
   }
 
   // private fillboundAllNurseOnTheMap() {
@@ -650,6 +854,76 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     console.log('ngAfterViewInit');
+  }
+
+  private checkOverlap(start1: number, start2: number, end1: number, end2: number): boolean {
+    console.log("Vô");
+    if (Math.max(start1, start2) <= Math.min(end1, end2))
+      return true;
+    else return false;
+  }
+
+  private checkBusyDates(busyDates: BusyDate[]) {
+    let busyDays = 0;
+    let dem = 0;
+    console.log("Busy_dates" + busyDates);
+    busyDates.forEach( busyDate => {
+      console.log("Busy_dates start time" + busyDate.start_time);
+      let startOldTime = new Date(busyDate.start_time);
+      let startNewTime = new Date();
+      startNewTime.setHours(startOldTime .getHours());
+      startNewTime.setMinutes(startOldTime .getMinutes());
+      startNewTime.setSeconds(0);
+      // this.testSt = startNewTime;
+      let endOldTime = new Date(busyDate.end_time);
+      let endNewTime = new Date();
+      endNewTime.setHours(endOldTime .getHours());
+      endNewTime.setMinutes(endOldTime .getMinutes());
+      endNewTime.setSeconds(0);
+      // this.testEn = endNewTime;      
+      console.log("Burse Time " + busyDate.date +"|"+ startNewTime.getMinutes() + "|" + endNewTime.getMinutes());
+      switch (busyDate.date) {
+        case "T2":
+        if (this.monSt !== undefined && this.monEn !==undefined)
+          if (this.checkOverlap(this.monSt.getTime(), startNewTime.getTime(), this.monEn.getTime(), endNewTime.getTime()))
+            dem++;
+          break;
+        case "T3":
+        if (this.tueSt !== undefined && this.tueEn !==undefined)
+          if (this.checkOverlap(this.tueSt.getTime(), startNewTime.getTime(), this.tueEn.getTime(), endNewTime.getTime()))
+            dem++;
+          break;
+        case "T4":
+        if (this.wedSt !== undefined && this.wedEn !==undefined)
+          if (this.checkOverlap(this.wedSt.getTime(), startNewTime.getTime(), this.wedEn.getTime(), endNewTime.getTime()))
+            dem++;        
+          break;
+        case "T5":
+        if (this.thuSt !== undefined && this.thuEn !==undefined)
+          if (this.checkOverlap(this.thuSt.getTime(), startNewTime.getTime(), this.thuEn.getTime(), endNewTime.getTime()))
+            dem++;  
+          break;
+        case "T6":
+        if (this.friSt !== undefined && this.friEn !==undefined)
+          if (this.checkOverlap(this.friSt.getTime(), startNewTime.getTime(), this.friEn.getTime(), endNewTime.getTime()))
+            dem++;          
+          break;
+        case "T7":
+        if (this.satSt !== undefined && this.satEn !==undefined)
+          if (this.checkOverlap(this.satSt.getTime(), startNewTime.getTime(), this.satEn.getTime(), endNewTime.getTime()))
+            dem++;          
+          break;
+        case "CN":
+        if (this.sunSt !== undefined && this.sunEn !==undefined)
+          if (this.checkOverlap(this.sunSt.getTime(), startNewTime.getTime(), this.sunEn.getTime(), endNewTime.getTime()))
+            dem++;          
+          break;                    
+      }
+    });
+    console.log("Dem:"+dem);
+    // if (dem <= this.numberBusyDateAllow) return false; else return true;
+    return dem <= this.numberBusyDateAllow ? false : true;
+    
   }
 
   private lockRegionForCurrentUser() {
@@ -816,6 +1090,7 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
           this.nurseProfiles = [];
 
           let dem = 0;
+          
           nurses.forEach(nurse => {
           console.log("Nurse ", nurse);
           console.log("location ", nurse.owner.location.latitude.toString());
@@ -824,24 +1099,31 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
             case "nearby":
               // for old mode
               if (this.getDistanceFromLatLonInKm(this.latitude,this.longitude,nurse.owner.location.latitude,nurse.owner.location.longitude) <= this.radius) {
-                let nurseMarker = {
-                  no: dem,
-                  name: nurse.owner.profile.name,
-                  email: nurse.owner.profile.email,
-                  phone: nurse.owner.profile.phone,   
-                  sex: nurse.owner.profile.sex,
-                  age: nurse.owner.profile.age,
-                  address: nurse.owner.profile.address,
-                  hospital: nurse.hospital,          
-                  lat: nurse.owner.location.latitude,
-                  lng: nurse.owner.location.longitude,
-                  // distance: distance,
-                  draggable: false
+                // console.log("Busy_dates" + nurse.busy_dates);
+                let isBusy = false;
+                if (nurse.busy_dates.length !== 0 )
+                  isBusy = this.checkBusyDates(nurse.busy_dates);
+                if (!isBusy) {
+                  let nurseMarker = {
+                    no: dem,
+                    name: nurse.owner.profile.name,
+                    email: nurse.owner.profile.email,
+                    phone: nurse.owner.profile.phone,   
+                    sex: nurse.owner.profile.sex,
+                    age: nurse.owner.profile.age,
+                    address: nurse.owner.profile.address,
+                    hospital: nurse.hospital,          
+                    lat: nurse.owner.location.latitude,
+                    lng: nurse.owner.location.longitude,
+                    // distance: distance,
+                    draggable: false
+                  }
+                  dem++;
+                  console.log("Nurse Marker ", nurseMarker);
+                  this.markers.push(nurseMarker);
+                  this.nurseProfiles.push(nurse);
                 }
-                dem++;
-                console.log("Nurse Marker ", nurseMarker);
-                this.markers.push(nurseMarker);
-                this.nurseProfiles.push(nurse);
+
               };
               break;
             case "sector":            

@@ -1,4 +1,4 @@
-import { Nurse, Name } from './index';
+import { Nurse, Name, BusyDate } from './index';
 
 export interface NurseProfile {
     career: string;
@@ -7,6 +7,7 @@ export interface NurseProfile {
     type: string;
     owner: Nurse;
     name: Name;
+    busy_dates: BusyDate[];
     // address: string;
     // age: number;
     // sex: string;
