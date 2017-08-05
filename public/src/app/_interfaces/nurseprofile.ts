@@ -7,6 +7,7 @@ export interface NurseProfile {
     type: string;
     owner: Nurse;
     name: Name;
+    status: string;
     busy_dates: BusyDate[];
     // address: string;
     // age: number;

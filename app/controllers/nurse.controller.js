@@ -228,3 +228,26 @@ exports.search = (req, res, next) =>
             .catch(err => {
                 res.status(400).send(err);
             })
+
+exports.setStatus = (req, res, next) => {
+    console.log(req.body);
+    nurseService.setStatus(req.body)
+            .then(nurse => {
+                res.send("Thành công");
+            })
+            .catch(err => {
+                res.status(400).send(err);
+            })            
+}
+
+exports.setDate = (req, res, next) => {
+    console.log(req.body);
+    nurseService.setDate(req.body)
+            .then(nurse => {
+                res.send("Thành công");
+            })
+            .catch(err => {
+                res.status(400).send(err);
+            })            
+}
+    

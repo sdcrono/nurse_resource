@@ -12,7 +12,7 @@ import { AlertService, UsersService } from '../_services/index';
 
 export class RegisterComponent {
 
-  model= {};
+  model: any = {};
   loading = false;
 
   constructor(   
@@ -26,8 +26,13 @@ export class RegisterComponent {
 
   register() {
     this.loading = true;
-    console.log(this.model);
-    this.usersService.upsert(this.model)
+    if (this.model.password !== this.model.repassword) {
+        this.loading = false;
+        this.alertService.error("Mật khẩu và nhập lại mật khẩu cần trùng khớp");
+    }
+    else {
+      console.log(this.model);
+      this.usersService.upsert(this.model)
         .subscribe(
           data => {
             console.log(data)
@@ -40,6 +45,8 @@ export class RegisterComponent {
             this.loading = false;
           }
         )
+    }
+
     // this.usersService.upsert(this.model).subscribe(result => {
     //   this.loading = false;
     //   let id = result.text();

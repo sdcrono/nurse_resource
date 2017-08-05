@@ -22,7 +22,11 @@ var contractSchema = new Schema({
     },    
     status: {
         type: String,
-        enum: ['check', 'approve', 'reject']
+        enum: ['check', 'approve', 'reject', 'finish']
+    },
+    payment: {
+        type: String,
+        enum: ['50.000 VND', '100.000 VND', '200.000 VND', '300.000 VND', '400.000 VND']
     },    
     detail: {
         type: Schema.Types.ObjectId,

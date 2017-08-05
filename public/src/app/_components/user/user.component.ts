@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../_models/index';
-import { UsersService } from '../../_services/index';
+import { AlertService, UsersService } from '../../_services/index';
 
 @Component({
   moduleId: module.id,
@@ -15,6 +15,7 @@ export class UserComponent implements OnInit {
   users: any;
 
   constructor(
+    private alertService: AlertService,
     private usersService: UsersService
   ) {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -40,8 +41,11 @@ export class UserComponent implements OnInit {
     console.log(id);
     this.usersService.delete(req).subscribe(result => {
         console.log(result);
+        this.alertService.success('Xóa thành công', false);
+        this.getUserList();
     }, err => {
       console.log(err);
+      this.alertService.error(err);
     });
   }
 

@@ -1,5 +1,13 @@
 <div class="container">
-  <h1>Edit Nurse</h1>
+  <div class="row">
+    <div class="col-md-8"></div>
+    <div class="col-md-4">
+      <a [routerLink]="['/nurses']" class="btn btn-default btn-lg">
+        <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
+      </a>      
+    </div>   
+  </div>
+  <h1>Chỉnh sửa thông tin điều dưỡng</h1>
   <div class="row">
     <div class="col-md-12">
       <!-- <form (ngSubmit)="saveNurse()" #nurseForm="ngForm" ngNativeValidate> -->
@@ -116,6 +124,50 @@
             </agm-map>                        
           </div>
       </form>
+
+        <div class="col-md-6 top-buffer">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <select type="text" class="form-control" [(ngModel)]="date" name="date">
+                  <option value="T2">Thứ 2</option>
+                  <option value="T3">Thứ 3</option>
+                  <option value="T4">Thứ 4</option>
+                  <option value="T5">Thứ 5</option>
+                  <option value="T6">Thứ 6</option>
+                  <option value="T7">Thứ 7</option>
+                  <option value="CN">Chủ Nhật</option>            
+                </select>              
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-log-in"></i></span>
+                <input class="form-control" [value]="start | date:'shortTime'" [(ngModel)]="start" name="start" dateTimePicker [pickerType]="'time'" readonly [minMoment]="limitSt" [maxMoment]="end">
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-log-out"></i></span>
+                <input class="form-control" [value]="end | date:'shortTime'" [(ngModel)]="end" name="end" dateTimePicker [pickerType]="'time'" readonly [minMoment]="start" [maxMoment]="limitEn">
+              </div>
+            </div>
+             <div class="col-md-1">      
+              <button type="button" class="btn btn-success btn-number" (click)="addBusyDate()">
+                <span class="glyphicon glyphicon-ok"></span>
+              </button>
+             </div>             
+          </div>
+
+
+        </div>
+        <div class="col-md-6  top-buffer jumbotron">
+          <table class="table">
+            <tr *ngFor="let busyDate of busyDates">
+              <td>{{ busyDate.date }}</td>
+              <td>{{ busyDate.start_time | date:'shortTime' }}</td>
+              <td>{{ busyDate.end_time | date:'shortTime' }}</td>
+              <td><button type="button" class="btn btn btn-danger btn-number" (click)="deleteBusyDate(busyDate)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td> 
+            </tr>
+          </table>
+        </div>        
 
     </div>
   </div>

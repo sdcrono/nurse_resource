@@ -58,6 +58,16 @@ export class NursesService {
         return this.http.post('/nurses/del', id);
     }
 
+    updateBusyDate(nurse: any) {
+        console.log(nurse);
+        return this.http.post('/nurses/changeBusyDate', nurse);
+    }        
+
+    setStatus(nurse: any) {
+        console.log(nurse);
+        return this.http.post('/nurses/changeStatus', nurse);
+    }    
+
 }
 
 

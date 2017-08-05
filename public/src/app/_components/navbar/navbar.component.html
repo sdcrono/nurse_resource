@@ -36,6 +36,11 @@
                     <span class='glyphicon glyphicon-search'></span> Tìm kiếm người bệnh
                 </a>  
             </li>
+            <li [routerLinkActive]="['link-active']" *ngIf="currentUser.role!='ROLE_Admin'">  
+                <a [routerLink]="['/contracts']">  
+                    <span class='glyphicon glyphicon-briefcase'></span> Hợp đồng công việc
+                </a>  
+            </li>                    
             <li [routerLinkActive]="['link-active']">  
                 <a [routerLink]="['/users/', currentUser._id, 'profile']">  
                     <span class='glyphicon glyphicon-user'></span> Thông tin cá nhân

@@ -1,5 +1,6 @@
 const Contracts = require('mongoose').model('Contracts'),
     Details = require('mongoose').model('ContractDetails');
+    Schedule = require('node-schedule');
 
 const _ = require('lodash');
     jwt = require('jsonwebtoken')
@@ -372,7 +373,7 @@ function createContract(contractParam) {
     });        
     newContract.save((err, contract) => {
         if (err) deferred.reject(err.name + ': ' + err.message);
-        deferred.resolve('Success');
+        deferred.resolve('contract._id');
         var contractId = contract._id;
         let newContractDetail = new Details({
             jobDescription: contractParam.detail.jobDescription,
@@ -387,7 +388,18 @@ function createContract(contractParam) {
                 _id: contractId
             }, {detail: detail._id}, (err, contract) => {
                 if (err) deferred.reject(err.name + ': ' + err.message);
-                    deferred.resolve('Success2');
+                deferred.resolve(contractId);
+                let j = Schedule.scheduleJob(contract.created_at, () => {
+                    if (contract.status === 'check')  {
+                        let info = {
+                            status: "reject"
+                        };
+                        contract.update(info, (err) => {
+                            if (err) { deferred.reject(err.name + ': ' + err.message); }
+                            console.log('thành công');
+                        });                    
+                    }
+                });
             });
         });
         // createDetail(contractParam);
@@ -414,7 +426,21 @@ function approve(id) {
 
         contract.update(info, (err) => {
             if (err) { deferred.reject(err.name + ': ' + err.message); }
-            deferred.resolve('SUCCESS');
+            deferred.resolve(id);
+            console.log("End time: "+ contract.end_at);
+            // let d = new Date("8/5/2017");
+            // d.setHours(10);
+            // d.setMinutes(17);
+            // d.setSeconds(0);
+            let j = Schedule.scheduleJob(contract.end_at, () => {
+                let info = {
+                    status: "finish"
+                };
+                contract.update(info, (err) => {
+                    if (err) { deferred.reject(err.name + ': ' + err.message); }
+                    console.log('thành công');
+                });
+            });
         });
 
     });

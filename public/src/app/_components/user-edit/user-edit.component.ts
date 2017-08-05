@@ -97,7 +97,7 @@ export class UserEditComponent implements OnInit {
     };
     this.usersService.upsert(this.user).subscribe(result => {
       let id = result.text();
-      console.log(id);
+      console.log(typeof(id));
       this.alertService.success('Chỉnh sửa thành công', true);
       this.router.navigate(['/users/', id]);
     }, err => {

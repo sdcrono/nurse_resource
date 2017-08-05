@@ -1,5 +1,13 @@
 <div class="container">
   <div class="row">
+    <div class="col-md-8"></div>
+    <div class="col-md-4">
+      <a [routerLink]="['/users']" class="btn btn-default btn-lg">
+        <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
+      </a>      
+    </div>
+  </div>  
+  <div class="row">
     <div class="col-md-12">
       <a [routerLink]="['/users/', user._id, 'edit']" class="btn btn-success">EDIT</a>
     </div>

@@ -91,7 +91,10 @@ export class UserCreateComponent implements OnInit {
     };
     this.usersService.upsert(this.user).subscribe(result => {
       let id = result.text();
-      console.log(id);
+      // id.replace(/\"/g,'\\"');
+      id = id.substring(1);
+      id = id.substring(0,id.length-1);
+      // console.log(id+typeof(id));
       this.alertService.success('Thêm thành công', true);
       this.router.navigate(['/users/', id]);
     }, err => {

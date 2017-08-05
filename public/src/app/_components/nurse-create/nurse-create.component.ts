@@ -55,6 +55,10 @@ export class NurseCreateComponent implements OnInit {
   start: Date;
   end: Date;
   busyDates: BusyDate[] = [];
+  //date variable
+  momentVariable: any;
+  limitSt: Date;
+  limitEn: Date;  
 
   constructor(
     private alertService: AlertService,
@@ -98,6 +102,21 @@ export class NurseCreateComponent implements OnInit {
     this.latitude = 10.772057;
     this.longitude = 106.698333;
     this.zoom = 12;
+    //set Time for search
+    const minHour = 7;
+    const maxHour = 21;
+    const minMinute = 30;
+    const maxMinute = 30;
+    const minSecond = 0;
+    const maxSecond = 0;
+    this.limitSt= new Date();            
+    this.limitSt.setHours(minHour);
+    this.limitSt.setMinutes(minMinute);
+    this.limitSt.setSeconds(minSecond);
+    this.limitEn= new Date();
+    this.limitEn.setHours(maxHour);
+    this.limitEn.setMinutes(maxMinute);
+    this.limitEn.setSeconds(maxSecond);    
     this.searchControl = new FormControl();
     this.autoComplete();
   }
@@ -128,8 +147,8 @@ export class NurseCreateComponent implements OnInit {
     };
     this.nursesService.upsert(this.nurse).takeWhile(() => this.alive).subscribe(result => {
       let id = result.text();
-      id.replace(/\"/g, "");
-      eval(id);
+      id = id.substring(1);
+      id = id.substring(0,id.length-1);
       console.log(id);
       this.alertService.success('Thêm thành công', true);
       // this.router.navigate(['/nurses/', id]);
@@ -167,24 +186,24 @@ export class NurseCreateComponent implements OnInit {
     });
   }
 
-addBusyDate() {
-  let busyDate = {
-    date: this.date,
-    start_time: this.start,
-    end_time: this.end
-  };
-  this.busyDates.push(busyDate);
-  console.log(this.busyDates);
-}
-
-deleteBusyDate(busyDate) {
-  console.log(busyDate);
-  let index = this.busyDates.indexOf(busyDate);
-  console.log(index);
-  if (index > -1) {
-      this.busyDates.splice(index, 1);
+  addBusyDate() {
+    let busyDate = {
+      date: this.date,
+      start_time: this.start,
+      end_time: this.end
+    };
+    this.busyDates.push(busyDate);
+    console.log(this.busyDates);
   }
-}
+
+  deleteBusyDate(busyDate) {
+    console.log(busyDate);
+    let index = this.busyDates.indexOf(busyDate);
+    console.log(index);
+    if (index > -1) {
+      this.busyDates.splice(index, 1);
+    }
+  }
 
 }
 

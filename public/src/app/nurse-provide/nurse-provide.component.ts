@@ -39,7 +39,10 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
   public address: string;
   public radius: number; //meter
   // yourLatLng;
-  
+
+  //style of google map
+  public styles = [{"featureType": "landscape", "stylers": [{"saturation": -100}, {"lightness": 65}, {"visibility": "on"}]}, {"featureType": "poi", "stylers": [{"saturation": -100}, {"lightness": 51}, {"visibility": "simplified"}]}, {"featureType": "road.highway", "stylers": [{"saturation": -100}, {"visibility": "simplified"}]}, {"featureType": "road.arterial", "stylers": [{"saturation": -100}, {"lightness": 30}, {"visibility": "on"}]}, {"featureType": "road.local", "stylers": [{"saturation": -100}, {"lightness": 40}, {"visibility": "on"}]}, {"featureType": "transit", "stylers": [{"saturation": -100}, {"visibility": "simplified"}]}, {"featureType": "administrative.province", "stylers": [{"visibility": "off"}]}, {"featureType": "water", "elementType": "labels", "stylers": [{"visibility": "on"}, {"lightness": -25}, {"saturation": -100}]}, {"featureType": "water", "elementType": "geometry", "stylers": [{"hue": "#ffff00"}, {"lightness": -25}, {"saturation": -97}]}];
+
 
   //Search form
   public searchControl: FormControl;
@@ -70,6 +73,9 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
   patientName: string;
   patientAge: string;
   patientDescription: string;
+
+  //payment
+  money: string;
 
   //dateRangePickerValue
   value: string;
@@ -205,15 +211,15 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectCareerOption = [
       {
         id: 1,
-        label: "-Select Career-",
+        label: "-Chọn kinh nghiệm-",
         value: ""
       }, {
         id: 2,
-        label: "LPN",
+        label: "Trên 5 năm kinh nghiệm",
         value: "LPN"
       }, {
         id: 3,
-        label: "RN",
+        label: "Dưới 5 năm kinh nghiệm",
         value: "RN"
       }
     ];
@@ -223,15 +229,15 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectTypeOption = [
       {
         id: 1,
-        label: "-Select Type-",
+        label: "-Chọn Loại hình-",
         value: ""
       }, {
         id: 2,
-        label: "Internal",
+        label: "Điều dưỡng chính quy",
         value: "Internal"
       }, {
         id: 3,
-        label: "External",
+        label: "Điều dưỡng gia đình",
         value: "External"
       }
     ];
@@ -241,7 +247,7 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectHospitalOption = [
       {
         id: 1,
-        label: "-Select Hospital-",
+        label: "-Chọn bệnh viện-",
         value: ""
       }, {
         id: 2,
@@ -321,6 +327,9 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
     //create search FormControl
     this.searchControl = new FormControl();
 
+    //Payment init
+    this.money = "50.000 VND";
+
     // this.whatTime = Observable.interval(1000).map(x => new Date()).share();
     // this.whatTime = Date.now();
     this.ahuhu = "Date.now()";
@@ -344,7 +353,7 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //default option for daterangepicker
     this.options = {
-      theme: 'default',
+      theme: 'gray',
       range: 'tm',
       dayNames: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       presetNames: ['This Month', 'Last Month', 'This Week', 'Last Week', 'This Year', 'Last Year', 'Start', 'End'],
@@ -385,6 +394,27 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
     this.markerDraggable = marker.draggable;
     console.log("Clicked user " + this.nurseProfiles[this.markerNo].owner.username + ' at index ' + this.markerNo + ' with lat ' + marker.lat + ' lng ' + marker.lng);
     this.nurseProfile = this.nurseProfiles[this.markerNo];
+    switch(this.radius) {
+      case 5000:
+        if (this.nurseProfile.career === "LPN")
+          this.money = "400.000 VND";
+        else
+          if (this.nurseProfile.career === "RN" && this.nurseProfile.type === "Internal")
+            this.money = "200.000 VND";
+          else if (this.nurseProfile.career === "RN" && this.nurseProfile.type === "External")
+            this.money = "100.000 VND";
+        break;    
+      case 10000:
+        if (this.nurseProfile.career === "LPN")
+          this.money = "400.000 VND";
+        else
+          if (this.nurseProfile.career === "RN" && this.nurseProfile.type === "Internal")
+            this.money = "300.000 VND";
+          else if (this.nurseProfile.career === "RN" && this.nurseProfile.type === "External")
+            this.money = "200.000 VND";
+        break;          
+      
+    }
   }
 
   click($event: any){
@@ -429,13 +459,14 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   expandSearchingRadius() {
-    if(this.radius<10000)
+    if (this.radius<10000)
       this.radius += 5000;
+    
     this.loadAllNurseOnTheMap();
   }
 
   collapseSearchingRadius() {
-    if(this.radius>5000)
+    if (this.radius>5000)
       this.radius -= 5000;
     this.loadAllNurseOnTheMap();
   }
@@ -663,7 +694,9 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
         data => {
             this.alertService.success('Make a contract successful', true);
             this.ahuhu ="123";
-            // this.router.navigate(['/login']);
+            let id = data.text();
+            console.log(id);
+            this.router.navigate(['/contracts/', id]);
         },
         error => {
             this.alertService.error(error);
@@ -1082,6 +1115,18 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
   private loadAllNurseOnTheMap() {
       this.markers.length = 0;
       // this.markers = [];
+
+      this.markerNo= undefined;
+      this.markerName= undefined;
+      this.markerEmail= undefined;
+      this.markerPhone= undefined;
+      this.markerSex= undefined;
+      this.markerAge= undefined;
+      this.markerAddress= undefined;
+      this.markerHospital= undefined;
+      this.markerLat= undefined;
+      this.markerLng= undefined;
+
 
       this.nursesService.search(this.searchCriteriaCareer.value, this.searchCriteriaType.value, this.searchCriteriaHospital.value)
         .takeWhile(() => this.alive)

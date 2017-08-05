@@ -24,6 +24,8 @@ service.deleteProfile = _deleteProfile;
 service.deactiveUser = deactiveUser;
 service.activeUser = activeUser;
 service.deactiveNurse = deactiveNurse;
+service.setStatus = setStatus;
+service.setDate = setDate;
 service.search = searchByNurseProfile;
  
 module.exports = service;
@@ -299,7 +301,8 @@ function updateNurseProfile(userParam) {
             type: userParam.type,
             rate: userParam.rate,
             retribution: userParam.retribution,
-            status: "free"
+            status: userParam.status,
+            busy_dates: userParam.busyDates
         }
 
         profile.update(set, (err, doc) => {
@@ -413,6 +416,50 @@ function deactiveNurse(id) {
 
         let info = {
             isDelete: true,
+        };
+
+        nurse.update(info, (err) => {
+            if (err) { deferred.reject(err.name + ': ' + err.message); }
+            deferred.resolve('SUCCESS');
+        });
+
+    });
+    return deferred.promise;
+}
+
+function setStatus(nurseParam) {
+
+    let deferred = Q.defer();
+
+    NurseProfiles.findOne({owner: nurseParam.id}, (err, nurse) => {
+        if (err){
+            deferred.reject(err.name + ': ' + err.message);
+        }
+
+        let info = {
+            status: nurseParam.status,
+        };
+
+        nurse.update(info, (err) => {
+            if (err) { deferred.reject(err.name + ': ' + err.message); }
+            deferred.resolve('SUCCESS');
+        });
+
+    });
+    return deferred.promise;
+}
+
+function setDate(nurseParam) {
+
+    let deferred = Q.defer();
+
+    NurseProfiles.findOne({owner: nurseParam.id}, (err, nurse) => {
+        if (err){
+            deferred.reject(err.name + ': ' + err.message);
+        }
+
+        let info = {
+            busy_dates: nurseParam.busyDates,
         };
 
         nurse.update(info, (err) => {

@@ -31,6 +31,13 @@
             <!-- <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div> -->
             <div *ngIf="f.submitted && !password.valid" class="help-block">Yêu cầu gõ mật khẩu ít nhất 6 ký tự</div>
         </div>
+        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !repassword.valid }">
+            <label for="repassword">Mật khẩu</label>
+            <input type="password" pattern=".{6,}" class="form-control" name="repassword" [(ngModel)]="model.repassword" #repassword="ngModel" required title="6 characters minimum"/>
+            <!-- <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div> -->
+            <div *ngIf="f.submitted && !password.valid" class="help-block">Yêu cầu gõ mật khẩu ít nhất 6 ký tự</div>
+            <!-- <div *ngIf="f.submitted && password!=repassword" class="help-block">Yêu cầu mật khẩu và nhập lại mật khẩu phải khớp</div> -->
+        </div>        
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
             <label for="email">Email</label>
             <input type="email" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" required />

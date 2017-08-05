@@ -1,22 +1,30 @@
 <div class="container">
+  <div class="col-md-8"></div>
+  <div class="col-md-4">
+    <a [routerLink]="['/contracts']" class="btn btn-default btn-lg">
+      <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
+    </a>      
+  </div> 
   <h1>Chi tiết hợp đồng</h1>
 
-          <div class="card" >
+          <div class="card" *ngIf="contract.detail">
             <div class="card-block">
               <h4 class="card-title">Thông tin công việc</h4>
               <p class="card-text">Thời gian: {{ contract.created_at | date: 'dd/MM/yyyy' }} - {{ contract.end_at | date: 'dd/MM/yyyy' }}</p>  
               <p class="card-text">Nội dung: {{ contract.detail.jobDescription }}</p>
               <p class="card-text">Thời điểm:</p>
+           
               <table class="table">
                 <thead>
                   <tr>
-                    <th *ngIf="contract.detail.dates[0]!=''">{{ contract.detail.dates[1] }}</th>
-                    <th *ngIf="contract.detail.dates[1]!=''">{{ contract.detail.dates[2] }}</th>
-                    <th *ngIf="contract.detail.dates[2]!=''">{{ contract.detail.dates[2] }}</th>
-                    <th *ngIf="contract.detail.dates[3]!=''">{{ contract.detail.dates[3] }}</th>
-                    <th *ngIf="contract.detail.dates[4]!=''">{{ contract.detail.dates[4] }}</th>
-                    <th *ngIf="contract.detail.dates[5]!=''">{{ contract.detail.dates[5] }}</th>
-                    <th *ngIf="contract.detail.dates[6]!=''">{{ contract.detail.dates[6] }}</th>
+                    <td>Thứ</td>
+                    <td>Giờ bắt đầu</td>
+                    <td>Giờ kết thúc</td>                    
+                  </tr>
+                  <tr *ngFor="let workingDate of contract.detail.dates">
+                    <td>{{ workingDate.date }}</td>
+                    <td>{{ workingDate.start_time | date:'shortTime' }}</td>
+                    <td>{{ workingDate.end_time | date:'shortTime' }}</td>
                     <!-- <th>Hủy</th> -->
                   </tr>
                 </thead>
