@@ -1,9 +1,11 @@
 <div class="container">
   <h1>Danh sách các hợp đồng</h1>
-  <a [routerLink]="['/contracts/add']" class="btn btn-default btn-lg">
+  <!-- <a [routerLink]="['/contracts/add']" class="btn btn-default">
     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-  </a>
-  <select type="text" [(ngModel)]="statusSelect " name="statusSelect" (ngModelChange)="onChangeStatus($event)">
+  </a> -->
+
+  <div class="col-md-3">
+  <select class="form-control col-xs-4" type="text" [(ngModel)]="statusSelect " name="statusSelect" (ngModelChange)="onChangeStatus($event)">
     <!-- <option [value]="LPN">LPN</option>
     <option [value]="RN">RN</option> -->
     <!-- <option *ngFor="let item of selectCareerOption" [ngValue]="item" [disabled]="item.value==0"> -->
@@ -11,6 +13,7 @@
       {{item.label}}
     </option>
   </select>
+  </div>
   <table class="table">
     <thead>
       <tr>

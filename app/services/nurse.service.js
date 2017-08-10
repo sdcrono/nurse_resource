@@ -234,7 +234,7 @@ function createNurseProfile(userParam) {
             rate: 0,
             retribution: 0,
             isDelete: false,
-            status: "Free",
+            status: "free",
             busy_dates: userParam.busyDates,
             owner: user._id 
         })
@@ -534,7 +534,8 @@ function getAllNurses() {
 function searchByNurseProfile(searchCriteria) {
     let deferred = Q.defer();
     let query = {
-        isDelete: false
+        isDelete: false,
+        status: "free",
     };
     if (searchCriteria.career != "")
         query.career = searchCriteria.career;

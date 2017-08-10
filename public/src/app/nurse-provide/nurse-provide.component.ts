@@ -259,6 +259,66 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
         value: "BỆNH VIỆN QUÂN DÂN MIỀN ĐÔNG"
       }, {
         id: 4,
+        label: "BỆNH VIỆN PHỤ SẢN TỪ DŨ",
+        value: "BỆNH VIỆN PHỤ SẢN TỪ DŨ"
+      }, {
+        id: 5,
+        label: "BỆNH VIỆN UNG BƯỚU TP.HCM",
+        value: "BỆNH VIỆN UNG BƯỚU TP.HCM"
+      }, {
+        id: 6,
+        label: "BỆNH VIỆN TRUYỀN MÁU HUYẾT HỌC",
+        value: "BỆNH VIỆN TRUYỀN MÁU HUYẾT HỌC"
+      }, {
+        id: 7,
+        label: "BỆNH VIỆN Y HỌC CỔ TRUYỀN",
+        value: "BỆNH VIỆN Y HỌC CỔ TRUYỀN"
+      }, {
+        id: 7,
+        label: "BỆNH VIỆN BÌNH DÂN",
+        value: "BỆNH VIỆN BÌNH DÂN"
+      }, {
+        id: 8,
+        label: "BỆNH VIỆN BỆNH NHIỆT ĐỚI",
+        value: "BỆNH VIỆN BỆNH NHIỆT ĐỚI"
+      }, {
+        id: 9,
+        label: "BỆNH VIỆN MẮT TP.HCM",
+        value: "BỆNH VIỆN MẮT TP.HCM"
+      }, {
+        id: 10,
+        label: "BỆNH VIỆN TAI MŨI HỌNG TP.HCM",
+        value: "BỆNH VIỆN TAI MŨI HỌNG TP.HCM"
+      }, {
+        id: 11,
+        label: "BỆNH VIỆN NHÂN DÂN 115",
+        value: "BỆNH VIỆN NHÂN DÂN 115"
+      }, {
+        id: 12,
+        label: "BỆNH VIỆN TRƯỜNG ĐH Y DƯỢC",
+        value: "BỆNH VIỆN TRƯỜNG ĐH Y DƯỢC"
+      }, {
+        id: 13,
+        label: "BỆNH VIỆN CHỢ RẪY",
+        value: "BỆNH VIỆN CHỢ RẪY"
+      }, {
+        id: 13,
+        label: "BỆNH VIỆN NGUYỄN TRI PHƯƠNG",
+        value: "BỆNH VIỆN NGUYỄN TRI PHƯƠNG"
+      }, {
+        id: 14,
+        label: "BỆNH VIỆN NHÂN DÂN GIA ĐỊNH",
+        value: "BỆNH VIỆN NHÂN DÂN GIA ĐỊNH"
+      }, {
+        id: 15,
+        label: "BỆNH VIỆN PHẠM NGỌC THẠCH",
+        value: "BỆNH VIỆN PHẠM NGỌC THẠCH"
+      }, {
+        id: 16,
+        label: "QUÂN Y VIỆN 175",
+        value: "QUÂN Y VIỆN 175"
+      }, {
+        id: 17,
         label: "BỆNH VIỆN BƯU ĐIỆN 2",
         value: "BỆNH VIỆN BƯU ĐIỆN 2"
       }
@@ -647,7 +707,7 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
     //   created_at: "2017-12-11",
     //   end_at: "2017-12-12"
     // }
-    console.log("ahuhu" + this.value);
+    // console.log("ahuhu" + this.value);
     // this.contractsService.create(contract).subscribe(
     //             data => {
     //                 this.alertService.success('Make a contract successful', true);
@@ -661,6 +721,27 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
     //             });
   }
 
+  checkEmptySchedule() {
+    let countSchedule = 0;
+    if (this.monSt == undefined || this.monEn == undefined)
+      countSchedule++;
+    if (this.tueSt == undefined || this.tueEn == undefined)
+      countSchedule++;
+    if (this.wedSt == undefined || this.wedEn == undefined)
+      countSchedule++;
+    if (this.thuSt == undefined || this.thuEn == undefined)
+      countSchedule++;
+    if (this.friSt == undefined || this.friEn == undefined)
+      countSchedule++;
+    if (this.satSt == undefined || this.satEn == undefined)
+      countSchedule++;                   
+    if (this.sunSt == undefined || this.sunEn == undefined)
+      countSchedule++;
+    if (countSchedule == 7)
+      return true;
+    else return false     
+  }
+
   convertDate(d)
   {
     var parts = d.split('/',3);
@@ -670,39 +751,54 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
 
   makeContract() {
     console.log("Choosing nurse is " + this.nurseProfile.owner.username + ' at index ' + this.markerNo);
-    console.log("ahuhu" + this.value.toString());
-    let day = this.value.split("-",2);
-    console.log("ahhihi" + day[0] + "+" + day[1]);
-    let date = new Date(Date.now());
-    let startDate = this.convertDate(day[0]);
-    let endDate = this.convertDate(day[1]);
-    if(startDate <= date) {
-      console.log("<=" + startDate + "," + endDate + "," + date);
-      this.alertService.success('Start date is before today!', false);
+    if (this.value === undefined) {
+      this.alertService.success('Cần chọn khung giờ!', false);
       return;
     }
-
     else {
-      startDate.setDate(startDate.getDate()+1);
-      endDate.setDate(endDate.getDate()+1);
-      let loc = new Location(this.latitude, this.longitude);
-      console.log(">" + startDate + "," + endDate + "," + date + "," + this.nurseProfile.owner._id);
-      this.addBusyDates();
-      let contractDetail = new ContractDetailModel(this.patientDescription,this.workingDates);
-      let contract = new ContractModel(this.currentUser._id, this.nurseProfile.owner._id, startDate, endDate, this.patientName, this.patientAge, this.address, loc, contractDetail);
-      this.contractsService.create(contract).takeWhile(() => this.alive).subscribe(
-        data => {
-            this.alertService.success('Make a contract successful', true);
-            this.ahuhu ="123";
-            let id = data.text();
-            console.log(id);
-            this.router.navigate(['/contracts/', id]);
-        },
-        error => {
-            this.alertService.error(error);
-            this.ahuhu ="456";
-            // this.loading = false;
-        });
+
+      console.log("ahuhu" + this.value.toString());
+      let day = this.value.split("-",2);
+      console.log("ahhihi" + day[0] + "+" + day[1]);
+      let date = new Date(Date.now());
+      let startDate = this.convertDate(day[0]);
+      let endDate = this.convertDate(day[1]);
+      if (this.checkEmptySchedule()) {
+        this.alertService.success('Cần chọn khung giờ!', false);
+        return;
+      }
+      else if(startDate <= date) {
+        console.log("<=" + startDate + "," + endDate + "," + date);
+        this.alertService.success('Ngày bắt đầu trước hôm nay!', false);
+        return;
+      }
+
+      else {
+        startDate.setDate(startDate.getDate());
+        endDate.setDate(endDate.getDate());
+        let loc = new Location(this.latitude, this.longitude);
+        console.log(">" + startDate + "," + endDate + "," + date + "," + this.nurseProfile.owner._id);
+        this.addBusyDates();
+        let contractDetail = new ContractDetailModel(this.patientDescription,this.workingDates);
+        let contract = new ContractModel(this.currentUser._id, this.nurseProfile.owner._id, startDate, endDate, this.patientName, this.patientAge, this.address, loc, contractDetail);
+        this.contractsService.create(contract).takeWhile(() => this.alive).subscribe(
+          data => {
+              this.alertService.success('Make a contract successful', true);
+              this.ahuhu ="123";
+              let id = data.text();
+              id = id.substring(1);
+              id = id.substring(0,id.length-1);              
+              console.log(id);
+              this.router.navigate(['/contracts/', id]);
+          },
+          error => {
+              this.alertService.error(error);
+              this.ahuhu ="456";
+              // this.loading = false;
+          });
+      }
+
+
     }
 
   }
@@ -793,6 +889,14 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
         this.zoom = 12;
       });
     }
+  }
+
+  private getCurrentLocation() {
+    this.ngZone.run(() => {
+      this.setCurrentPosition();
+      // this.autoComplete();
+      this.loadAllNurseOnTheMap();
+    });
   }
 
   // var rad = function(x) {

@@ -24,12 +24,17 @@
     </div>
   </div>
   <div class="col-md-3">
-    <div class="form-group">
+    <div class="input-group">
       <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
+      <span class="input-group-btn">
+        <button class="btn btn-secondary .btn-xs" type="button" (click)="getCurrentLocation()">
+          <span class="glyphicon glyphicon-record"></span>
+        </button>
+      </span>      
     </div>
   </div>    
   <div class="col-md-2">
-      <select type="text" class="form-control" [(ngModel)]="searchCriteriaCareer" name="searchCriteriaCareer" (ngModelChange)="onChangeCareer($event)">
+      <select type="text" class="form-control col-xs-3" [(ngModel)]="searchCriteriaCareer" name="searchCriteriaCareer" (ngModelChange)="onChangeCareer($event)">
         <!-- <option [value]="LPN">LPN</option>
         <option [value]="RN">RN</option> -->
         <!-- <option *ngFor="let item of selectCareerOption" [ngValue]="item" [disabled]="item.value==0"> -->
@@ -39,7 +44,7 @@
       </select>
   </div>
     <div class="col-md-2">
-      <select type="text" class="form-control" [(ngModel)]="searchCriteriaType" name="searchCriteriaType" (ngModelChange)="onChangeType($event)">
+      <select type="text" class="form-control col-xs-2" [(ngModel)]="searchCriteriaType" name="searchCriteriaType" (ngModelChange)="onChangeType($event)">
         <!-- <option [value]="Internal">Internal</option>
         <option [value]="External">External</option> -->
         <option *ngFor="let item of selectTypeOption" [ngValue]="item">
@@ -48,7 +53,7 @@
       </select>
     </div>
   <div class="col-md-2">    
-      <select type="text" class="form-control" [(ngModel)]="searchCriteriaHospital" name="searchCriteriaHospital" (ngModelChange)="onChangeHospital($event)">
+      <select type="text" class="form-control col-xs-4" [(ngModel)]="searchCriteriaHospital" name="searchCriteriaHospital" (ngModelChange)="onChangeHospital($event)">
         <!-- <option [value]="BỆNH VIỆN AN BÌNH">BỆNH VIỆN AN BÌNH</option>
         <option [value]="BỆNH VIỆN QUÂN DÂN MIỀN ĐÔNG">BỆNH VIỆN QUÂN DÂN MIỀN ĐÔNG</option>
         <option [value]="BỆNH VIỆN BƯU ĐIỆN 2">BỆNH VIỆN BƯU ĐIỆN 2</option> -->
@@ -58,7 +63,7 @@
       </select>
   </div>
     <div class="col-md-2">
-      <select type="text" class="form-control" [(ngModel)]="searchMode" name="searchMode" (ngModelChange)="onChangeMode($event)">
+      <select type="text" class="form-control col-xs-3" [(ngModel)]="searchMode" name="searchMode" (ngModelChange)="onChangeMode($event)">
         <!-- <option [value]="BỆNH VIỆN AN BÌNH">BỆNH VIỆN AN BÌNH</option>
         <option [value]="BỆNH VIỆN QUÂN DÂN MIỀN ĐÔNG">BỆNH VIỆN QUÂN DÂN MIỀN ĐÔNG</option>
         <option [value]="BỆNH VIỆN BƯU ĐIỆN 2">BỆNH VIỆN BƯU ĐIỆN 2</option> -->
@@ -196,7 +201,9 @@
       <agm-polygon #myPolygon
       [paths]="paths"
       [editable]="false" 
-      [draggable]="false" 
+      [draggable]="false"
+      [visible]="false"
+      [strokeOpacity]= 0.0
       (polyClick)="click($event)" 
       (polyDblClick)="delete($event)"></agm-polygon>              
     </agm-map>
@@ -267,58 +274,26 @@
             <option value="yes">Yes</option>
           </select><br/>  -->
         </form>    
-      </div>
-           
-    </div>
-
-  </div>
-  <div class="row">
-
-
-
-      <div class="col-md-1" *ngIf="markerName">
-
-      </div> 
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-
+      </div>          
     </div>
   </div>
 </div>
-
-<div class="container">
-
-
-</div>
-
 
 <div class="row">
+  <!-- <div class="column is-4 is-offset-4"> -->
+  <!-- <div class="col-md-5">
 
-
-    <!-- <div class="col-md-3"></div> -->
-    <div class="col-md-5" *ngIf="markerName">
-
+  </div> -->
+  <!-- <div class="column is-4 is-offset-4"> -->
+  <!-- <div class="col-md-5">
+    <div class="is-fullwidth has-text-centered">
+      <ng-daterangepicker [(ngModel)]="value" name="value" [options]="options"></ng-daterangepicker>
+          <input [value]="momentVariable | date" [(ngModel)]="momentVariable" name="momentVariable" dateTimePicker [pickerType]="'time'" readonly (onChange)="setMoment($event)">   
+        <dp-time-select #dayPicker theme="dp-material" [(ngModel)]="selectedDate" [config]="config"></dp-time-select>
+        <button type="button" class="btn btn-success btn-number"(click)="open()"></button>
+        <button type="button" class="btn btn-success btn-number" (click)="close()"></button> 
     </div>
-  </div>
-
-
-
-      <div class="row">
-        <!-- <div class="column is-4 is-offset-4"> -->
-        <!-- <div class="col-md-5">
-
-        </div> -->
-        <!-- <div class="column is-4 is-offset-4"> -->
-        <!-- <div class="col-md-5">
-          <div class="is-fullwidth has-text-centered">
-            <ng-daterangepicker [(ngModel)]="value" name="value" [options]="options"></ng-daterangepicker>
-               <input [value]="momentVariable | date" [(ngModel)]="momentVariable" name="momentVariable" dateTimePicker [pickerType]="'time'" readonly (onChange)="setMoment($event)">   
-             <dp-time-select #dayPicker theme="dp-material" [(ngModel)]="selectedDate" [config]="config"></dp-time-select>
-              <button type="button" class="btn btn-success btn-number"(click)="open()"></button>
-              <button type="button" class="btn btn-success btn-number" (click)="close()"></button> 
-          </div>
-        </div> -->
-      </div>
+  </div> -->
+</div>
 
 

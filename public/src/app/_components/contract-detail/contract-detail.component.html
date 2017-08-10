@@ -1,7 +1,7 @@
 <div class="container">
   <div class="col-md-8"></div>
   <div class="col-md-4">
-    <a [routerLink]="['/contracts']" class="btn btn-default btn-lg">
+    <a [routerLink]="['/contracts']" class="btn btn-default">
       <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
     </a>      
   </div> 
@@ -32,12 +32,12 @@
               </table>              
             </div>                
             <div class="card-block">
-              <h4 class="card-title">{{ contract.userId.profile.name }}</h4>
+              <h4 class="card-title">Tên người đăng ký: {{ contract.userId.profile.name }}</h4>
               <h6 class="card-subtitle mb-2 text-muted">email: {{ contract.userId.profile.email }} - sđt: {{ contract.userId.profile.phone }}</h6>
               <p class="card-text">Địa chỉ: {{ contract.userId.profile.address }}</p>
             </div>            
             <div class="card-block">
-              <h4 class="card-title">{{ contract.nurseId.profile.name }}</h4>
+              <h4 class="card-title">Tên đi6ù dưỡng: {{ contract.nurseId.profile.name }}</h4>
               <h6 class="card-subtitle mb-2 text-muted">Giới tính: {{ contract.nurseId.profile.sex }} - email: {{ contract.nurseId.profile.email }} - sđt: {{ contract.nurseId.profile.phone }}</h6>
               <p class="card-text">Làm việc tại: {{ contract.nurseId.nurseprofile.hospital }}</p>
               <p class="card-text">Địa chỉ: {{ contract.nurseId.profile.address }}</p>

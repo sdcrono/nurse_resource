@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-8"></div>
     <div class="col-md-4">
-      <a [routerLink]="['/nurses']" class="btn btn-default btn-lg">
+      <a [routerLink]="['/nurses']" class="btn btn-default">
         <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
       </a>      
     </div>   
@@ -27,39 +27,39 @@
               <input type="password" class="form-control input-lg" placeholder="nhập mật khẩu" [formControl]="reactiveForm.controls['password']">
             </div>
             <!-- name -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['name'].valid && reactiveForm.controls['name'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['name'].valid && reactiveForm.controls['name'].touched}" *ngIf=" nurse.profile">
               <label for="name">Họ Tên</label>
               <div class="alert" *ngIf="reactiveForm.controls['name'].hasError('required') && reactiveForm.controls['name'].touched">{{ requireAlert }}</div>
-              <input type="text" class="form-control input-lg" placeholder="nhập tên" [formControl]="reactiveForm.controls['name']" [(ngModel)]="nurse.profile.name" *ngIf=" nurse.profile">
+              <input type="text" class="form-control input-lg" placeholder="nhập tên" [formControl]="reactiveForm.controls['name']" [(ngModel)]="nurse.profile.name">
             </div>   
             <!-- email -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['email'].valid && reactiveForm.controls['email'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['email'].valid && reactiveForm.controls['email'].touched}" *ngIf=" nurse.profile">
               <label for="name">Email</label>
               <div class="alert" *ngIf="reactiveForm.controls['email'].hasError('required') && reactiveForm.controls['email'].touched">{{ requireAlert }}</div>
               <div class="alert" *ngIf="reactiveForm.controls['email'].hasError('pattern') && reactiveForm.controls['email'].touched">{{ emailAlert }}</div> 
-              <input type="email" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" class="form-control input-lg" placeholder="nhập email" [formControl]="reactiveForm.controls['email']" [(ngModel)]="nurse.profile.email" *ngIf=" nurse.profile">
+              <input type="email" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" class="form-control input-lg" placeholder="nhập email" [formControl]="reactiveForm.controls['email']" [(ngModel)]="nurse.profile.email">
             </div>
             <!-- phone -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['phone'].valid && reactiveForm.controls['phone'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['phone'].valid && reactiveForm.controls['phone'].touched}" *ngIf=" nurse.profile">
               <label for="name">Số điện thoại</label>
               <div class="alert" *ngIf="reactiveForm.controls['phone'].hasError('required') && reactiveForm.controls['phone'].touched">{{ requireAlert }}</div>
               <div class="alert" *ngIf="reactiveForm.controls['phone'].hasError('minlength') && reactiveForm.controls['phone'].touched">{{ minPhoneAlert }}</div>
               <div class="alert" *ngIf="reactiveForm.controls['phone'].hasError('maxlength') && reactiveForm.controls['phone'].touched">{{ maxPhoneAlert }}</div>
-              <input type="tel" pattern="[0-9]*" class="form-control input-lg" placeholder="Nhập số điện thoại" [formControl]="reactiveForm.controls['phone']" [(ngModel)]="nurse.profile.phone" *ngIf=" nurse.profile">
+              <input type="tel" pattern="[0-9]*" class="form-control input-lg" placeholder="Nhập số điện thoại" [formControl]="reactiveForm.controls['phone']" [(ngModel)]="nurse.profile.phone">
             </div>
             <!-- age -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['age'].valid && reactiveForm.controls['age'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['age'].valid && reactiveForm.controls['age'].touched}" *ngIf=" nurse.profile">
               <label for="name">Tuổi</label>
               <div class="alert" *ngIf="reactiveForm.controls['age'].hasError('required') && reactiveForm.controls['age'].touched">{{ requireAlert }}</div>
               <div class="alert" *ngIf="reactiveForm.controls['age'].hasError('maxValue') && reactiveForm.controls['age'].touched">{{ maxAgeAlert }}</div>
               <div class="alert" *ngIf="reactiveForm.controls['age'].hasError('minAge') && reactiveForm.controls['age'].touched">{{ minAgeAlert }}</div>
-              <input type="number" pattern="[0-9]*" class="form-control input-lg" placeholder="nhập tuổi" [formControl]="reactiveForm.controls['age']" [(ngModel)]="nurse.profile.age" *ngIf=" nurse.profile">
+              <input type="number" pattern="[0-9]*" class="form-control input-lg" placeholder="nhập tuổi" [formControl]="reactiveForm.controls['age']" [(ngModel)]="nurse.profile.age">
             </div>
             <!-- gender -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['gender'].valid && reactiveForm.controls['gender'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['gender'].valid && reactiveForm.controls['gender'].touched}" *ngIf=" nurse.profile">
               <label for="name">Giới tính</label>
               <div class="alert" *ngIf="reactiveForm.controls['gender'].hasError('required') && reactiveForm.controls['gender'].touched">{{ requireAlert }}</div>
-              <select type="text" class="form-control input-lg" [formControl]="reactiveForm.controls['gender']" [(ngModel)]="nurse.profile.sex" *ngIf=" nurse.profile">
+              <select type="text" class="form-control input-lg" [formControl]="reactiveForm.controls['gender']" [(ngModel)]="nurse.profile.sex">
                 <option value="Nam">Nam</option>
                 <option value="Nữ">Nữ</option>
               </select>
@@ -71,47 +71,47 @@
           </div>
           <div class="col-md-6">
             <!-- certificatiom -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['certification'].valid && reactiveForm.controls['certification'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['certification'].valid && reactiveForm.controls['certification'].touched}" *ngIf=" nurse.nurseprofile">
               <label for="name">Bằng cấp</label>
               <div class="alert" *ngIf="reactiveForm.controls['certification'].hasError('required') && reactiveForm.controls['certification'].touched">{{ requireAlert }}</div>
-              <input type="text" class="form-control input-lg" placeholder="nhập các bằng cấp hiện có" [formControl]="reactiveForm.controls['certification']" [(ngModel)]="nurse.nurseprofile.certification" *ngIf=" nurse.nurseprofile">
+              <input type="text" class="form-control input-lg" placeholder="nhập các bằng cấp hiện có" [formControl]="reactiveForm.controls['certification']" [(ngModel)]="nurse.nurseprofile.certification">
             </div>
             <!-- career -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['career'].valid && reactiveForm.controls['career'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['career'].valid && reactiveForm.controls['career'].touched}" *ngIf=" nurse.nurseprofile">
               <label for="name">Chuyên môn</label>
               <div class="alert" *ngIf="reactiveForm.controls['career'].hasError('required') && reactiveForm.controls['career'].touched">{{ requireAlert }}</div>
               <!-- <input type="text" class="form-control input-lg" placeholder="nhập thông tin về chuyên môn" [formControl]="reactiveForm.controls['career']" [(ngModel)]="nurse.nurseprofile.career"> -->
-              <select type="text" class="form-control input-lg" [formControl]="reactiveForm.controls['career']" [(ngModel)]="nurse.nurseprofile.career" *ngIf=" nurse.nurseprofile">
+              <select type="text" class="form-control input-lg" [formControl]="reactiveForm.controls['career']" [(ngModel)]="nurse.nurseprofile.career">
                 <option value="LPN">Trên 5 năm kinh nghiệm</option>
                 <option value="RN">Dưới 5 năm kinh nghiệm</option>
               </select>        
             </div>
             <!-- hospital -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['hospital'].valid && reactiveForm.controls['hospital'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['hospital'].valid && reactiveForm.controls['hospital'].touched}" *ngIf=" nurse.nurseprofile">
               <label for="name">Bệnh viện hiện tại</label>
               <div class="alert" *ngIf="reactiveForm.controls['career'].hasError('hospital') && reactiveForm.controls['hospital'].touched">{{ requireAlert }}</div>
-              <input type="text" class="form-control input-lg" placeholder="nhập tên bệnh viện hiện đang làm" [formControl]="reactiveForm.controls['hospital']" [(ngModel)]="nurse.nurseprofile.hospital" *ngIf=" nurse.nurseprofile">
+              <input type="text" class="form-control input-lg" placeholder="nhập tên bệnh viện hiện đang làm" [formControl]="reactiveForm.controls['hospital']" [(ngModel)]="nurse.nurseprofile.hospital">
             </div>
             <!-- type -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['type'].valid && reactiveForm.controls['type'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['type'].valid && reactiveForm.controls['type'].touched}" *ngIf=" nurse.nurseprofile">
               <label for="name">Dạng điều dưỡng</label>
               <div class="alert" *ngIf="reactiveForm.controls['career'].hasError('type') && reactiveForm.controls['type'].touched">{{ requireAlert }}</div>
-              <select type="text" class="form-control input-lg" [formControl]="reactiveForm.controls['type']" [(ngModel)]="nurse.nurseprofile.type" *ngIf=" nurse.nurseprofile">
-                <option value="Internal">Nội</option>
-                <option value="External">Ngoại</option>
+              <select type="text" class="form-control input-lg" [formControl]="reactiveForm.controls['type']" [(ngModel)]="nurse.nurseprofile.type">
+                <option value="Internal">Điều dưỡng chính quy</option>
+                <option value="External">Điều dưỡng gia đình</option>
               </select>
             </div>
             <!-- rate -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['rate'].valid && reactiveForm.controls['rate'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['rate'].valid && reactiveForm.controls['rate'].touched}" *ngIf=" nurse.nurseprofile">
               <label for="name">Đánh giá</label>
               <div class="alert" *ngIf="reactiveForm.controls['rate'].hasError('required') && reactiveForm.controls['rate'].touched">{{ requireAlert }}</div>
-              <input type="number" pattern="[0-9]*" class="form-control input-lg" placeholder="nhập thông tin về đánh giá" [formControl]="reactiveForm.controls['rate']" [(ngModel)]="nurse.nurseprofile.rate" *ngIf=" nurse.nurseprofile">
+              <input type="number" pattern="[0-9]*" class="form-control input-lg" placeholder="nhập thông tin về đánh giá" [formControl]="reactiveForm.controls['rate']" [(ngModel)]="nurse.nurseprofile.rate">
             </div>
             <!-- retribution -->
-            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['retribution'].valid && reactiveForm.controls['retribution'].touched}">
+            <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['retribution'].valid && reactiveForm.controls['retribution'].touched}" *ngIf=" nurse.nurseprofile">
               <label for="name">Điểm</label>
               <div class="alert" *ngIf="reactiveForm.controls['career'].hasError('retribution') && reactiveForm.controls['retribution'].touched">{{ requireAlert }}</div>
-              <input type="number" pattern="[0-9]*" class="form-control input-lg" placeholder="nhập tên bệnh viện hiện đang làm" [formControl]="reactiveForm.controls['retribution']" [(ngModel)]="nurse.nurseprofile.retribution" *ngIf=" nurse.nurseprofile">
+              <input type="number" pattern="[0-9]*" class="form-control input-lg" placeholder="nhập tên bệnh viện hiện đang làm" [formControl]="reactiveForm.controls['retribution']" [(ngModel)]="nurse.nurseprofile.retribution">
             </div>
             <!-- address -->
             <div class="form-group" [ngClass]="{'has-error':!reactiveForm.controls['address'].valid && reactiveForm.controls['address'].touched}">

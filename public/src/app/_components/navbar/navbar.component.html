@@ -45,7 +45,12 @@
                 <a [routerLink]="['/users/', currentUser._id, 'profile']">  
                     <span class='glyphicon glyphicon-user'></span> Thông tin cá nhân
                 </a>  
-            </li>            
+            </li>
+            <li [routerLinkActive]="['link-active']">  
+                <a [routerLink]="['/login']">  
+                    <span class='glyphicon glyphicon-log-out'></span> Đăng xuất
+                </a>  
+            </li>                           
             <!-- <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>   -->
           </ul>

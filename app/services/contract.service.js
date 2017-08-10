@@ -373,7 +373,7 @@ function createContract(contractParam) {
     });        
     newContract.save((err, contract) => {
         if (err) deferred.reject(err.name + ': ' + err.message);
-        deferred.resolve('contract._id');
+        deferred.resolve(contract._id);
         var contractId = contract._id;
         let newContractDetail = new Details({
             jobDescription: contractParam.detail.jobDescription,
@@ -390,15 +390,16 @@ function createContract(contractParam) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 deferred.resolve(contractId);
                 let j = Schedule.scheduleJob(contract.created_at, () => {
-                    if (contract.status === 'check')  {
-                        let info = {
-                            status: "reject"
-                        };
-                        contract.update(info, (err) => {
-                            if (err) { deferred.reject(err.name + ': ' + err.message); }
-                            console.log('thành công');
-                        });                    
-                    }
+                    if (contract !== undefined)
+                        if (contract.status === 'check')  {
+                            let info = {
+                                status: "reject"
+                            };
+                            contract.update(info, (err) => {
+                                if (err) { deferred.reject(err.name + ': ' + err.message); }
+                                console.log('thành công');
+                            });                    
+                        }
                 });
             });
         });
@@ -433,13 +434,20 @@ function approve(id) {
             // d.setMinutes(17);
             // d.setSeconds(0);
             let j = Schedule.scheduleJob(contract.end_at, () => {
-                let info = {
-                    status: "finish"
-                };
-                contract.update(info, (err) => {
-                    if (err) { deferred.reject(err.name + ': ' + err.message); }
-                    console.log('thành công');
-                });
+                if (contract !== undefined) {
+                    if (contract.status === 'check')  {
+
+                        let info = {
+                            status: "finish"
+                        };                
+                        contract.update(info, (err) => {
+                            if (err) { deferred.reject(err.name + ': ' + err.message); }
+                            console.log('thành công');
+                        });
+
+                    }
+                }
+
             });
         });
 
