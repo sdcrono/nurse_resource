@@ -19,7 +19,8 @@ var contractSchema = new Schema({
     location: {
         latitude: Number,
         longitude: Number
-    },    
+    },
+    payment: String,    
     status: {
         type: String,
         enum: ['check', 'approve', 'reject', 'finish']

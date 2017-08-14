@@ -2,7 +2,7 @@ const port = 3000;
 const configValues = require("../loginname");
 module.exports = {
 	port: process.env.PORT || port,
-    // db: 'mongodb://localhost/todos',
+    // db: 'mongodb://localhost/nurse',
 	db: 'mongodb://'+configValues.uname+':'+configValues.pwd+'@ds133932.mlab.com:33932/nurses',
 	facebook:{
 		clientID: '396953987333419',

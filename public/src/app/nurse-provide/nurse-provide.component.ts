@@ -423,7 +423,7 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     //set current position
-    this.setCurrentPosition();
+    // this.setCurrentPosition();
 
     //load searched nurses
     // this.loadAllNurseOnTheMap();
@@ -780,7 +780,7 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log(">" + startDate + "," + endDate + "," + date + "," + this.nurseProfile.owner._id);
         this.addBusyDates();
         let contractDetail = new ContractDetailModel(this.patientDescription,this.workingDates);
-        let contract = new ContractModel(this.currentUser._id, this.nurseProfile.owner._id, startDate, endDate, this.patientName, this.patientAge, this.address, loc, contractDetail);
+        let contract = new ContractModel(this.currentUser._id, this.nurseProfile.owner._id, startDate, endDate, this.patientName, this.patientAge, this.address, loc, this.money, contractDetail);
         this.contractsService.create(contract).takeWhile(() => this.alive).subscribe(
           data => {
               this.alertService.success('Make a contract successful', true);

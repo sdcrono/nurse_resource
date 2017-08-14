@@ -355,7 +355,6 @@ function getById(_id) {
 
 function createContract(contractParam) {
     let deferred = Q.defer();
-    console.log("not fun:" + contractParam);
 
     let newContract = new Contracts({
         userId: contractParam.userId,
@@ -369,6 +368,7 @@ function createContract(contractParam) {
             latitude: contractParam.location.latitude,
             longitude: contractParam.location.longitude
         },
+        payment: contractParam.payment,
         status: "check"
     });        
     newContract.save((err, contract) => {

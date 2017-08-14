@@ -13,32 +13,40 @@ module.exports = function (app) {
         let adminAcc = {
             username: "admin",
             password: bcrypt.hashSync("admin", 10),
+            location: {
+                latitude: 10.778285,
+                longitude: 106.697806
+            },
             role: "ROLE_Admin",
-            nurse: true,
-            admin: true,
-            created_at: new Date
-
+            created_at: new Date,
+            updated_at: new Date,
+            isDelete: false
         }
 
         let userAcc = {
             username: "user",
             password: bcrypt.hashSync("user", 10),
+            location: {
+                latitude: 10.849986,
+                longitude: 106.769895
+            },            
             role: "ROLE_User",
-            nurse: false,
-            admin: false,
             created_at: new Date,
-            updated_at: new Date
-
+            updated_at: new Date,
+            isDelete: false
         }
 
         let nurseAcc = {
             username: "nurse",
             password: bcrypt.hashSync("nurse", 10),
+            location: {
+                latitude: 10.777594,
+                longitude: 106.683312
+            },                   
             role: "ROLE_Nurse",
-            nurse: true,
-            admin: false,
             created_at: new Date,
-            updated_at: new Date
+            updated_at: new Date,
+            isDelete: false
         }
 
         // Users.create(startUsers, function(err, results){
@@ -68,7 +76,7 @@ module.exports = function (app) {
                 phone: "01217366366",
                 age: 18,
                 sex: "female",
-                address: "String",
+                address: "290 Võ Văn Ngân, Bình Thọ, Thủ Đức, Hồ Chí Minh, Việt Nam",
                 owner: user._id
             }
 
@@ -89,7 +97,7 @@ module.exports = function (app) {
                 phone: "01217333333",
                 age: 20,
                 sex: "female",
-                address: "String",
+                address: "61 Tú Xương, phường 7, Quận 3, Hồ Chí Minh, Việt Nam",
             }
 
             Profiles.findOneAndUpdate({ owner: user._id }, profile, { upsert: true }, function (err, doc) {

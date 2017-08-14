@@ -7,5 +7,6 @@ export interface Contract {
     patientName: string,
     patientAge: string,
     address: string,
-    location: Location
+    location: Location,
+    payment: string
 }

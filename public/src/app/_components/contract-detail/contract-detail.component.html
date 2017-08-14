@@ -11,6 +11,7 @@
             <div class="card-block">
               <h4 class="card-title">Thông tin công việc</h4>
               <p class="card-text">Thời gian: {{ contract.created_at | date: 'dd/MM/yyyy' }} - {{ contract.end_at | date: 'dd/MM/yyyy' }}</p>  
+              <p class="card-text">Thanh toán cho 1 buổi làm việc: {{ contract.payment }}</p>
               <p class="card-text">Nội dung: {{ contract.detail.jobDescription }}</p>
               <p class="card-text">Thời điểm:</p>
            

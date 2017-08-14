@@ -65,3 +65,7 @@
   overflow: none;
   left: -100%;
 }
+
+.myLocation {
+  height: 75%;
+}

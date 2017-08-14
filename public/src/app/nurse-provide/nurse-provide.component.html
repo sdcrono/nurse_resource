@@ -7,7 +7,7 @@
   <span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
   <span id="inputGroupWarningStatus" class="sr-only">(warning)</span>
 </div> -->
-<div class="row">
+<div class="row px-2">
     <!-- <h1>{{ahuhu}} {{radius}}</h1> -->
   <div class="col-md-1">
     <div class="input-group">
@@ -23,10 +23,10 @@
       </span>
     </div>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3" id="myLocation" >
     <div class="input-group">
       <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
-      <span class="input-group-btn">
+      <span class="input-group-btn .btn-xs">
         <button class="btn btn-secondary .btn-xs" type="button" (click)="getCurrentLocation()">
           <span class="glyphicon glyphicon-record"></span>
         </button>
@@ -183,8 +183,9 @@
         [longitude]="m.lng"
         [markerDraggable]="m.draggable"
         (dragEnd)="markerDragEnd(m, $event)"
-        [iconUrl]="'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'"
+        [iconUrl]="'https://cdn3.iconfinder.com/data/icons/medical-2-1/512/map_marker-32.png'"
       >
+      <!--http://maps.google.com/mapfiles/ms/icons/blue-dot.png  -->
       <!-- <agm-info-window>
         <strong>{{m.name}}</strong>
       </agm-info-window> -->

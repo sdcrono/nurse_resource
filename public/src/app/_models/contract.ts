@@ -10,7 +10,8 @@ export class ContractModel implements Contract{
         public patientName: string,
         public patientAge: string,
         public address: string,
-        public location: Location,        
+        public location: Location,
+        public payment: string,        
         public detail: ContractDetailModel
     ) { }
     

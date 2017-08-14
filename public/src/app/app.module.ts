@@ -27,7 +27,7 @@ import { UsersComponent } from './users/users.component';
 
 import { customHttpProvider } from './_helpers/index';
 import { AlertComponent } from './_directives/index';
-import { AuthGuard } from './_guards/index';
+import { AuthGuard, AuthGuardAdmin, AuthGuardNurse, AuthGuardUser } from './_guards/index';
 import { AlertService, AuthenticationService, UsersService, NursesService, ContractsService, GlobalEventsManager, NavbarService } from './_services/index';
 import { HomeComponent } from './home/index';
 import { LoginComponent } from './login/index';
@@ -99,6 +99,9 @@ const ROUTES = [
     // { provide: LOCALE_ID, useValue: "vi" },
     customHttpProvider,
     AuthGuard,
+    AuthGuardAdmin,
+    AuthGuardUser,
+    AuthGuardNurse,
     AlertService,
     AuthenticationService,
     GlobalEventsManager,
