@@ -23,7 +23,7 @@ var nurseProfileSchema = new Schema({
     isDelete: Boolean,
     status: {
         type: String,
-        enum: ['Free', 'Working']
+        enum: ['free', 'working']
     },
     busy_dates: [{
         date: String,

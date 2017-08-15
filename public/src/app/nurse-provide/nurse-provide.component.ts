@@ -488,14 +488,14 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
 
   mapClicked($event: any) {
     console.log("Clicked map");
-    let newMarker = {
-      no: -1,
-      name: 'Untitle',
-      lat: $event.coords.lat,
-      lng: $event.coords.lng,
-      draggable: false
-    }
-    this.markers.push(newMarker);
+    // let newMarker = {
+    //   no: -1,
+    //   name: 'Untitle',
+    //   lat: $event.coords.lat,
+    //   lng: $event.coords.lng,
+    //   draggable: false
+    // }
+    // this.markers.push(newMarker);
   }
 
   markerDragEnd(marker: any, $event: any) {

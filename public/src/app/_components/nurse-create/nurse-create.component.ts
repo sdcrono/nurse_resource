@@ -151,7 +151,7 @@ export class NurseCreateComponent implements OnInit {
       id = id.substring(0,id.length-1);
       console.log(id);
       this.alertService.success('Thêm thành công', true);
-      // this.router.navigate(['/nurses/', id]);
+      this.router.navigate(['/nurses/', id]);
     }, err => {
       this.alertService.error(err);
       console.log(err);
@@ -187,13 +187,16 @@ export class NurseCreateComponent implements OnInit {
   }
 
   addBusyDate() {
-    let busyDate = {
-      date: this.date,
-      start_time: this.start,
-      end_time: this.end
-    };
-    this.busyDates.push(busyDate);
-    console.log(this.busyDates);
+    if (this.date !== undefined && this.start !== undefined && this.end !==undefined) {
+      let busyDate = {
+        date: this.date,
+        start_time: this.start,
+        end_time: this.end
+      };
+      this.busyDates.push(busyDate);
+      console.log(this.busyDates);
+    }
+
   }
 
   deleteBusyDate(busyDate) {

@@ -164,13 +164,16 @@ export class NurseEditComponent implements OnInit {
   } 
 
   addBusyDate() {
-    let busyDate = {
-      date: this.date,
-      start_time: this.start,
-      end_time: this.end
-    };
-    this.busyDates.push(busyDate);
-    console.log(this.busyDates);
+    if (this.date !== undefined && this.start !== undefined && this.end !==undefined) {
+      let busyDate = {
+        date: this.date,
+        start_time: this.start,
+        end_time: this.end
+      };
+      this.busyDates.push(busyDate);
+      console.log(this.busyDates);
+    }
+    
   }
 
   deleteBusyDate(busyDate) {
