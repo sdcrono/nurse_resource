@@ -32,7 +32,7 @@
         <td *ngIf="currentUser.role!='ROLE_User'"><a [routerLink]="['/users/', contract.userId._id]">{{ contract.userId.profile.name }}</a></td>
         <td *ngIf="currentUser.role!='ROLE_Nurse'"><a [routerLink]="['/nurses/', contract.nurseId._id]">{{ contract.nurseId.profile.name }}</a></td>
         <td>{{ contract.patientName }}</td>
-        <td><a [routerLink]="['/contracts/', contract._id]">Show Detail</a></td>
+        <td><a [routerLink]="['/contracts/', contract._id]">Xem chi tiết</a></td>
         <td *ngIf="statusSelect.value!='reject' && statusSelect.value!='finish' && statusSelect.value!='all' && statusSelect.value!='' && currentUser.role=='ROLE_Admin' && contract.nurseId.nurseprofile.status=='free'"><button class="btn btn-danger" type="button" (click)="busy(contract.nurseId._id)">Bận</button></td>
         <td *ngIf="statusSelect.value!='reject' && statusSelect.value!='finish' && statusSelect.value!='all' && statusSelect.value!='' && currentUser.role=='ROLE_Admin' && contract.nurseId.nurseprofile.status=='busy'">Đã bận</td>                
         <td *ngIf="statusSelect.value!='approve' && statusSelect.value!='finish' && statusSelect.value!='all' && statusSelect.value!='' && currentUser.role=='ROLE_Admin' && contract.nurseId.nurseprofile.status!='busy'"><button class="btn btn-success" type="button" (click)="approve(contract._id)">Xác nhận</button></td>

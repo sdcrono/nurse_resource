@@ -7,13 +7,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Project name</a>
+          <a class="navbar-brand" href="/">Nurse</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li [routerLinkActive]="['link-active']" >  
                 <a [routerLink]="['/home']">  
-                    <span class='glyphicon glyphicon-home'></span> Home  
+                    <span class='glyphicon glyphicon-home'></span> Trang chủ  
                 </a>  
             </li>
             <li [routerLinkActive]="['link-active']" *ngIf="currentUser.role=='ROLE_Admin'">  

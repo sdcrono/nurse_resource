@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AgmCoreModule } from "@agm/core";
 import { NgDateRangePickerModule } from 'ng-daterangepicker';
@@ -75,13 +76,15 @@ const ROUTES = [
     UserDetailComponent,
     ContractComponent,
     ContractDetailComponent,
-    ProfileComponent  
+    ProfileComponent,
+    AhihiComponent  
   ],
   imports: [
     BrowserModule,
     HttpModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAepYGvisNRywBmOOV3d2_T-9wPBZVy9gM',
       libraries: ["places","geometry"]

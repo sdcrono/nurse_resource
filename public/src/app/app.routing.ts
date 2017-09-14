@@ -26,7 +26,7 @@ const appRoutes: Routes = [
     { path: 'contracts', component: ContractComponent, canActivate: [AuthGuard] },
     { path: 'contracts/add', component: NurseCreateComponent, canActivate: [AuthGuardAdmin] },
     { path: 'contracts/:id/edit', component: NurseEditComponent, canActivate: [AuthGuardAdmin] },
-    { path: 'contracts/:id', component: ContractDetailComponent, canActivate: [AuthGuardAdmin] },
+    { path: 'contracts/:id', component: ContractDetailComponent, canActivate: [AuthGuard] },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' },

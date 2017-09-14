@@ -399,7 +399,7 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
     const minHour = 7;
     const maxHour = 21;
     const minMinute = 30;
-    const maxMinute = 30;
+    const maxMinute = 31;
     const minSecond = 0;
     const maxSecond = 0;
     this.limitSt= new Date();            
@@ -751,8 +751,17 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
 
   makeContract() {
     console.log("Choosing nurse is " + this.nurseProfile.owner.username + ' at index ' + this.markerNo);
+    console.log("Choosing nurse is " + this.patientName + ' at index ' + this.patientAge);
     if (this.value === undefined) {
-      this.alertService.success('Cần chọn khung giờ!', false);
+      this.alertService.error('Cần chọn khoảng thời gian làm việc!');
+      return;
+    }
+    else if (this.patientName === "" || this.patientName === undefined ) {
+      this.alertService.error('Cần điền tên người bệnh!');
+      return;
+    }
+    else if (+this.patientAge <= 8 || +this.patientAge >= 70 || this.patientAge === undefined) {
+      this.alertService.error('Cần điền tuổi người bệnh (Từ 8 đến 70 tuổi)!');
       return;
     }
     else {
@@ -764,7 +773,7 @@ export class NurseProvideComponent implements OnInit, OnDestroy, AfterViewInit {
       let startDate = this.convertDate(day[0]);
       let endDate = this.convertDate(day[1]);
       if (this.checkEmptySchedule()) {
-        this.alertService.success('Cần chọn khung giờ!', false);
+        this.alertService.error('Cần chọn lịch làm việc!');
         return;
       }
       else if(startDate <= date) {
