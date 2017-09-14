@@ -50,6 +50,7 @@
     "express-stormpath": "^3.2.0"
   },
   "engines": {
-    "node": "8.4.0"
+    "node": "8.4.0",
+    "npm": "5.3.0"
   }
 }
