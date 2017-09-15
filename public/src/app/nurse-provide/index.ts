@@ -1,1 +1,0 @@
-export * from './nurse-provide.component';

@@ -1,1 +1,0 @@
-export * from './nurse-detail.component';
